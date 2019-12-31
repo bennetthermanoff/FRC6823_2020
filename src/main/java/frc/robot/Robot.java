@@ -17,19 +17,24 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * it contains the code necessary to operate a robot with tank drive.
  */
 public class Robot extends TimedRobot {
-  private DifferentialDrive m_myRobot;
-  private Joystick m_leftStick;
-  private Joystick m_rightStick;
+  
+  private Joystick joystick = new Joystick (0); //creates new joystick
+  
+
+  private WheelDrive backRight = new WheelDrive (0, 1, 0);//These are the motors and encoder ports for swerve drive, CHANGE DEM 
+  private WheelDrive backLeft = new WheelDrive (2, 3, 1);
+  private WheelDrive frontRight = new WheelDrive (4, 5, 2);
+  private WheelDrive frontLeft = new WheelDrive (6, 7, 3);
+
+  private SwerveDrive swerveDrive = new SwerveDrive (backRight, backLeft, frontRight, frontLeft); //This creates a swerve drive!
 
   @Override
   public void robotInit() {
-    m_myRobot = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
-    m_leftStick = new Joystick(0);
-    m_rightStick = new Joystick(1);
+    
   }
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
+    swerveDrive.drive (joystick.getRawAxis (1), joystick.getRawAxis (0), joystick.getRawAxis (4)); //drives the swervedrive!
   }
 }
