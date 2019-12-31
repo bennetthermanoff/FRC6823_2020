@@ -1,4 +1,5 @@
 package main.java.frc.robot;
+import com.*;
 public class WheelDrive{
 
 
@@ -9,7 +10,7 @@ public class WheelDrive{
 
     public WheelDrive (int angleMotor, int speedMotor, int encoder) {
 
-        this.angleMotor = new Jaguar (angleMotor); //configured for Jaguar controllers, can be changed.
+        this.angleMotor = new CANSparkMax (); //configured for Jaguar controllers, can be changed.
         this.speedMotor = new Jaguar (speedMotor);
         pidController = new PIDController (1, 0, 0, new AnalogInput (encoder), this.angleMotor);
     

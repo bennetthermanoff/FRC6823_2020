@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
   
 
   private WheelDrive backRight = new WheelDrive (0, 1, 0);//These are the motors and encoder ports for swerve drive, CHANGE DEM 
-  private WheelDrive backLeft = new WheelDrive (2, 3, 1);
+  private WheelDrive backLeft = new WheelDrive (2, 3, 1); //angle,speed,encoder
   private WheelDrive frontRight = new WheelDrive (4, 5, 2);
   private WheelDrive frontLeft = new WheelDrive (6, 7, 3);
 
