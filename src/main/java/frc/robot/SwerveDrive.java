@@ -1,6 +1,8 @@
 package main.java.frc.robot;
 public class SwerveDrive {  /** What does this class do? some weird math to take controller inputs and convert them
                             into rotation and speed values for each motor (which is controlled via the WheelDrive class)
+
+                            This code heavily attributed from Jacob Misirian of FIRST Robotics Team 2506 of Franklin, WI.
                             */
     public final double L = LENGTH_BETWEEN_AXLE; //
     public final double W = WIDTH_BETWEEN_AXLE; // These are from the Length and Width between wheels.
@@ -41,5 +43,5 @@ public class SwerveDrive {  /** What does this class do? some weird math to take
         backLeft.drive (backLeftSpeed, backLeftAngle);
         frontRight.drive (frontRightSpeed, frontRightAngle);
         frontLeft.drive (frontLeftSpeed, frontLeftAngle);
-}
+    }
 }
