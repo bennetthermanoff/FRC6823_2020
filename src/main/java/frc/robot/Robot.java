@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -26,11 +27,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    
+     
   }
 
   @Override
   public void teleopPeriodic() {
-    swerveDrive.drive (joystick.getRawAxis (1), joystick.getRawAxis (0), joystick.getRawAxis (4)); //drives the swervedrive!
+    double rate = SmartDashboard.getNumber("SpeedRate", 1);
+    double turnRate = SmartDashboard.getNumber("TurnRate", 1);
+    swerveDrive.drive (joystick.getRawAxis (1), joystick.getRawAxis (0), joystick.getRawAxis (4)*turnRate, rate); //drives the swervedrive!
   }
 }

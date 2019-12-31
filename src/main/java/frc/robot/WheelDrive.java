@@ -22,8 +22,8 @@ public class WheelDrive{
         pidController.setContinuous ();
         pidController.enable ();
     }
-    public void drive (double speed, double angle) {
-        speedMotor.set (speed);
+    public void drive (double speed, double angle,double rate) {
+        speedMotor.set (speed*rate);
     
         double setpoint = angle * (MAX_VOLTS * 0.5) + (MAX_VOLTS * 0.5); // Optimization offset can be calculated here.
         if (setpoint < 0) {
