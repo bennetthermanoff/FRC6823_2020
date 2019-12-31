@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-//test change
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -23,7 +23,7 @@ public final class Main {
    *
    * <p>If you change your main robot class, change the parameter type.
    */
-  public static void main(String... args) { 
+  public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
   }
 }
