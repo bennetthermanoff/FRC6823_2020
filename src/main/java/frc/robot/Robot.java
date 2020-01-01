@@ -7,29 +7,47 @@
 //hey look it's some code! Incredible
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This is a demo program showing the use of the RobotDrive class, specifically
- * it contains the code necessary to operate a robot with tank drive.
+ * This is a small bit of code for using tank drive with 4 NEO motors with SparkMAX's in CAN mode. 
+ * (What a great jumping off point for some limelight testing!) - Bennett H.
  */
 public class Robot extends TimedRobot {
-  private DifferentialDrive m_myRobot;
-  private Joystick m_leftStick;
-  private Joystick m_rightStick;
+  private DifferentialDrive driveTrain;
+  private Joystick driveStick;
+  private CANSparkMax left1CAN, left2CAN, right1CAN, right2CAN;
+  private double speedRate, turnRate;
 
   @Override
   public void robotInit() {
-    m_myRobot = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
-    m_leftStick = new Joystick(0);
-    m_rightStick = new Joystick(1);
+    left1CAN  = new CANSparkMax(1, MotorType.kBrushless);
+    left2CAN  = new CANSparkMax(2, MotorType.kBrushless);
+    right1CAN = new CANSparkMax(3, MotorType.kBrushless);
+    right2CAN = new CANSparkMax(4, MotorType.kBrushless);   
+    /**  The numbers 1-4 are the CAN id's for the SparkMAX's, configure their ID's via 
+     *   plugging the SparkMAX via USB and using their software.**/
+
+    SpeedControllerGroup driveTrainLeft  = new SpeedControllerGroup(left1CAN,  left2CAN);
+    SpeedControllerGroup driveTrainRight = new SpeedControllerGroup(right1CAN, right2CAN); //groups motors into one virtual ESC for each side.
+
+    driveTrain = new DifferentialDrive(driveTrainLeft, driveTrainRight);
+    
+    
+
   }
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
+    speedRate = SmartDashboard.getNumber("SpeedRate", 1);
+    turnRate  = SmartDashboard.getNumber("TurnRate",  1);
+    driveTrain.arcadeDrive((-driveStick.getRawAxis(1))*speedRate, driveStick.getTwist()*turnRate);
   }
 }
