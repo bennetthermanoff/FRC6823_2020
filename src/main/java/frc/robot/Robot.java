@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This is a small bit of code for using tank drive with 4 NEO motors with SparkMAX's in CAN mode. 
- * (What a great jumping off point for some limelight testing!) - Bennett H.
+ * (What a great jumping off point for some limelight testing!) - Bennett H. zucc
  */
 public class Robot extends TimedRobot {
   private DifferentialDrive driveTrain;
