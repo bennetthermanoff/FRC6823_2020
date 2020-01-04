@@ -11,7 +11,7 @@ public class WheelDrive {
     private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private PIDController pidController;
-    private final double MAX_VOLTS = 4.95; // CHANGE THIS VOLTAGE I HAVE NO IDEA WHAT OUR KIT USES
+    private final double MAX_VOLTS = 4.95; // CHANGE THIS VOLTAGE I HAVE NO IDEA WHAT OUR KIT USES.
 
     public WheelDrive(int angleMotor, int speedMotor, int encoder) {
 
