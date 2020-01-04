@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Talon;
 
 /**
  * This is a small bit of code for using tank drive with 4 NEO motors with SparkMAX's in CAN mode. 
@@ -27,10 +28,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    left1CAN  = new CANSparkMax(1, MotorType.kBrushless);
-    left2CAN  = new CANSparkMax(2, MotorType.kBrushless);
-    right1CAN = new CANSparkMax(3, MotorType.kBrushless);
-    right2CAN = new CANSparkMax(4, MotorType.kBrushless);   
+    left1CAN  = new Talon();
+    left2CAN  = new Talon();
+    right1CAN = new Talon();
+    right2CAN = new Talon();   
     /**  The numbers 1-4 are the CAN id's for the SparkMAX's, configure their ID's via 
      *   plugging the SparkMAX via USB and using their software.**/
 
