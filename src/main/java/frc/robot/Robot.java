@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Preferences;
 
 /**
  * This is a small bit of code for using tank drive with 4 NEO motors with
@@ -23,7 +24,7 @@ public class Robot extends TimedRobot {
   private Joystick driveStick;
   private Talon left, right;
   private double speedRate, turnRate;
-
+  private Preferences prefs;
   @Override
   public void robotInit() {
     left = new Talon(1);
@@ -36,13 +37,16 @@ public class Robot extends TimedRobot {
      **/
 
     driveTrain = new DifferentialDrive(left, right);
-
+    driveStick = new Joystick(0);
+    prefs = Preferences.getInstance();
+   
   }
 
   @Override
   public void teleopPeriodic() {
-    speedRate = SmartDashboard.getNumber("SpeedRate", 1);
-    turnRate = SmartDashboard.getNumber("TurnRate", 1);
+    speedRate = prefs.getDouble("SpeedRate", 1);
+    turnRate = prefs.getDouble("TurnRate", 1);
+    System.out.println(speedRate);
     driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
   }
 }
