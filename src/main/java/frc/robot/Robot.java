@@ -69,6 +69,38 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("area", area);
     SmartDashboard.putNumber("skew", skew);
 
+    float KpAim = -0.1f;
+float KpDistance = -0.03f;
+float min_aim_command = 0.01f;
+float xfloat =(float) (x/360.0*60);
+float yfloat = (float) (y/360.0*60);
+if (driveStick.getRawButton(3)) 
+{
+        double heading_error = -1*xfloat;
+        double distance_error = -1*xfloat;
+        double steering_adjust = 0.0;
+
+        if (xfloat > 1.0)
+        {
+                steering_adjust = KpAim*heading_error - min_aim_command;
+        }
+        else if (xfloat < 1.0)
+        {
+                steering_adjust = KpAim*heading_error + min_aim_command;
+        }
+
+        double distance_adjust = KpDistance * distance_error;
+
+        float left_command = 0.0f;
+        float right_command = 0.0f;
+
+        left_command += (float)steering_adjust + (float)distance_adjust;
+        right_command -= (float)steering_adjust + (float)distance_adjust;
+        System.out.println(left_command);
+        System.out.println(right_command);
+       // driveTrain.tankDrive(left_command*2, right_command*2);
+}
+
 
   }
 }
