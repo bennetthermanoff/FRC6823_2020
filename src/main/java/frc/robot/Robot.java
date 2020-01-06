@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * This is a small bit of code for using tank drive with 4 NEO motors with
@@ -25,6 +28,8 @@ public class Robot extends TimedRobot {
   private Talon left, right;
   private double speedRate, turnRate;
   private Preferences prefs;
+  private NetworkTable table;
+  private NetworkTableEntry tx, ty, ta, ts;
   @Override
   public void robotInit() {
     left = new Talon(1);
@@ -38,7 +43,13 @@ public class Robot extends TimedRobot {
 
     driveTrain = new DifferentialDrive(left, right);
     driveStick = new Joystick(0);
-    prefs = Preferences.getInstance();
+    prefs = Preferences.getInstance(); 
+    //setsup limelight table values
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+    tx = table.getEntry("tx");
+    ty = table.getEntry("ty");
+    ta = table.getEntry("ta");
+    ts = table.getEntry("ts");
    
   }
 
@@ -46,7 +57,18 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     speedRate = prefs.getDouble("SpeedRate", 1);
     turnRate = prefs.getDouble("TurnRate", 1);
-    System.out.println(speedRate);
     driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
+
+    //get limelight values
+    double x = tx.getDouble(0.0);
+    double y = ty.getDouble(0.0);
+    double area = ta.getDouble(0.0);
+    double skew = ts.getDouble(0.0);
+    SmartDashboard.putNumber("x",x);
+    SmartDashboard.putNumber("y", y);
+    SmartDashboard.putNumber("area", area);
+    SmartDashboard.putNumber("skew", skew);
+
+
   }
 }
