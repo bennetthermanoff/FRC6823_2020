@@ -14,6 +14,10 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
+
+import com.revrobotics.ColorSensorV3; // Color sensor
 
 /**
  * This is a small bit of code for using tank drive with 4 NEO motors with SparkMAX's in CAN mode. 
@@ -24,6 +28,8 @@ public class Robot extends TimedRobot {
   private Joystick driveStick;
   private CANSparkMax left1CAN, left2CAN, right1CAN, right2CAN;
   private double speedRate, turnRate;
+  private ColorSensorV3 colorSensor;
+  private I2C.Port i2cPort = I2C.Port.kOnboard;
 
   @Override
   public void robotInit() {
@@ -38,15 +44,32 @@ public class Robot extends TimedRobot {
     SpeedControllerGroup driveTrainRight = new SpeedControllerGroup(right1CAN, right2CAN); //groups motors into one virtual ESC for each side.
 
     driveTrain = new DifferentialDrive(driveTrainLeft, driveTrainRight);
-    
-    
-
   }
-
   @Override
   public void teleopPeriodic() {
     speedRate = SmartDashboard.getNumber("SpeedRate", 1);
     turnRate  = SmartDashboard.getNumber("TurnRate",  1);
     driveTrain.arcadeDrive((-driveStick.getRawAxis(1))*speedRate, driveStick.getTwist()*turnRate);
+    
+    // Color Sensor
+
+    Color detectedColor = colorSensor.getColor();
+
+    double IR = colorSensor.getIR();
+
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    System.out.println("Color: " + IR);
   }
-}
+  //returns if the rgb of two colors is within the errorValue
+  public boolean closeEnough(Color colorSensor, Color targetColor){
+    int errorValue = 10;
+    if (Math.abs(colorSensor.red - targetColor.red) <= errorValue && Math.abs(colorSensor.blue - targetColor.blue) <= errorValue && Math.abs(colorSensor.green - targetColor.green) <= errorValue){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+}  
