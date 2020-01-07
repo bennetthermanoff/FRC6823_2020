@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   private Preferences prefs;
   private NetworkTable table;
   private NetworkTableEntry tx, ty, ta, ts;
+  LimelightAutoAimAutoSteer autoSteer;
 
   @Override
   public void robotInit() {
@@ -46,50 +47,56 @@ public class Robot extends TimedRobot {
     driveStick = new Joystick(0);
     prefs = Preferences.getInstance();
     // setsup limelight table values
+
     table = NetworkTableInstance.getDefault().getTable("limelight");
     tx = table.getEntry("tx");
     ty = table.getEntry("ty");
     ta = table.getEntry("ta");
     ts = table.getEntry("ts");
+  }
 
+  @Override
+  public void teleopInit() {
+    speedRate = prefs.getDouble("SpeedRate", 1);
+    turnRate = prefs.getDouble("TurnRate", 1);
+
+    double KpDistance = prefs.getDouble("KpDistance", .18); // speed in which distance is adjusted when autoaiming
+    double KpAim = prefs.getDouble("KpAim", -.036); // speed in which aiming is adjusted when autoaiming
+    double min_aim_command = prefs.getDouble("min_aim_command", .1); // minimum command sent to motors when coarse
+                                                                     // autoaiming
+    double low_min_aim_command = prefs.getDouble("low_min_aim_command", .3); // minimum command sent to motors when fine
+    double angleCutoff = prefs.getDouble("angleCutoff", 10); // cutoff angle where fine autoaim ceases to activate.
+
+    autoSteer = new LimelightAutoAimAutoSteer(KpDistance, KpAim, min_aim_command, low_min_aim_command, angleCutoff);
   }
 
   @Override
   public void teleopPeriodic() {
-    speedRate = prefs.getDouble("SpeedRate", 1);
-    turnRate = prefs.getDouble("TurnRate", 1);
-    double min_aim_command = prefs.getDouble("min_aim_command", .1); // minimum command sent to motors when coarse
-                                                                     // autoaiming
-    double KpDistance = prefs.getDouble("KpDistance", .18); // speed in which distance is adjusted when autoaiming
-    double KpAim = prefs.getDouble("KpAim", -.036); // speed in which aiming is adjusted when autoaiming
-    double low_min_aim_command = prefs.getDouble("low_min_aim_command", .3); // minimum command sent to motors when fine
-                                                                             // autoaiming
-    double angleCutoff = prefs.getDouble("angleCutoff", 10); // cutoff angle where fine autoaim ceases to activate.
-
-    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate); // drives
-                                                                                                       // drivetrain
-                                                                                                       // with joystick
-
     // get limelight values and output to smartdashboard
     double x = tx.getDouble(0.0);
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
     double skew = ts.getDouble(0.0);
+
     SmartDashboard.putNumber("x", x);
     SmartDashboard.putNumber("y", y);
     SmartDashboard.putNumber("area", area);
     SmartDashboard.putNumber("skew", skew);
 
     // Start of autoaim/autodistance code
-    LimelightAutoAimAutoSteer autoSteer = new LimelightAutoAimAutoSteer(KpDistance, KpAim, min_aim_command,
-        low_min_aim_command, angleCutoff); // creates new autosteer class
-    double[] coarseControl = autoSteer.coarseControl(x, y); // gets values from autosteer Coarse adjustment
-    double[] fineControl = autoSteer.fineControl(x, y); // gets values from autosteer fine adjustment
+    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate); // drives
 
     if (driveStick.getRawButton(3)) {
+      double[] coarseControl = autoSteer.coarseControl(x, y); // gets values from autosteer Coarse adjustment
       driveTrain.tankDrive(coarseControl[0], coarseControl[1]);
     } // activates coarse autosteer
     if (driveStick.getRawButton(5)) {
+      double[] fineControl = autoSteer.fineControl(x, y); // gets values from autosteer fine adjustment
+      driveTrain.tankDrive(fineControl[0], fineControl[1]);
+    } // activates fine autosteer
+
+    if (driveStick.getRawButton(5)) {
+      double[] fineControl = autoSteer.fineControl(x, y); // gets values from autosteer fine adjustment
       driveTrain.tankDrive(fineControl[0], fineControl[1]);
     } // activates fine autosteer
 

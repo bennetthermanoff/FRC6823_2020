@@ -37,26 +37,28 @@ public class LimelightAutoAimAutoSteer {
     }
 
     public double[] fineControl(double x, double y) {
+        // the x and y are degrees
 
         // This is the same as the coarseControl method, but the difference is that it
         // allows angle cutoffs (doesnt trigger at large angles) and also has a
         // different minimum aim command.
         double steering_adjust = 0.0;
 
-        double heading_error = -1 * x;
-        double distance_error = -1 * y;
-
-        if (x > 1.0 && x < angleCutoff) {
-            steering_adjust = KpAim * heading_error + low_min_aim_command;
-        } else if (x < 1 && x > -1 * angleCutoff) {
-            steering_adjust = KpAim * heading_error - low_min_aim_command;
+        if (x > 1 && x < angleCutoff) {
+            steering_adjust = KpAim * -x + low_min_aim_command;
+        } else if (x < 1 && x > -angleCutoff) {
+            steering_adjust = KpAim * -x - low_min_aim_command;
         }
 
-        double distance_adjust = KpDistance * distance_error;
-        left_command = steering_adjust - distance_adjust;
-        right_command = steering_adjust * -1 - distance_adjust;
+        // we add y to change the distance. robot will move forward/backward until y=0
+        left_command = steering_adjust + y;
+        right_command = -steering_adjust + y;
 
         return new double[] { left_command, right_command };
+
+    }
+
+    public void beginStrafe() {
 
     }
 }
