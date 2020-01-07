@@ -72,22 +72,28 @@ public class Robot extends TimedRobot {
 
     // Start of autoaim/autodistance code
     double steering_adjust = 0.0;
-    double KpAim = -.5; // Speed constant for aiming
-    double KpDistance = -0.6; // speed constant for distance
-    double min_aim_command = 0.01; // If aim command is less than this, robot will purposefully overshoot so it can
-                                   // come in hotter, creating more accuracy. If too high robot will tictac, if too
-                                   // low it will be inaccurate.
+    double KpAim = prefs.getDouble("KpAim", -.2); // Speed constant for aiming
+    double KpDistance = prefs.getDouble("KpDistance", -.35);// speed constant for distance
+    double min_aim_command = prefs.getDouble("min_aim_command", .05);// If aim command is less than minAngle, robot will purposefully overshoot so it can
+    // come in hotter, creating more accuracy. If too high robot will tictac, if too
+    // low it will be inaccurate.
+    double low_min_aim_command = prefs.getDouble("low_min_aim_command", 3);
+
+    //double KpAim = -.5;
+    //double KpDistance = -0.6; 
+    //double min_aim_command = 0.1; 
 
     if (driveStick.getRawButton(3)) {
       double heading_error = -1 * x;
-      double distance_error = -1 * x;
-
+      double distance_error = -1 * y;
+    
       if (x > 1.0) {
-        steering_adjust = KpAim * heading_error - min_aim_command; // this gets just the steering adjustment. If the
+        steering_adjust = KpAim * heading_error + min_aim_command; // this gets just the steering adjustment. If the
                                                                    // angle is larger than 1 then it removes the
                                                                    // minimum.
-      } else if (x < 1.0) {
-        steering_adjust = KpAim * heading_error + min_aim_command; // If angle is less than 1 it adds the min aim
+      } 
+      else if (x < 1) {
+        steering_adjust = KpAim * heading_error - min_aim_command; // If angle is less than 1 it adds the min aim
                                                                    // command.
       }
 
@@ -98,11 +104,38 @@ public class Robot extends TimedRobot {
                                  // reset them to 0 every time? If so, consider moving these before the if to
                                  // condense code.
 
-      left_command += steering_adjust + distance_adjust;
-      right_command -= steering_adjust + distance_adjust;
+      left_command = steering_adjust - distance_adjust;
+      right_command = steering_adjust*-1 - distance_adjust;
       // System.out.println(left_command); //For debugging purposes
       // System.out.println(right_command);
-      driveTrain.tankDrive(left_command * 2, right_command * 2);
+      driveTrain.tankDrive(left_command, right_command);
+    }
+    if (driveStick.getRawButton(5)) {
+      double heading_error = -1 * x;
+      double distance_error = -1 * y;
+    
+      if (x > 1.0 && x<10) {
+        steering_adjust = KpAim * heading_error + low_min_aim_command; // this gets just the steering adjustment. If the
+                                                                   // angle is larger than 1 then it removes the
+                                                                   // minimum.
+      } 
+      else if (x < 1 && x > -10) {
+        steering_adjust = KpAim * heading_error - low_min_aim_command; // If angle is less than 1 it adds the min aim
+                                                                   // command.
+      }
+
+      double distance_adjust = KpDistance * distance_error;
+
+      double left_command = 0.0;
+      double right_command = 0.0;// check if these are needed. Are you supposed to let these just keep going? Or
+                                 // reset them to 0 every time? If so, consider moving these before the if to
+                                 // condense code.
+
+      left_command = steering_adjust - distance_adjust;
+      right_command = steering_adjust*-1 - distance_adjust;
+      // System.out.println(left_command); //For debugging purposes
+      // System.out.println(right_command);
+      driveTrain.tankDrive(left_command, right_command);
     }
 
   }
