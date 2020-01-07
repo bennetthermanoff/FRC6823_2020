@@ -64,11 +64,23 @@ public class Robot extends TimedRobot {
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
     double skew = ts.getDouble(0.0);
+    double dist = 11.5/(Math.tan(y));
+    double i = 0.1; //Insert margin of error here
+    double target = 72; //Target distance in inches
     SmartDashboard.putNumber("x",x);
     SmartDashboard.putNumber("y", y);
     SmartDashboard.putNumber("area", area);
     SmartDashboard.putNumber("skew", skew);
+    SmartDashboard.putNumber("Distance", dist);
 
-
+    if((Math.abs(x))<i){
+      if (dist < target){
+        //Go in reverse
+      }else if (dist > target){
+        //Go forward
+      }else{
+        //Stop
+      }
+    }
   }
 }
