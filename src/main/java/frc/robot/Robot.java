@@ -58,9 +58,19 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     speedRate = prefs.getDouble("SpeedRate", 1);
     turnRate = prefs.getDouble("TurnRate", 1);
-    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
+    double min_aim_command = prefs.getDouble("min_aim_command", .1); // minimum command sent to motors when coarse
+                                                                     // autoaiming
+    double KpDistance = prefs.getDouble("KpDistance", .18); // speed in which distance is adjusted when autoaiming
+    double KpAim = prefs.getDouble("KpAim", -.036); // speed in which aiming is adjusted when autoaiming
+    double low_min_aim_command = prefs.getDouble("low_min_aim_command", .3); // minimum command sent to motors when fine
+                                                                             // autoaiming
+    double angleCutoff = prefs.getDouble("angleCutoff", 10); // cutoff angle where fine autoaim ceases to activate.
 
-    // get limelight values
+    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate); // drives
+                                                                                                       // drivetrain
+                                                                                                       // with joystick
+
+    // get limelight values and output to smartdashboard
     double x = tx.getDouble(0.0);
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
@@ -71,72 +81,17 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("skew", skew);
 
     // Start of autoaim/autodistance code
-    double steering_adjust = 0.0;
-    double KpAim = prefs.getDouble("KpAim", -.2); // Speed constant for aiming
-    double KpDistance = prefs.getDouble("KpDistance", -.35);// speed constant for distance
-    double min_aim_command = prefs.getDouble("min_aim_command", .05);// If aim command is less than minAngle, robot will purposefully overshoot so it can
-    // come in hotter, creating more accuracy. If too high robot will tictac, if too
-    // low it will be inaccurate.
-    double low_min_aim_command = prefs.getDouble("low_min_aim_command", 3);
-
-    //double KpAim = -.5;
-    //double KpDistance = -0.6; 
-    //double min_aim_command = 0.1; 
+    LimelightAutoAimAutoSteer autoSteer = new LimelightAutoAimAutoSteer(KpDistance, KpAim, min_aim_command,
+        low_min_aim_command, angleCutoff); // creates new autosteer class
+    double[] coarseControl = autoSteer.coarseControl(x, y); // gets values from autosteer Coarse adjustment
+    double[] fineControl = autoSteer.fineControl(x, y); // gets values from autosteer fine adjustment
 
     if (driveStick.getRawButton(3)) {
-      double heading_error = -1 * x;
-      double distance_error = -1 * y;
-    
-      if (x > 1.0) {
-        steering_adjust = KpAim * heading_error + min_aim_command; // this gets just the steering adjustment. If the
-                                                                   // angle is larger than 1 then it removes the
-                                                                   // minimum.
-      } 
-      else if (x < 1) {
-        steering_adjust = KpAim * heading_error - min_aim_command; // If angle is less than 1 it adds the min aim
-                                                                   // command.
-      }
-
-      double distance_adjust = KpDistance * distance_error;
-
-      double left_command = 0.0;
-      double right_command = 0.0;// check if these are needed. Are you supposed to let these just keep going? Or
-                                 // reset them to 0 every time? If so, consider moving these before the if to
-                                 // condense code.
-
-      left_command = steering_adjust - distance_adjust;
-      right_command = steering_adjust*-1 - distance_adjust;
-      // System.out.println(left_command); //For debugging purposes
-      // System.out.println(right_command);
-      driveTrain.tankDrive(left_command, right_command);
-    }
+      driveTrain.tankDrive(coarseControl[0], coarseControl[1]);
+    } // activates coarse autosteer
     if (driveStick.getRawButton(5)) {
-      double heading_error = -1 * x;
-      double distance_error = -1 * y;
-    
-      if (x > 1.0 && x<10) {
-        steering_adjust = KpAim * heading_error + low_min_aim_command; // this gets just the steering adjustment. If the
-                                                                   // angle is larger than 1 then it removes the
-                                                                   // minimum.
-      } 
-      else if (x < 1 && x > -10) {
-        steering_adjust = KpAim * heading_error - low_min_aim_command; // If angle is less than 1 it adds the min aim
-                                                                   // command.
-      }
-
-      double distance_adjust = KpDistance * distance_error;
-
-      double left_command = 0.0;
-      double right_command = 0.0;// check if these are needed. Are you supposed to let these just keep going? Or
-                                 // reset them to 0 every time? If so, consider moving these before the if to
-                                 // condense code.
-
-      left_command = steering_adjust - distance_adjust;
-      right_command = steering_adjust*-1 - distance_adjust;
-      // System.out.println(left_command); //For debugging purposes
-      // System.out.println(right_command);
-      driveTrain.tankDrive(left_command, right_command);
-    }
+      driveTrain.tankDrive(fineControl[0], fineControl[1]);
+    } // activates fine autosteer
 
   }
 }
