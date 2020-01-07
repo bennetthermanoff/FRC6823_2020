@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   private Preferences prefs;
   private NetworkTable table;
   private NetworkTableEntry tx, ty, ta, ts;
+
   @Override
   public void robotInit() {
     left = new Talon(1);
@@ -43,14 +44,14 @@ public class Robot extends TimedRobot {
 
     driveTrain = new DifferentialDrive(left, right);
     driveStick = new Joystick(0);
-    prefs = Preferences.getInstance(); 
-    //setsup limelight table values
+    prefs = Preferences.getInstance();
+    // setsup limelight table values
     table = NetworkTableInstance.getDefault().getTable("limelight");
     tx = table.getEntry("tx");
     ty = table.getEntry("ty");
     ta = table.getEntry("ta");
     ts = table.getEntry("ts");
-   
+
   }
 
   @Override
@@ -59,48 +60,50 @@ public class Robot extends TimedRobot {
     turnRate = prefs.getDouble("TurnRate", 1);
     driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
 
-    //get limelight values
+    // get limelight values
     double x = tx.getDouble(0.0);
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
     double skew = ts.getDouble(0.0);
-    SmartDashboard.putNumber("x",x);
+    SmartDashboard.putNumber("x", x);
     SmartDashboard.putNumber("y", y);
     SmartDashboard.putNumber("area", area);
     SmartDashboard.putNumber("skew", skew);
 
-    float KpAim = -0.1f;
-float KpDistance = -0.03f;
-float min_aim_command = 0.01f;
-float xfloat =(float) (x/360.0*60);
-float yfloat = (float) (y/360.0*60);
-if (driveStick.getRawButton(3)) 
-{
-        double heading_error = -1*xfloat;
-        double distance_error = -1*xfloat;
-        double steering_adjust = 0.0;
+    // Start of autoaim/autodistance code
+    double steering_adjust = 0.0;
+    double KpAim = -.5; // Speed constant for aiming
+    double KpDistance = -0.6; // speed constant for distance
+    double min_aim_command = 0.01; // If aim command is less than this, robot will purposefully overshoot so it can
+                                   // come in hotter, creating more accuracy. If too high robot will tictac, if too
+                                   // low it will be inaccurate.
 
-        if (xfloat > 1.0)
-        {
-                steering_adjust = KpAim*heading_error - min_aim_command;
-        }
-        else if (xfloat < 1.0)
-        {
-                steering_adjust = KpAim*heading_error + min_aim_command;
-        }
+    if (driveStick.getRawButton(3)) {
+      double heading_error = -1 * x;
+      double distance_error = -1 * x;
 
-        double distance_adjust = KpDistance * distance_error;
+      if (x > 1.0) {
+        steering_adjust = KpAim * heading_error - min_aim_command; // this gets just the steering adjustment. If the
+                                                                   // angle is larger than 1 then it removes the
+                                                                   // minimum.
+      } else if (x < 1.0) {
+        steering_adjust = KpAim * heading_error + min_aim_command; // If angle is less than 1 it adds the min aim
+                                                                   // command.
+      }
 
-        float left_command = 0.0f;
-        float right_command = 0.0f;
+      double distance_adjust = KpDistance * distance_error;
 
-        left_command += (float)steering_adjust + (float)distance_adjust;
-        right_command -= (float)steering_adjust + (float)distance_adjust;
-        System.out.println(left_command);
-        System.out.println(right_command);
-       // driveTrain.tankDrive(left_command*2, right_command*2);
-}
+      double left_command = 0.0;
+      double right_command = 0.0;// check if these are needed. Are you supposed to let these just keep going? Or
+                                 // reset them to 0 every time? If so, consider moving these before the if to
+                                 // condense code.
 
+      left_command += steering_adjust + distance_adjust;
+      right_command -= steering_adjust + distance_adjust;
+      // System.out.println(left_command); //For debugging purposes
+      // System.out.println(right_command);
+      driveTrain.tankDrive(left_command * 2, right_command * 2);
+    }
 
   }
 }
