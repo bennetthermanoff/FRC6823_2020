@@ -77,11 +77,15 @@ public class Robot extends TimedRobot {
     double y = ty.getDouble(0.0);
     double area = ta.getDouble(0.0);
     double skew = ts.getDouble(0.0);
+    double h = 9;
+    double dist = h * Math.tan(y);
 
     SmartDashboard.putNumber("x", x);
     SmartDashboard.putNumber("y", y);
     SmartDashboard.putNumber("area", area);
     SmartDashboard.putNumber("skew", skew);
+    SmartDashboard.putNumber("distance", dist);
+  
 
     // Start of autoaim/autodistance code
     driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate); // drives
