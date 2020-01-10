@@ -9,8 +9,8 @@ public class SwerveDrive {
      * This code heavily attributed from Jacob Misirian of FIRST Robotics Team 2506
      * of Franklin, WI.
      */
-    public final double L = 38; //
-    public final double W = 28; // These are from the Length and Width between wheels.
+    public final double L = 1; //
+    public final double W = 1; // These are from the Length and Width between wheels.
 
     private WheelDrive backRight;
     private WheelDrive backLeft;
