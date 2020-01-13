@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
-    System.out.println("Color: " + IR);
+
   }
   //returns if the rgb of two colors is within the errorValue
   public boolean closeEnough(Color colorSensor, Color targetColor){
