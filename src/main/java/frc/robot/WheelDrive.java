@@ -1,32 +1,39 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
+
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 
 public class WheelDrive {
+    private final double MAX_VOLTS = 4.95; // CHANGE THIS VOLTAGE I HAVE NO IDEA WHAT OUR KIT USES.
 
     private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private PIDController pidController;
-    private final double MAX_VOLTS = 4.95; // CHANGE THIS VOLTAGE I HAVE NO IDEA WHAT OUR KIT USES.
 
-    public WheelDrive(int angleMotor, int speedMotor, int encoder) {
+    private AnalogInput angleEncoder;
+    private double encoderOffset;
 
-        this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless); // configured for Jaguar controllers, can
-                                                                             // be changed.
+    public WheelDrive(int angleMotor, int speedMotor, AnalogInput angleEncoder, double encoderOffset) {
+        this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
-        pidController = new PIDController(1, 0, 0, new AnalogInput(encoder), this.angleMotor);
+        this.angleEncoder = angleEncoder;
+        this.encoderOffset = encoderOffset;
 
-        pidController.setOutputRange(-1, 1);
-        pidController.setContinuous();
-        pidController.enable();
+        // pidController = new PIDController(1, 0, 0, new AnalogInput(encoder),
+        // this.angleMotor);
+        pidController = new PIDController(.5, 0, 0);
+        // pidController.setTolerance(20);
+        pidController.enableContinuousInput(0, MAX_VOLTS);
+
     }
 
+    // angle is a value between -1 to 1
     public void drive(double speed, double angle, double rate) {
-        speedMotor.set(speed * rate);
+        // speedMotor.set(speed * rate);
 
         double setpoint = angle * (MAX_VOLTS * 0.5) + (MAX_VOLTS * 0.5); // Optimization offset can be calculated here.
         if (setpoint < 0) {
@@ -37,6 +44,26 @@ public class WheelDrive {
         }
 
         pidController.setSetpoint(setpoint);
+        double boundedOffset = (angleEncoder.getVoltage() + encoderOffset) % MAX_VOLTS;
+
+
+        double pidOut = pidController.calculate(boundedOffset, setpoint);
+        // angleMotor.set(-pidOut);
+
+        Robot.prefs.putDouble("Encoder ["+angleEncoder.getChannel()+"] getVoltage", angleEncoder.getVoltage());
+
+        Robot.prefs.putDouble("Encoder ["+angleEncoder.getChannel()+"] boundedOffset", boundedOffset);
+        Robot.prefs.putDouble("Encoder ["+angleEncoder.getChannel()+"] setpoint", setpoint);
+        Robot.prefs.putDouble("Encoder ["+angleEncoder.getChannel()+"] pidOut", pidOut);
+
+        if (angleEncoder.getChannel() == 0) {
+            if (angleEncoder.getVoltage() > maxVal) {
+                maxVal = angleEncoder.getVoltage();
+                Robot.prefs.putDouble("Encoder ["+angleEncoder.getChannel()+"] getVoltageMax", maxVal);
+            }
+        }
     }
+
+    double maxVal = 0;
 
 }
