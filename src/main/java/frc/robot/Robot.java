@@ -41,8 +41,12 @@ public class Robot extends TimedRobot {
   private NetworkTableEntry tx, ty, ta, ts;
   private NetworkTable table;
   private Preferences prefs;
-
-
+  private double red;
+  private double green;
+  private double blue;
+  private double error = 0.04;
+  private String[] colors = {"blue", "green", "red", "yellow"};
+  private int colorSelection = 0;
 
   @Override
   public void robotInit() {
@@ -75,22 +79,97 @@ public class Robot extends TimedRobot {
     // Color Sensor
 
     Color detectedColor = colorSensor.getColor();
+    red = detectedColor.red;
+    green = detectedColor.green;
+    blue = detectedColor.blue;
+    // cycles through the colors
+    if(driveStick.getRawButtonPressed(10)){
+      if(colorSelection == colors.length - 1){
+        colorSelection = 0;
+      }
+      else{
+        colorSelection++;
+      }
 
-    double IR = colorSensor.getIR();
-
+    }
+    if(driveStick.getRawButtonPressed(11))
+    SmartDashboard.putString("Looking for", colors[colorSelection]);
+    SmartDashboard.putString("Color I see", colorSeen());
+    SmartDashboard.putString("Color selected", colorSelected());
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
+    
+    if (closeEnough(colors[colorSelection]))
+    {
 
+    }
   }
   //returns if the rgb of two colors is within the errorValue
-  public boolean closeEnough(Color colorSensor, Color targetColor){
-    int errorValue = 10;
-    if (Math.abs(colorSensor.red - targetColor.red) <= errorValue && Math.abs(colorSensor.blue - targetColor.blue) <= errorValue && Math.abs(colorSensor.green - targetColor.green) <= errorValue){
-      return true;
+  public boolean closeEnough(String color){
+    if (color.equals("red"))
+    {
+      return Math.abs(red -  0.507568) <= error && Math.abs(green - 0.355225) <= error && Math.abs(blue - 0.136963) <= error;
     }
-    else{
-      return false;
+    else if (color.equals("green"))
+    {
+      return Math.abs(red - 0.163574) <= error && Math.abs(green - 0.584473) <= error && Math.abs(red - 0.251953) <= error;
     }
+    else if (color.equals("blue"))
+    {
+      return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.426758) <= error && Math.abs(red - 0.455078) <= error;
+    }
+    else
+    {
+      return Math.abs(red - 0.312256) <= error && Math.abs(green - 0.566162) <= error && Math.abs(red - 0.121338) <= error;
+    }
+  }
+  // returns the color the color sensor see
+  public String colorSeen(){
+    for(int i = 0; i < colors.length; i++){
+      if (closeEnough(colors[i])){
+        return colors[i];
+      }
+    }
+    return "idk";
+  }
+  public String colorSelected(){
+    if (colorSeen().equals("red"))
+    {
+      return "blue";
+    }
+    else if (colorSeen().equals("blue"))
+    {
+      return "red";
+    }
+    else if (colorSeen().equals("green"))
+    {
+      return "yellow";
+    }
+    else
+    {
+      return "green";
+    }
+  }
+  public double distanceSpun()
+  {
+    double distance = 300;
+    if (colorSeen().equals("blue"))
+    {
+      
+    }
+    else if (colorSeen().equals("green"))
+    {
+
+    }
+    else if (colorSeen().equals("red"))
+    {
+
+    }
+    else if (colorSeen().equals("yellow"))
+    {
+
+    }
+    return distance;
   }
 }  
