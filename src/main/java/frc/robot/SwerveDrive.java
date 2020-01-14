@@ -10,7 +10,8 @@ public class SwerveDrive {
      * of Franklin, WI.
      */
     public final double L = 1; //
-    public final double W = 1; // These are from the Length and Width between wheels.
+    public final double W = 1; // These are from the Length and Width between wheels. CHANGE THESE IF YOUR
+                               // ROBOT IS NOT A SQUARE
 
     private WheelDrive backRight;
     private WheelDrive backLeft;
