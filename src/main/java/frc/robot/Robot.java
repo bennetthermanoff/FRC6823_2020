@@ -47,7 +47,8 @@ public class Robot extends TimedRobot {
   private double error = 0.04;
   private String[] colors = {"blue", "green", "red", "yellow"};
   private int colorSelection = 0;
-
+  private int clockwise = 1;
+  private double distanceMotorSpins = 0;
   @Override
   public void robotInit() {
     left = new Talon(1);
@@ -93,17 +94,17 @@ public class Robot extends TimedRobot {
 
     }
     if(driveStick.getRawButtonPressed(11))
+    {
+      distanceMotorSpins = distanceSpun();
+    }
     SmartDashboard.putString("Looking for", colors[colorSelection]);
     SmartDashboard.putString("Color I see", colorSeen());
     SmartDashboard.putString("Color selected", colorSelected());
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Distance motor spins", distanceMotorSpins);
     
-    if (closeEnough(colors[colorSelection]))
-    {
-
-    }
   }
   //returns if the rgb of two colors is within the errorValue
   public boolean closeEnough(String color){
@@ -154,22 +155,83 @@ public class Robot extends TimedRobot {
   public double distanceSpun()
   {
     double distance = 300;
-    if (colorSeen().equals("blue"))
+    if (colors[colorSelection].equals("blue"))
     {
-      
-    }
-    else if (colorSeen().equals("green"))
-    {
+      if (colorSelected().equals("blue"))
+      {
+        distance += 50;
+      }
+      else if (colorSelected().equals("green"))
+      {
+          distance += 37.5;
+      }
+      else if (colorSelected().equals("red"))
+      {
+         distance += 25;
+      }
+      else if (colorSelected().equals("yellow"))
+      {
+         distance += 12.5;
 
+      }
     }
-    else if (colorSeen().equals("red"))
+    else if (colors[colorSelection].equals("green"))
     {
-
+      if (colorSelected().equals("blue"))
+      {
+         distance += 12.5;
+      }
+      else if (colorSelected().equals("green"))
+      {
+        distance += 50;
+      }
+      else if (colorSelected().equals("red"))
+      {
+          distance += 37.5;
+      }
+      else if (colorSelected().equals("yellow"))
+      {
+         distance += 25;
+      }
     }
-    else if (colorSeen().equals("yellow"))
+    else if (colors[colorSelection].equals("red"))
     {
-
+      if (colorSelected().equals("blue"))
+      {
+         distance += 25;
+      }
+      else if (colorSelected().equals("green"))
+      {
+         distance += 12.5;
+      }
+      else if (colorSelected().equals("red"))
+      {
+        distance += 50;
+      }
+      else if (colorSelected().equals("yellow"))
+      {
+          distance += 37.5;
+      }
     }
-    return distance;
+    else
+    {
+      if (colorSelected().equals("blue"))
+      {
+          distance += 37.5;
+      }
+      else if (colorSelected().equals("green"))
+      {
+         distance += 25;
+      }
+      else if (colorSelected().equals("red"))
+      {
+         distance += 12.5;
+      }
+      else
+      {
+         distance += 50;
+      }
+    }
+    return distance * clockwise;
   }
 }  
