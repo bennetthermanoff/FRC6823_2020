@@ -20,6 +20,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C.Port;
 
 import edu.wpi.first.wpilibj.util.Color;
@@ -49,6 +50,7 @@ public class Robot extends TimedRobot {
   private int colorSelection = 0;
   private int clockwise = 1;
   private double distanceMotorSpins = 0;
+  private Encoder encoder = new Encoder();
   @Override
   public void robotInit() {
     left = new Talon(1);
@@ -103,7 +105,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Distance motor spins", distanceMotorSpins);
+    SmartDashboard.putNumber("Distance motor is supposed to spin", distanceMotorSpins);
+    SmartDashboard.putNumber("RPM", value)
     
   }
   //returns if the rgb of two colors is within the errorValue
