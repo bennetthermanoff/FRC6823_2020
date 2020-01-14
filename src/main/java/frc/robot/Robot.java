@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     green = detectedColor.green;
     blue = detectedColor.blue;
     // cycles through the colors
-    if(driveStick.getRawButtonPressed(10)){
+    if(/**driveStick.getRawButtonPressed(10)**/ true){
       if(colorSelection == colors.length - 1){
         colorSelection = 0;
       }
@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
       }
 
     }
-    if(driveStick.getRawButtonPressed(11))
+    if(/**driveStick.getRawButtonPressed(11)**/ true)
     {
       distanceMotorSpins = distanceSpun();
     }
