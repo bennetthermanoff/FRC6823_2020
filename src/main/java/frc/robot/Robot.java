@@ -19,13 +19,14 @@ public class Robot extends TimedRobot {
   private WheelDrive backRight, backLeft, frontLeft, frontRight;
   private SwerveDrive swerveDrive;
   private AnalogInput encoder0, encoder1, encoder2, encoder3;
-
+  private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
+  private boolean isBackward;
   // swerve drive!
 
   @Override
   public void robotInit() {
     prefs = Preferences.getInstance();
-
+    isBackward = false;
     joystick = new Joystick(0); // creates new joystick
 
     encoder0 = new AnalogInput(0); // encoders from swervedrive 0,1,2,3 = FL,FR,BL,BR
@@ -34,17 +35,43 @@ public class Robot extends TimedRobot {
     encoder3 = new AnalogInput(3);
 
     backRight = new WheelDrive(5, 1, encoder3, -4.70);// These are the motors and encoder ports for swerve drive,
-    backLeft = new WheelDrive(9, 2, encoder2, .884);
+    backLeft = new WheelDrive(6, 2, encoder2, .884);
     frontRight = new WheelDrive(7, 3, encoder1, .697);
     frontLeft = new WheelDrive(8, 4, encoder0, .374);// angle,speed,encoder,offset (offset gets changed by
                                                      // smartdashboard in calibration.)
 
-    swerveDrive = new SwerveDrive(backRight, backLeft, frontRight, frontLeft); // This creates a swervedrive object, use
+    swerveDrive = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
+    frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
+      frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+      backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+      backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25); // This creates a swervedrive object, use
                                                                                // it to interact with the swervedrive
   }
 
   @Override
   public void teleopPeriodic() {
+
+    //Joystick deadzone code
+    double deadZone = prefs.getDouble("DeadZone", .1);
+    if(Math.abs(joystick.getRawAxis(1))<deadZone)
+      joyStickAxis1=0;
+      else
+      joyStickAxis1=joystick.getRawAxis(1);
+    if(Math.abs(joystick.getRawAxis(2))<deadZone)
+      joyStickAxis2=0;
+      else
+      joyStickAxis2=joystick.getRawAxis(2);
+    if(Math.abs(joystick.getRawAxis(0))<deadZone)
+      joyStickAxis0=0;
+      else
+      joyStickAxis0=joystick.getRawAxis(0);
+    
+
+      if(!joystick.getRawButton(2)){
+        joyStickAxis0*=-1;
+        joyStickAxis1*=-1;
+        //joyStickAxis2*=-1;
+      }
 
     if (joystick.getRawButton(12)) {
       swerveDrive.drive(0, .2, 0, 1);// press button 12 to set the swerve just forward, this is for calibration
@@ -61,11 +88,13 @@ public class Robot extends TimedRobot {
     backRight.getVoltages();
     frontLeft.getVoltages();
     frontRight.getVoltages();// outputs voltages to SmartDashBoard from each swerve module.
+    
+   
 
-    frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
-    frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
-    backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
-    backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);// sets encoder offsets from smartdashboard. Also rotates
+    
+    
+      
+    // sets encoder offsets from smartdashboard. Also rotates
                                                              // 90 degrees to account for which side is "forward".
 
   }
@@ -74,7 +103,7 @@ public class Robot extends TimedRobot {
     double speedRate = prefs.getDouble("SpeedRate", 1);
     double turnRate = prefs.getDouble("TurnRate", 1);// rates are broken rn. Keep at 1 until marked as fixed or
                                                      // calculations will go bad.
-    swerveDrive.drive(joystick.getRawAxis(1), joystick.getRawAxis(0), joystick.getRawAxis(2) * turnRate, speedRate);
+    swerveDrive.drive(joyStickAxis1*speedRate, joyStickAxis0*speedRate, joyStickAxis2 * turnRate, 1);
 
   }
 
