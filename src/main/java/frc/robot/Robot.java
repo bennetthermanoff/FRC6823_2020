@@ -114,15 +114,15 @@ public class Robot extends TimedRobot {
     }
     else if (color.equals("green"))
     {
-      return Math.abs(red - 0.163574) <= error && Math.abs(green - 0.584473) <= error && Math.abs(red - 0.251953) <= error;
+      return Math.abs(red - 0.163574) <= error && Math.abs(green - 0.584473) <= error && Math.abs(blue - 0.251953) <= error;
     }
     else if (color.equals("blue"))
     {
-      return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.426758) <= error && Math.abs(red - 0.455078) <= error;
+      return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.426758) <= error && Math.abs(blue - 0.455078) <= error;
     }
     else
     {
-      return Math.abs(red - 0.312256) <= error && Math.abs(green - 0.566162) <= error && Math.abs(red - 0.121338) <= error;
+      return Math.abs(red - 0.312256) <= error && Math.abs(green - 0.566162) <= error && Math.abs(blue - 0.121338) <= error;
     }
   }
   // returns the color the color sensor see
