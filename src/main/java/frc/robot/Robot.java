@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
     }
     if(driveStick.getRawButtonPressed(11))
     {
-      distanceMotorSpins = distanceSpun();
+      distanceMotorSpins = NextDistanceSpun();
     }
     SmartDashboard.putString("Looking for", colors[colorSelection]);
     SmartDashboard.putString("Color I see", colorSeen());
@@ -185,13 +185,11 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public double distanceSpun()
+  public double NextDistanceSpun()
   {
-    double distance = 300;
     double setpoint = convertToNumber(colors[colorSelection]);
     pidcontroller.setSetpoint(setpoint);
-    double boundedOffset = convertToNumber(colorSeen()) - setpoint;
-    distance += pidcontroller.calculate(boundedOffset, setpoint);
+    return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint) * 12.5;
 
     /**
     if (colors[colorSelection].equals("blue"))
@@ -273,6 +271,6 @@ public class Robot extends TimedRobot {
     }
     return distance * clockwise;
     **/
-    return distance;
+
   }
 }  
