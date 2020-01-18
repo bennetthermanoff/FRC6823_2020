@@ -51,19 +51,22 @@ public class Robot extends TimedRobot {
   private double blue;
   // wheel of fortune
   private PWMVictorSPX spinner;
+  private boolean moving = false;
 
-  private double error = 0.04;
+  private double error = 0.09;
   private String[] colors = { "blue", "green", "red", "yellow" };
   private int colorSelection = 0;
   private int clockwise = 1;
   private double distanceMotorSpins = 0;
 
   // PID Controller Related Shit
-  private PIDController pidcontroller = new PIDController(0.2, 0, 0);
+  private PIDController pidcontroller;
 
   @Override
   public void robotInit() {
-    spinner = new PWMVictorSPX(5); // placeholder
+    pidcontroller = new PIDController(0.2, 0, 0);
+
+    spinner = new PWMVictorSPX(5);
 
     left = new Talon(1);
 
@@ -101,7 +104,7 @@ public class Robot extends TimedRobot {
     green = detectedColor.green;
     blue = detectedColor.blue;
     // cycles through the colors
-    if (driveStick.getRawButtonPressed(10)) {
+    if (driveStick.getRawButtonPressed(10) && !moving) {
       if (colorSelection == colors.length - 1) {
         colorSelection = 0;
       } else {
@@ -110,9 +113,15 @@ public class Robot extends TimedRobot {
 
     }
 
-    if (driveStick.getRawButtonPressed(11)) {
+    if (driveStick.getRawButtonPressed(11) || moving) {
       distanceMotorSpins = NextDistanceSpun();
-      spinner.set(distanceMotorSpins / 2);// you can tell I have no idea what I am doing
+      if (!colorSelected().equals("fuck you idk"))
+        spinner.set(distanceMotorSpins);// you can tell I have no idea what I am doing
+      if (distanceMotorSpins != 0) {
+        moving = true;
+      } else {
+        moving = false;
+      }
     }
     SmartDashboard.putString("Looking for", colors[colorSelection]);
     SmartDashboard.putString("Color I see", colorSeen());
@@ -152,7 +161,7 @@ public class Robot extends TimedRobot {
         return colors[i];
       }
     }
-    return "idk";
+    return "fuck you idk";
   }
 
   public String colorSelected() {
@@ -162,6 +171,8 @@ public class Robot extends TimedRobot {
       return "red";
     } else if (colorSeen().equals("green")) {
       return "yellow";
+    } else if (colorSeen().equals("fuck you idk")) {
+      return "fuck you idk";
     } else {
       return "green";
     }
@@ -182,7 +193,7 @@ public class Robot extends TimedRobot {
   public double NextDistanceSpun() {
     double setpoint = convertToNumber(colors[colorSelection]);
     pidcontroller.setSetpoint(setpoint);
-    return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint) * 12.5;
+    return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint);
 
     /**
      * if (colors[colorSelection].equals("blue")) { if
