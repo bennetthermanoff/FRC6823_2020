@@ -5,8 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 package frc.robot;
+
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -15,75 +15,55 @@ import edu.wpi.first.wpilibj.PWMVictorSPX;
 import com.revrobotics.ColorSensorV3;
 
 public class ColorSensor {
-  private Joystick driveStick;
-  private I2C.Port i2cPort = I2C.Port.kOnboard;
-  private ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+  // Spinner motor control
+  private PWMVictorSPX spinner;
+  private boolean moving;
+  // Color sensor
+  private double error; // Tolerance for colors
+  private String[] colors;
+  private int colorSelection; // Driver's selected color
+  private double distanceMotorSpins;
+  private I2C.Port i2cPort;
+  private ColorSensorV3 colorSensor;
   private double red;
   private double green;
   private double blue;
-
-  // wheel of fortune
-  private PWMVictorSPX spinner;
-  private boolean moving = false;
-
-  //color sensor
-  private double error = 0.09;
-  private String[] colors = { "blue", "green", "red", "yellow" };
-  private int colorSelection = 0;
-  private double distanceMotorSpins = 0;
-
-  // PID Controller Related Shit
+  // PID controller related shit
   private PIDController pidcontroller;
 
-  @Override
-  public void robotInit() {
-    pidcontroller = new PIDController(0.2, 0, 0);
-    spinner = new PWMVictorSPX(5);
-    driveStick = new Joystick(0);
-    pidcontroller.enableContinuousInput(0, 1);
+  public ColorSensor() {
+    i2cPort = I2C.Port.kOnboard;
+    colorSensor = new ColorSensorV3(i2cPort);
+    moving = false;
+    error = 0.09;
+    colors = new String[] { "blue", "green", "red", "yellow" }; // it's in an array so that you can easily cycle through
+                                                                // it
+    colorSelection = 0;// this
+    distanceMotorSpins = 0;
+    pidcontroller = new PIDController(0.5, 0, 0); // changed from 0.2, 0, 0 to overshoot
+    spinner = new PWMVictorSPX(5); // this is the motor for the spinner
+    pidcontroller.enableContinuousInput(0, 1); // So that the code knows it's a wheel we are dealing with
   }
 
-  @Override
-  public void teleopPeriodic() {
+  // this will be run in a loop
+  public void deploySpinner(Joystick driveStick) {
     Color detectedColor = colorSensor.getColor();
     red = detectedColor.red;
     green = detectedColor.green;
     blue = detectedColor.blue;
     // cycles through the colors
     if (driveStick.getRawButtonPressed(10) && !moving) {
-      if (colorSelection == colors.length - 1) {
-        colorSelection = 0;
-      } else {
-        colorSelection++;
-      }
-
+      nextColor();
     }
-
+    // it starts when you push button 11 and it stops the motor once it has reached
+    // the right color and stopped moving
     if (driveStick.getRawButtonPressed(11) || moving) {
-      distanceMotorSpins = NextDistanceSpun();
-      if (!colorSelected().equals("unknown"))
-        spinner.set(distanceMotorSpins);// you can tell I have no idea what I am doing
-      if (distanceMotorSpins != 0) {
-        moving = true;
-      } else {
-        moving = false;
-      }
+      activateSpinner();
     }
-    SmartDashboard.putString("Looking for", colors[colorSelection]);
-    SmartDashboard.putString("Color I see", colorSeen());
-    SmartDashboard.putString("Color selected", colorSelected());
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Distance motor spins", distanceMotorSpins);
-
-    // PID Color Controller
-    if (driveStick.getRawButtonPressed(12)) {
-
-    }
+    showOnDashBoard(detectedColor);
   }
 
-  // returns if the rgb of two colors is within the errorValue
+  // returns true if the rgb of two colors is within the error value
   public boolean closeEnough(String color) {
     if (color.equals("red")) {
       return Math.abs(red - 0.507568) <= error && Math.abs(green - 0.355225) <= error
@@ -94,10 +74,23 @@ public class ColorSensor {
     } else if (color.equals("blue")) {
       return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.426758) <= error
           && Math.abs(blue - 0.455078) <= error;
-    } else {
+    } else { // assume its yellow
       return Math.abs(red - 0.312256) <= error && Math.abs(green - 0.566162) <= error
           && Math.abs(blue - 0.121338) <= error;
     }
+  }
+
+  // show the color selected by the driver, color currently selected by the field
+  // sensor, color detected by robot sensor, red value, green value, blue value,
+  // whether or not the motor should turn
+  public void showOnDashBoard(Color detectedColor) {
+    SmartDashboard.putString("Looking for", colors[colorSelection]);
+    SmartDashboard.putString("Color I see", colorSeen());
+    SmartDashboard.putString("Color selected", colorSelected());
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Distance motor spins", distanceMotorSpins);
   }
 
   // returns the color the color sensor see
@@ -110,6 +103,15 @@ public class ColorSensor {
     return "unknown";
   }
 
+  public void nextColor() {
+    if (colorSelection == colors.length - 1) {
+      colorSelection = 0;
+    } else {
+      colorSelection++;
+    }
+  }
+
+  // this
   public String colorSelected() {
     if (colorSeen().equals("red")) {
       return "blue";
@@ -142,7 +144,11 @@ public class ColorSensor {
     return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint);
   }
 
-  //ColorSensor Methods
-
-
+  public void activateSpinner() {
+    distanceMotorSpins = NextDistanceSpun();
+    if (!colorSelected().equals("unknown"))// if the color is unknown it won't set a direction and keep doing what its
+                                           // doing
+      spinner.set(distanceMotorSpins);
+    moving = distanceMotorSpins != 0;
+  }
 }
