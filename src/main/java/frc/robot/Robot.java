@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     speedRate = SmartDashboard.getNumber("SpeedRate", 1);
     turnRate = SmartDashboard.getNumber("TurnRate", 1);
-    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
+    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, 0.5 /*driveStick.getTwist() * turnRate*/);
 
     // Color Sensor
 
