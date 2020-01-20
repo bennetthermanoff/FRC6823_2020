@@ -57,7 +57,7 @@ public class ColorSensor {
     colorSelection = 0;// this
     directionOfSpin = 0;
     pidcontroller = new PIDController(0.5, 0, 0); // changed from 0.2, 0, 0 to overshoot
-    spinner = new PWMVictorSPX(5); // this is the motor for the spinner
+    this.spinner = spinner; // this is the motor for the spinner
     pidcontroller.enableContinuousInput(0, 1); // So that the code knows it's a wheel we are dealing with
   }
 
@@ -78,6 +78,7 @@ public class ColorSensor {
       activateSpinner();
     }
     showOnDashBoard(detectedColor);
+
   }
 
   // returns true if the rgb of two colors is within the error value
@@ -171,7 +172,6 @@ public class ColorSensor {
     directionOfSpin = NextSpin();
     if (!colorSelected().equals("unknown"))// if the color is unknown it won't set a direction and keep doing what its
                                            // doing
-      spinner.set(directionOfSpin);
-    moving = directionOfSpin != 0;
-  }
-}
+      spinner.set(directionOfSpin * 2);
+  }moving=directionOfSpin!=0;
+}}
