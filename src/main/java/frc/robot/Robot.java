@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
   private int colorSelection = 0;
   private int clockwise = 1;
   private double distanceMotorSpins = 0;
+
   // PID Controller Related Shit
   private PIDController pidcontroller;
 
@@ -70,6 +71,7 @@ public class Robot extends TimedRobot {
     left = new Talon(1);
 
     right = new Talon(0);
+
     /**
      * The numbers 1-4 are the CAN id's for the SparkMAX's, configure their ID's via
      * plugging the SparkMAX via USB and using their software.
@@ -93,26 +95,33 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     speedRate = SmartDashboard.getNumber("SpeedRate", 1);
     turnRate = SmartDashboard.getNumber("TurnRate", 1);
-    driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
+   // driveTrain.arcadeDrive((-driveStick.getRawAxis(1)) * speedRate, driveStick.getTwist() * turnRate);
 
     // Color Sensor
+
     Color detectedColor = colorSensor.getColor();
     red = detectedColor.red;
     green = detectedColor.green;
     blue = detectedColor.blue;
-
     // cycles through the colors
-    if (driveStick.getRawButtonPressed(10) && !moving) {
-      if (colorSelection == colors.length - 1)
+    if (driveStick.getRawButtonPressed(8))
+    {
+      
+    }
+
+    if (driveStick.getRawButtonPressed(10)) {
+      if (colorSelection == colors.length - 1) {
         colorSelection = 0;
-      else 
+      } else {
         colorSelection++;
+      }
+
     }
 
     if (driveStick.getRawButtonPressed(11) || moving) {
       distanceMotorSpins = NextDistanceSpun();
-      if (!colorSelected().equals("idk"))
-        spinner.set(distanceMotorSpins * 20);// you can tell I have no idea what I am doing
+      if (!colorSelected().equals("fuck you idk"))
+        spinner.set(distanceMotorSpins);// you can tell I have no idea what I am doing
       if (distanceMotorSpins != 0) {
         moving = true;
       } else {
