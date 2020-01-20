@@ -7,6 +7,8 @@
 //hey look it's some code! Incredible
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -21,6 +23,7 @@ public class Robot extends TimedRobot {
   private AnalogInput encoder0, encoder1, encoder2, encoder3;
   private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
   private boolean isBackward;
+ 
   // swerve drive!
 
   @Override
