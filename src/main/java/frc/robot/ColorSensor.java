@@ -31,6 +31,7 @@ public class ColorSensor {
   // PID controller related shit
   private PIDController pidcontroller;
 
+  // in case there is another use for the i2cport in the robot code
   public ColorSensor(I2C.Port i2cPort) {
     this.i2cPort = i2cPort;
     colorSensor = new ColorSensorV3(i2cPort);
@@ -45,6 +46,7 @@ public class ColorSensor {
     pidcontroller.enableContinuousInput(0, 1); // So that the code knows it's a wheel we are dealing with
   }
 
+  // assumes i2cport = i2c.port.konboard
   public ColorSensor() {
     i2cPort = I2C.Port.kOnboard;
     colorSensor = new ColorSensorV3(i2cPort);
@@ -59,13 +61,14 @@ public class ColorSensor {
     pidcontroller.enableContinuousInput(0, 1); // So that the code knows it's a wheel we are dealing with
   }
 
-  // this will be run in a loop
+  // this will be run in a loop to (make the field sensor) select the color
+  // selected by the driver
   public void deploySpinner(Joystick driveStick) {
     Color detectedColor = colorSensor.getColor();
     red = detectedColor.red;
     green = detectedColor.green;
     blue = detectedColor.blue;
-    // cycles through the colors
+    // cycles through the colors when you press button 10
     if (driveStick.getRawButtonPressed(10) && !moving) {
       nextColor();
     }
@@ -117,6 +120,7 @@ public class ColorSensor {
     return "unknown";
   }
 
+  // cycles through the colors for driver color selection
   public void nextColor() {
     if (colorSelection == colors.length - 1) {
       colorSelection = 0;
@@ -125,7 +129,7 @@ public class ColorSensor {
     }
   }
 
-  // this
+  // returns color selected by the field sensor
   public String colorSelected() {
     if (colorSeen().equals("red")) {
       return "blue";
@@ -140,6 +144,7 @@ public class ColorSensor {
     }
   }
 
+  // convert color (String) to number for the pid controller
   public double convertToNumber(String color) {
     if (color.equals("yellow")) {
       return 0;
@@ -152,14 +157,18 @@ public class ColorSensor {
     }
   }
 
-  public double NextDistanceSpun() {
+  // calculate the direction and speed (not used) for the spinning, takes the
+  // shortest route
+  public double NextSpin() {
     double setpoint = convertToNumber(colors[colorSelection]);
     pidcontroller.setSetpoint(setpoint);
     return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint);
   }
 
+  // turn the spinner according to the direction of next spin, if the color sensor
+  // doesn't recognize the color it keeps the motor spinning
   public void activateSpinner() {
-    directionOfSpin = NextDistanceSpun();
+    directionOfSpin = NextSpin();
     if (!colorSelected().equals("unknown"))// if the color is unknown it won't set a direction and keep doing what its
                                            // doing
       spinner.set(directionOfSpin);
