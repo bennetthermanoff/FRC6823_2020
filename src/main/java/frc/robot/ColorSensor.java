@@ -22,7 +22,7 @@ public class ColorSensor {
   private double error; // Tolerance for colors
   private String[] colors;
   private int colorSelection; // Driver's selected color
-  private double distanceMotorSpins;
+  private double directionOfSpin;
   private I2C.Port i2cPort;
   private ColorSensorV3 colorSensor;
   private double red;
@@ -39,7 +39,7 @@ public class ColorSensor {
     colors = new String[] { "blue", "green", "red", "yellow" }; // it's in an array so that you can easily cycle through
                                                                 // it
     colorSelection = 0;// this
-    distanceMotorSpins = 0;
+    directionOfSpin = 0;
     pidcontroller = new PIDController(0.5, 0, 0); // changed from 0.2, 0, 0 to overshoot
     spinner = new PWMVictorSPX(5); // this is the motor for the spinner
     pidcontroller.enableContinuousInput(0, 1); // So that the code knows it's a wheel we are dealing with
@@ -90,7 +90,7 @@ public class ColorSensor {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Distance motor spins", distanceMotorSpins);
+    SmartDashboard.putNumber("Distance motor spins", directionOfSpin);
   }
 
   // returns the color the color sensor see
@@ -145,10 +145,10 @@ public class ColorSensor {
   }
 
   public void activateSpinner() {
-    distanceMotorSpins = NextDistanceSpun();
+    directionOfSpin = NextDistanceSpun();
     if (!colorSelected().equals("unknown"))// if the color is unknown it won't set a direction and keep doing what its
                                            // doing
-      spinner.set(distanceMotorSpins);
-    moving = distanceMotorSpins != 0;
+      spinner.set(directionOfSpin);
+    moving = directionOfSpin != 0;
   }
 }
