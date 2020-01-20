@@ -85,6 +85,6 @@ public class WheelDrive {
         Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
     }
 
-     double maxVal = 0; //This for the Encoder max value testcode above.
+    double maxVal = 0; // This for the Encoder max value testcode above.
 
 }
