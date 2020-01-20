@@ -47,7 +47,7 @@ public class ColorSensor {
   }
 
   // assumes i2cport = i2c.port.konboard
-  public ColorSensor() {
+  public ColorSensor(PWMVictorSPX spinner) {
     i2cPort = I2C.Port.kOnboard;
     colorSensor = new ColorSensorV3(i2cPort);
     moving = false;
@@ -170,8 +170,10 @@ public class ColorSensor {
   // doesn't recognize the color it keeps the motor spinning
   public void activateSpinner() {
     directionOfSpin = NextSpin();
-    if (!colorSelected().equals("unknown"))// if the color is unknown it won't set a direction and keep doing what its
-                                           // doing
+    if (!colorSelected().equals("unknown")) {// if the color is unknown it won't set a direction and keep doing what its
+                                             // doing
       spinner.set(directionOfSpin * 2);
-  }moving=directionOfSpin!=0;
-}}
+    }
+    moving = directionOfSpin != 0;
+  }
+}
