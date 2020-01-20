@@ -43,11 +43,17 @@ public class LimeLightAutoAimAutoSteer {
         double y = ty.getDouble(0.0);
         double area = ta.getDouble(0.0);
         double skew = ts.getDouble(0.0);
-
+        prefs.putDouble("x", x);
+        prefs.putDouble("y", y);
+        
         double aimCommand = aimPidController.calculate(x, 0);
         double distanceCommand = distancePidController.calculate(y, 0);
+        prefs.putDouble("aimCommand", aimCommand);
+        prefs.putDouble("distanceCommand", distanceCommand);
+        
 
-        return new double[] { aimCommand, distanceCommand };
+
+        return new double[] { aimCommand, distanceCommand};//
 
     }
 }

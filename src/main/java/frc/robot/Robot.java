@@ -24,6 +24,8 @@ public class Robot extends TimedRobot {
   private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
   private boolean isBackward;
   private LimeLightAutoAimAutoSteer limeLightAutoAimAutoSteer;
+  private double[] voltages;
+  boolean isCalibrate;
 
   // swerve drive!
 
@@ -51,20 +53,29 @@ public class Robot extends TimedRobot {
     backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25); // This creates a swervedrive object, use
     // it to interact with the swervedrive
     limeLightAutoAimAutoSteer = new LimeLightAutoAimAutoSteer(prefs);
+    isCalibrate=false;
 
   }
 
   @Override
   public void teleopPeriodic() {
+    
 
     limeLightAutoAimAutoSteer.updatePrefs();
 
     // Joystick deadzone code
-
-    if (joystick.getRawButton(3)) {
+    if(joystick.getRawButton(11)&&joystick.getRawButton(12)){
+      isCalibrate=true;
+    }
+    else{
+    //  frontLeft.setZero(prefs.getDouble("FLOffset", 0));
+    //frontRight.setZero(prefs.getDouble("FROffset", 0));
+    //backLeft.setZero(prefs.getDouble("BLOffset", 0));
+    //backRight.setZero(prefs.getDouble("BROffset", 0));
+    if (joystick.getRawButton(3)&&!isCalibrate) {
       double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
-      swerveDrive.drive(0, autoAim[1] * .1, autoAim[0] * .1, 1);
-    } else {
+      swerveDrive.drive( autoAim[1] * .2,0, autoAim[0] * .3, 1);
+    } else if(!isCalibrate) {
       double deadZone = prefs.getDouble("DeadZone", .1);
       if (Math.abs(joystick.getRawAxis(1)) < deadZone)
         joyStickAxis1 = 0;
@@ -96,7 +107,22 @@ public class Robot extends TimedRobot {
       else
         joystickDrive();
     }
-
+    else{
+      if(joystick.getRawButton(3)){
+        getValues();
+      }
+      else if (joystick.getRawButton(4)){
+        calibrate(voltages);
+      }
+      else if(joystick.getRawButton(5)){
+        backRight.stop();
+        backLeft.stop();
+        frontLeft.stop();
+        frontRight.stop();
+      }
+    }
+    
+  
     backLeft.getVoltages();
     backRight.getVoltages();
     frontLeft.getVoltages();
@@ -106,6 +132,34 @@ public class Robot extends TimedRobot {
     // 90 degrees to account for which side is "forward".
 
   }
+}
+
+  public void getValues(){
+
+    swerveDrive.drive(.2, 0, 0, 1);
+    voltages = new double[] {
+      backLeft.getVoltages(),
+      backRight.getVoltages(),
+      frontLeft.getVoltages(),
+      frontRight.getVoltages()};
+  }
+  public void calibrate(double[] array){
+    frontLeft.setZero(frontLeft.getVoltages()+array[2]);
+    frontRight.setZero(frontRight.getVoltages()+array[3]);
+    backLeft.setZero(backLeft.getVoltages()+array[0]);
+    backRight.setZero(backRight.getVoltages()+array[1]);
+    prefs.putDouble("FLOffset", frontLeft.getVoltages()+array[2]);
+    prefs.putDouble("FROffset", frontRight.getVoltages()+array[3]);
+    prefs.putDouble("BLOffset", backLeft.getVoltages()+array[0]);
+    prefs.putDouble("BROffset", backRight.getVoltages()+array[1]);
+    isCalibrate = false;
+    frontRight.restart();
+    frontLeft.restart();
+    backLeft.restart();
+    backRight.restart();
+    
+  }
+  
 
   public void joystickDrive() { // drives the swervedrive, also gets speed rates from smartdashboard.
     double speedRate = prefs.getDouble("SpeedRate", 1);
