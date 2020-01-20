@@ -23,7 +23,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.controller.PIDController;
-
 import edu.wpi.first.wpilibj.util.Color;
 
 import edu.wpi.first.wpilibj.Spark;
@@ -37,7 +36,7 @@ import com.revrobotics.ColorSensorV3; // Color sensor
  * testing!) - Bennett H. zucc
  */
 public class Robot extends TimedRobot {
- // private DifferentialDrive driveTrain;
+  // private DifferentialDrive driveTrain;
   private Joystick driveStick;
   private Talon left, right;
   // private CANSparkMax left1CAN, left2CAN, right1CAN, right2CAN;
@@ -66,7 +65,7 @@ public class Robot extends TimedRobot {
      * plugging the SparkMAX via USB and using their software.
      **/
 
-    //driveTrain = new DifferentialDrive(left, right);
+    // driveTrain = new DifferentialDrive(left, right);
     driveStick = new Joystick(0);
     prefs = Preferences.getInstance();
     // setsup limelight table values

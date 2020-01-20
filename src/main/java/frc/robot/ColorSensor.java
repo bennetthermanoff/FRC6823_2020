@@ -77,6 +77,10 @@ public class ColorSensor {
     if (driveStick.getRawButtonPressed(11) || moving) {
       activateSpinner();
     }
+
+    if (driveStick.getRawButtonPressed(12)) {
+      turnWheelNTimes(3.5);
+    }
     showOnDashBoard(detectedColor);
 
   }
@@ -175,5 +179,23 @@ public class ColorSensor {
       spinner.set(directionOfSpin * 2);
     }
     moving = directionOfSpin != 0;
+  }
+
+  // Turns a wheel n times
+  public void turnWheelNTimes(double n) {
+    int count = 0;
+    while (colorSelected().equals("unknown")) {
+      spinner.set(0.1);
+      // turnWheelNTimes(n);
+    }
+    String lastColor = colorSelected();
+
+    while (count < n * 8) {
+      spinner.set(1);
+      if (!lastColor.equals(colorSelected()) && !lastColor.equals("unknown")) {
+        lastColor = colorSelected();
+        count++;
+      }
+    }
   }
 }
