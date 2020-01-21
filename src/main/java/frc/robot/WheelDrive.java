@@ -81,10 +81,17 @@ public class WheelDrive {
 
     // this method outputs voltages of the encoder to the smartDashBoard, useful for
     // calibrating the encoder offsets
-    public void getVoltages() {
+    public double getVoltages() {
         Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
+        return angleEncoder.getVoltage();
     }
-
-     double maxVal = 0; //This for the Encoder max value testcode above.
+    public void stop(){
+        pidController.setP(0);
+        speedMotor.set(0);
+    }
+    public void restart(){
+        pidController.setP(.5);
+    }
+    double maxVal = 0; // This for the Encoder max value testcode above.
 
 }

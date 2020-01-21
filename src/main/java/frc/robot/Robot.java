@@ -7,6 +7,8 @@
 //hey look it's some code! Incredible
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -21,6 +23,10 @@ public class Robot extends TimedRobot {
   private AnalogInput encoder0, encoder1, encoder2, encoder3;
   private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
   private boolean isBackward;
+  private LimeLightAutoAimAutoSteer limeLightAutoAimAutoSteer;
+  private double[] voltages;
+  boolean isCalibrate;
+
   // swerve drive!
 
   @Override
@@ -42,68 +48,124 @@ public class Robot extends TimedRobot {
 
     swerveDrive = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
     frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
-      frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
-      backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
-      backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25); // This creates a swervedrive object, use
-                                                                               // it to interact with the swervedrive
+    frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+    backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+    backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25); // This creates a swervedrive object, use
+    // it to interact with the swervedrive
+    limeLightAutoAimAutoSteer = new LimeLightAutoAimAutoSteer(prefs);
+    isCalibrate=false;
+
   }
 
   @Override
   public void teleopPeriodic() {
-
-    //Joystick deadzone code
-    double deadZone = prefs.getDouble("DeadZone", .1);
-    if(Math.abs(joystick.getRawAxis(1))<deadZone)
-      joyStickAxis1=0;
-      else
-      joyStickAxis1=joystick.getRawAxis(1);
-    if(Math.abs(joystick.getRawAxis(2))<deadZone)
-      joyStickAxis2=0;
-      else
-      joyStickAxis2=joystick.getRawAxis(2);
-    if(Math.abs(joystick.getRawAxis(0))<deadZone)
-      joyStickAxis0=0;
-      else
-      joyStickAxis0=joystick.getRawAxis(0);
     
 
-      if(!joystick.getRawButton(2)){
-        joyStickAxis0*=-1;
-        joyStickAxis1*=-1;
-        //joyStickAxis2*=-1;
+    limeLightAutoAimAutoSteer.updatePrefs();
+
+    // Joystick deadzone code
+    if(joystick.getRawButton(11)&&joystick.getRawButton(12)){
+      isCalibrate=true;
+    }
+    else{
+    //  frontLeft.setZero(prefs.getDouble("FLOffset", 0));
+    //frontRight.setZero(prefs.getDouble("FROffset", 0));
+    //backLeft.setZero(prefs.getDouble("BLOffset", 0));
+    //backRight.setZero(prefs.getDouble("BROffset", 0));
+    if (joystick.getRawButton(3)&&!isCalibrate) {
+      double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
+      swerveDrive.drive( autoAim[1] * .2,0, autoAim[0] * .3, 1);
+    } else if(!isCalibrate) {
+      double deadZone = prefs.getDouble("DeadZone", .1);
+      if (Math.abs(joystick.getRawAxis(1)) < deadZone)
+        joyStickAxis1 = 0;
+      else
+        joyStickAxis1 = joystick.getRawAxis(1);
+      if (Math.abs(joystick.getRawAxis(2)) < deadZone)
+        joyStickAxis2 = 0;
+      else
+        joyStickAxis2 = joystick.getRawAxis(2);
+      if (Math.abs(joystick.getRawAxis(0)) < deadZone)
+        joyStickAxis0 = 0;
+      else
+        joyStickAxis0 = joystick.getRawAxis(0);
+
+      if (!joystick.getRawButton(2)) {
+        joyStickAxis0 *= -1;
+        joyStickAxis1 *= -1;
+        // joyStickAxis2*=-1;
       }
 
-    if (joystick.getRawButton(12)) {
-      swerveDrive.drive(0, .2, 0, 1);// press button 12 to set the swerve just forward, this is for calibration
-                                     // purposes.
+      if (joystick.getRawButton(12)) {
+        swerveDrive.drive(0, .2, 0, 1);// press button 12 to set the swerve just forward, this is for calibration
+                                       // purposes.
 
-    } else if (joystick.getRawButton(9))
-      swerveDrive.drive(0, 0, 0, 0); // This is the swerve "STOP" button, it will tell the swerve to immidiately stop
-                                     // and set all motors to brake.
+      } else if (joystick.getRawButton(9))
+        swerveDrive.drive(0, 0, 0, 0); // This is the swerve "STOP" button, it will tell the swerve to immidiately stop
+                                       // and set all motors to brake.
 
-    else
-      joystickDrive();
-
+      else
+        joystickDrive();
+    }
+    else{
+      if(joystick.getRawButton(3)){
+        getValues();
+      }
+      else if (joystick.getRawButton(4)){
+        calibrate(voltages);
+      }
+      else if(joystick.getRawButton(5)){
+        backRight.stop();
+        backLeft.stop();
+        frontLeft.stop();
+        frontRight.stop();
+      }
+    }
+    
+  
     backLeft.getVoltages();
     backRight.getVoltages();
     frontLeft.getVoltages();
     frontRight.getVoltages();// outputs voltages to SmartDashBoard from each swerve module.
-    
-   
 
-    
-    
-      
     // sets encoder offsets from smartdashboard. Also rotates
-                                                             // 90 degrees to account for which side is "forward".
+    // 90 degrees to account for which side is "forward".
 
   }
+}
+
+  public void getValues(){
+
+    swerveDrive.drive(.2, 0, 0, 1);
+    voltages = new double[] {
+      backLeft.getVoltages(),
+      backRight.getVoltages(),
+      frontLeft.getVoltages(),
+      frontRight.getVoltages()};
+  }
+  public void calibrate(double[] array){
+    frontLeft.setZero(frontLeft.getVoltages()+array[2]);
+    frontRight.setZero(frontRight.getVoltages()+array[3]);
+    backLeft.setZero(backLeft.getVoltages()+array[0]);
+    backRight.setZero(backRight.getVoltages()+array[1]);
+    prefs.putDouble("FLOffset", frontLeft.getVoltages()+array[2]);
+    prefs.putDouble("FROffset", frontRight.getVoltages()+array[3]);
+    prefs.putDouble("BLOffset", backLeft.getVoltages()+array[0]);
+    prefs.putDouble("BROffset", backRight.getVoltages()+array[1]);
+    isCalibrate = false;
+    frontRight.restart();
+    frontLeft.restart();
+    backLeft.restart();
+    backRight.restart();
+    
+  }
+  
 
   public void joystickDrive() { // drives the swervedrive, also gets speed rates from smartdashboard.
     double speedRate = prefs.getDouble("SpeedRate", 1);
     double turnRate = prefs.getDouble("TurnRate", 1);// rates are broken rn. Keep at 1 until marked as fixed or
                                                      // calculations will go bad.
-    swerveDrive.drive(joyStickAxis1*speedRate, joyStickAxis0*speedRate, joyStickAxis2 * turnRate, 1);
+    swerveDrive.drive(joyStickAxis1 * speedRate, joyStickAxis0 * speedRate, joyStickAxis2 * turnRate, 1);
 
   }
 
