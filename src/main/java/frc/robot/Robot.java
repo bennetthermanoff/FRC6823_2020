@@ -59,23 +59,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+    frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
+    frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+    backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+    backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
 
     limeLightAutoAimAutoSteer.updatePrefs();
 
     // Joystick deadzone code
-    if(joystick.getRawButton(11)&&joystick.getRawButton(12)){
-      isCalibrate=true;
-    }
-    else{
+    
     //  frontLeft.setZero(prefs.getDouble("FLOffset", 0));
     //frontRight.setZero(prefs.getDouble("FROffset", 0));
     //backLeft.setZero(prefs.getDouble("BLOffset", 0));
     //backRight.setZero(prefs.getDouble("BROffset", 0));
-    if (joystick.getRawButton(3)&&!isCalibrate) {
+    if (joystick.getRawButton(3)) {
       double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
       swerveDrive.drive( autoAim[1] * .2,0, autoAim[0] * .3, 1);
-    } else if(!isCalibrate) {
+    } else  {
       double deadZone = prefs.getDouble("DeadZone", .1);
       if (Math.abs(joystick.getRawAxis(1)) < deadZone)
         joyStickAxis1 = 0;
@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
       }
 
       if (joystick.getRawButton(12)) {
-        swerveDrive.drive(0, .2, 0, 1);// press button 12 to set the swerve just forward, this is for calibration
+        swerveDrive.drive(0.2, 0, 0, 1);// press button 12 to set the swerve just forward, this is for calibration
                                        // purposes.
 
       } else if (joystick.getRawButton(9))
@@ -107,20 +107,7 @@ public class Robot extends TimedRobot {
       else
         joystickDrive();
     }
-    else{
-      if(joystick.getRawButton(3)){
-        getValues();
-      }
-      else if (joystick.getRawButton(4)){
-        calibrate(voltages);
-      }
-      else if(joystick.getRawButton(5)){
-        backRight.stop();
-        backLeft.stop();
-        frontLeft.stop();
-        frontRight.stop();
-      }
-    }
+   
     
   
     backLeft.getVoltages();
@@ -131,11 +118,14 @@ public class Robot extends TimedRobot {
     // sets encoder offsets from smartdashboard. Also rotates
     // 90 degrees to account for which side is "forward".
 
-  }
+  
 }
 
   public void getValues(){
-
+    frontLeft.setZero(0);
+    frontRight.setZero(0);
+    backLeft.setZero(0);
+    backRight.setZero(0);
     swerveDrive.drive(.2, 0, 0, 1);
     voltages = new double[] {
       backLeft.getVoltages(),
@@ -144,14 +134,14 @@ public class Robot extends TimedRobot {
       frontRight.getVoltages()};
   }
   public void calibrate(double[] array){
-    frontLeft.setZero(frontLeft.getVoltages()+array[2]);
-    frontRight.setZero(frontRight.getVoltages()+array[3]);
-    backLeft.setZero(backLeft.getVoltages()+array[0]);
-    backRight.setZero(backRight.getVoltages()+array[1]);
-    prefs.putDouble("FLOffset", frontLeft.getVoltages()+array[2]);
-    prefs.putDouble("FROffset", frontRight.getVoltages()+array[3]);
-    prefs.putDouble("BLOffset", backLeft.getVoltages()+array[0]);
-    prefs.putDouble("BROffset", backRight.getVoltages()+array[1]);
+    frontLeft.setZero(frontLeft.getVoltages());
+    frontRight.setZero(frontRight.getVoltages());
+    backLeft.setZero(backLeft.getVoltages());
+    backRight.setZero(backRight.getVoltages());
+    prefs.putDouble("FLOffset", frontLeft.getVoltages()-2.5);
+    prefs.putDouble("FROffset", frontRight.getVoltages()-2.);
+    prefs.putDouble("BLOffset", backLeft.getVoltages());
+    prefs.putDouble("BROffset", backRight.getVoltages());
     isCalibrate = false;
     frontRight.restart();
     frontLeft.restart();
