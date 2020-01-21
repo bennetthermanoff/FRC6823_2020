@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
     frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
     frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
     backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
-    backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
+    backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);                  
 
     limeLightAutoAimAutoSteer.updatePrefs();
 
@@ -75,7 +75,16 @@ public class Robot extends TimedRobot {
     if (joystick.getRawButton(3)) {
       double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
       swerveDrive.drive( autoAim[1] * .2,0, autoAim[0] * .3, 1);
-    } else  {
+    
+     if (joystick.getRawButton(4)){
+      swerveDrive.drive(0, limeLightAutoAimAutoSteer.strafe()*.15, 0, 1);
+      
+    }
+  }
+    else  {
+
+      limeLightAutoAimAutoSteer.strafeDebug();
+
       double deadZone = prefs.getDouble("DeadZone", .1);
       if (Math.abs(joystick.getRawAxis(1)) < deadZone)
         joyStickAxis1 = 0;
