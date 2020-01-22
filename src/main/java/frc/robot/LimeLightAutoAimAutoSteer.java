@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.PIDCommand;
 public class LimeLightAutoAimAutoSteer {
     private double kPAim, kPDistance, thetaX, thetaY;
     private NetworkTable table;
-    private NetworkTableEntry tx, ty, ta, ts;
+    private NetworkTableEntry tx, ty, ta, ts, threeD;
     private Preferences prefs;
     private PIDController aimPidController, distancePidController, strafePidController;
 
@@ -28,6 +28,8 @@ public class LimeLightAutoAimAutoSteer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
+        threeD = table.getEntry("camtran");
+
 
     }
 
@@ -60,18 +62,32 @@ public class LimeLightAutoAimAutoSteer {
 
     }
     public void strafeDebug(){
-        prefs.putDouble("straft", ts.getDouble(0));
+        prefs.putDouble("straft", threeD.getDoubleArray(new double[]{0})[0]);
+    
     }
-    public double strafe(){
-        double skew=ts.getDouble(0);
+    public double[] strafeAndAim(){
+        double skew=threeD.getDoubleArray(new double[]{0})[0];
         //if(tx.getDouble(0)>0){
         //    strafePidController.setSetpoint(-90);
         //}
         //else
         strafePidController.setSetpoint(0);
+        
+        
+        double skewCommand= strafePidController.calculate(skew);
+        double x = tx.getDouble(0.0);
+        
+        prefs.putDouble("x", x);
+        
+        
+        double aimCommand = aimPidController.calculate(x, 0);
+        
+        prefs.putDouble("aimCommand", aimCommand);
 
-        strafePidController.enableContinuousInput(0, -90);
-        return strafePidController.calculate(skew);
+        
+
+
+        return new double[] { aimCommand, skewCommand*-1};//
 
 
     }

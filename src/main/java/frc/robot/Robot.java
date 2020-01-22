@@ -74,13 +74,14 @@ public class Robot extends TimedRobot {
     //backRight.setZero(prefs.getDouble("BROffset", 0));
     if (joystick.getRawButton(3)) {
       double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
-      swerveDrive.drive( autoAim[1] * .2,0, autoAim[0] * .3, 1);
-    
-     if (joystick.getRawButton(4)){
-      swerveDrive.drive(0, limeLightAutoAimAutoSteer.strafe()*.15, 0, 1);
-      
+      swerveDrive.drive( autoAim[1] * 0,0, autoAim[0] * .3, 1);
     }
-  }
+     else if (joystick.getRawButton(4)){
+      double[] autoAim = limeLightAutoAimAutoSteer.strafeAndAim();
+      swerveDrive.drive( 0,autoAim[1]*.1, autoAim[0] * .3, 1);
+     }
+    
+  
     else  {
 
       limeLightAutoAimAutoSteer.strafeDebug();
