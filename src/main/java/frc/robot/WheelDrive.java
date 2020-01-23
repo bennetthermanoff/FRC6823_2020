@@ -38,9 +38,9 @@ public class WheelDrive {
     }
 
     // angle is a value between -1 to 1
-    public void drive(double speed, double angle, double rate) {
+    public void drive(double speed, double angle) {
 
-        speedMotor.set(speed * rate); // sets motor speed
+        speedMotor.set(speed); // sets motor speed
 
         double setpoint = angle * (MAX_VOLTS * 0.5) + (MAX_VOLTS * 0.5); // Optimization offset can be calculated here.
         if (setpoint < 0) {
@@ -85,13 +85,16 @@ public class WheelDrive {
         Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
         return angleEncoder.getVoltage();
     }
-    public void stop(){
+
+    public void stop() {
         pidController.setP(0);
         speedMotor.set(0);
     }
-    public void restart(){
+
+    public void restart() {
         pidController.setP(.5);
     }
+
     double maxVal = 0; // This for the Encoder max value testcode above.
 
 }

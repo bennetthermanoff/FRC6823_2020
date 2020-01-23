@@ -5,12 +5,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.command.PIDCommand;
 
 public class LimeLightAutoAimAutoSteer {
-    private double kPAim, kPDistance, thetaX, thetaY;
+
     private NetworkTable table;
-    private NetworkTableEntry tx, ty, ta, ts, threeD;
+    private NetworkTableEntry tx, ty, threeD;
     private Preferences prefs;
     private PIDController aimPidController, distancePidController, strafePidController;
 
@@ -26,10 +25,7 @@ public class LimeLightAutoAimAutoSteer {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
-        ta = table.getEntry("ta");
-        ts = table.getEntry("ts");
         threeD = table.getEntry("camtran");
-
 
     }
 
@@ -40,55 +36,42 @@ public class LimeLightAutoAimAutoSteer {
         aimPidController.setP(KpAim);
         distancePidController.setP(KpDistance);
 
-
     }
 
     public double[] aimAndSteer() {
         double x = tx.getDouble(0.0);
         double y = ty.getDouble(0.0);
-        double area = ta.getDouble(0.0);
-        double skew = ts.getDouble(0.0);
+
         prefs.putDouble("x", x);
         prefs.putDouble("y", y);
-        
+
         double aimCommand = aimPidController.calculate(x, 0);
         double distanceCommand = distancePidController.calculate(y, 0);
         prefs.putDouble("aimCommand", aimCommand);
         prefs.putDouble("distanceCommand", distanceCommand);
-        
 
-
-        return new double[] { aimCommand, distanceCommand};//
+        return new double[] { aimCommand, distanceCommand };//
 
     }
-    public void strafeDebug(){
-        prefs.putDouble("straft", threeD.getDoubleArray(new double[]{0})[0]);
-    
-    }
-    public double[] strafeAndAim(){
-        double skew=threeD.getDoubleArray(new double[]{0})[0];
-        //if(tx.getDouble(0)>0){
-        //    strafePidController.setSetpoint(-90);
-        //}
-        //else
+
+    public double[] strafeAndAim() {
+        double skew = threeD.getDoubleArray(new double[] { 0 })[0];
+        // if(tx.getDouble(0)>0){
+        // strafePidController.setSetpoint(-90);
+        // }
+        // else
         strafePidController.setSetpoint(0);
-        
-        
-        double skewCommand= strafePidController.calculate(skew);
+
+        double skewCommand = strafePidController.calculate(skew);
         double x = tx.getDouble(0.0);
-        
+
         prefs.putDouble("x", x);
-        
-        
+
         double aimCommand = aimPidController.calculate(x, 0);
-        
+
         prefs.putDouble("aimCommand", aimCommand);
 
-        
-
-
-        return new double[] { aimCommand, skewCommand*-1};//
-
+        return new double[] { aimCommand, skewCommand * -1 };//
 
     }
 }
