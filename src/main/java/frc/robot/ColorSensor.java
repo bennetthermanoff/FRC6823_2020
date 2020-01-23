@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Spark;
+
 import com.revrobotics.ColorSensorV3;
 
 public class ColorSensor {
@@ -32,9 +34,15 @@ public class ColorSensor {
   private PIDController pidcontroller;
 
   private boolean isSpinning;
-
   // in case there is another use for the i2cport in the robot code
+
+  // rgb code
+  private Spark RGB;
+
   public ColorSensor(I2C.Port i2cPort) {
+    // rgb code
+    RGB = new Spark(9);
+
     isSpinning = false;
     this.i2cPort = i2cPort;
     colorSensor = new ColorSensorV3(i2cPort);
@@ -51,6 +59,9 @@ public class ColorSensor {
 
   // assumes i2cport = i2c.port.konboard
   public ColorSensor(PWMVictorSPX spinner) {
+    // rgb code
+    RGB = new Spark(9);
+
     i2cPort = I2C.Port.kOnboard;
     colorSensor = new ColorSensorV3(i2cPort);
     moving = false;
@@ -86,7 +97,8 @@ public class ColorSensor {
       isSpinning = turnWheelNTimes(3.5);
     }
     showOnDashBoard(detectedColor);
-
+    // rgb Code
+    RGB.set(colorToRGB(colorSelected()));
   }
 
   // returns true if the rgb of two colors is within the error value
@@ -212,5 +224,21 @@ public class ColorSensor {
     }
 
     return false;
+  }
+
+  public double colorToRGB(String color) {
+    if (color.equals("yellow")) {
+      return 0.69;
+    } else if (color.equals("blue")) {
+      return 0.87;
+    } else if (color.equals("green")) {
+      return 0.77;
+    } else if (color.equals("red")) {
+      return 0.61;
+    } else {
+      // this is color waves color 1 and 2 (chosen on the blinkin)
+      return 0.53;
+    }
+
   }
 }
