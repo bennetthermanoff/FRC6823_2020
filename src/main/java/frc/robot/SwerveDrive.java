@@ -25,13 +25,13 @@ public class SwerveDrive {
         this.frontLeft = frontLeft;
     }
 
-    public void drive(double x1, double y1, double x2, double rate) {// x1, y1 are from the position of the joystick, x2
-                                                                     // is from the rotation
+    public void drive(double x1, double y1, double x2) {// x1, y1 are from the position of the joystick, x2
+                                                        // is from the rotation
 
         double r = Math.sqrt((L * L) + (W * W));
-       // y1 *= -1;
-       // x1 *= -1;
-        
+        // y1 *= -1;
+        // x1 *= -1;
+
         double a = x1 - x2 * (L / r);
         double b = x1 + x2 * (L / r);
         double c = y1 - x2 * (W / r);
@@ -42,14 +42,14 @@ public class SwerveDrive {
         double frontRightSpeed = Math.sqrt((b * b) + (d * d));
         double frontLeftSpeed = Math.sqrt((a * a) + (d * d));//
 
-        double backRightAngle = Math.atan2(b,c) / Math.PI;
+        double backRightAngle = Math.atan2(b, c) / Math.PI;
         double backLeftAngle = Math.atan2(a, c) / Math.PI;
         double frontRightAngle = Math.atan2(b, d) / Math.PI;
-        double frontLeftAngle = Math.atan2(a,d) / Math.PI;
+        double frontLeftAngle = Math.atan2(a, d) / Math.PI;
 
-        backRight.drive(backRightSpeed, backRightAngle, rate);
-        backLeft.drive(backLeftSpeed, backLeftAngle, rate);
-        frontRight.drive(frontRightSpeed, frontRightAngle, rate);
-        frontLeft.drive(frontLeftSpeed, frontLeftAngle, rate);
+        backRight.drive(backRightSpeed, backRightAngle);
+        backLeft.drive(backLeftSpeed, backLeftAngle);
+        frontRight.drive(frontRightSpeed, frontRightAngle);
+        frontLeft.drive(frontLeftSpeed, frontLeftAngle);
     }
 }

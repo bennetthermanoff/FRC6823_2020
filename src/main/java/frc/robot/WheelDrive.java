@@ -38,9 +38,9 @@ public class WheelDrive {
     }
 
     // angle is a value between -1 to 1
-    public void drive(double speed, double angle, double rate) {
+    public void drive(double speed, double angle) {
 
-        speedMotor.set(speed * rate); // sets motor speed
+        speedMotor.set(speed); // sets motor speed
 
         double setpoint = angle * (MAX_VOLTS * 0.5) + (MAX_VOLTS * 0.5); // Optimization offset can be calculated here.
         if (setpoint < 0) {
@@ -81,10 +81,20 @@ public class WheelDrive {
 
     // this method outputs voltages of the encoder to the smartDashBoard, useful for
     // calibrating the encoder offsets
-    public void getVoltages() {
+    public double getVoltages() {
         Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
+        return angleEncoder.getVoltage();
     }
 
-     double maxVal = 0; //This for the Encoder max value testcode above.
+    public void stop() {
+        pidController.setP(0);
+        speedMotor.set(0);
+    }
+
+    public void restart() {
+        pidController.setP(.5);
+    }
+
+    double maxVal = 0; // This for the Encoder max value testcode above.
 
 }
