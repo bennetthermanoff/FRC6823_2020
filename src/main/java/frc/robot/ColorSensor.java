@@ -32,6 +32,7 @@ public class ColorSensor {
   private PIDController pidcontroller;
 
   private boolean isSpinning;
+
   // in case there is another use for the i2cport in the robot code
   public ColorSensor(I2C.Port i2cPort) {
     isSpinning = false;
@@ -90,6 +91,10 @@ public class ColorSensor {
 
   // returns true if the rgb of two colors is within the error value
   public boolean closeEnough(String color) {
+    Color detectedColor = colorSensor.getColor();
+    red = detectedColor.red;
+    green = detectedColor.green;
+    blue = detectedColor.blue;
     if (color.equals("red")) {
       return Math.abs(red - 0.507568) <= error && Math.abs(green - 0.355225) <= error
           && Math.abs(blue - 0.136963) <= error;
@@ -97,9 +102,11 @@ public class ColorSensor {
       return Math.abs(red - 0.163574) <= error && Math.abs(green - 0.584473) <= error
           && Math.abs(blue - 0.251953) <= error;
     } else if (color.equals("blue")) {
-      /*return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.426758) <= error
-          && Math.abs(blue - 0.455078) <= error;*/
-          return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.349854) <= error
+      /*
+       * return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.426758) <=
+       * error && Math.abs(blue - 0.455078) <= error;
+       */
+      return Math.abs(red - 0.118164) <= error && Math.abs(green - 0.349854) <= error
           && Math.abs(blue - 0.531494) <= error;
     } else { // assume its yellow
       return Math.abs(red - 0.312256) <= error && Math.abs(green - 0.566162) <= error
@@ -188,22 +195,22 @@ public class ColorSensor {
 
   // Turns a wheel n times
   public boolean turnWheelNTimes(double n) {
-      int count = 0;
-      while (colorSelected().equals("unknown")) {
-        spinner.set(0.1);
-        // turnWheelNTimes(n);
-      }
-      String lastColor = colorSelected();
+    int count = 0;
+    while (colorSelected().equals("unknown")) {
+      spinner.set(0.1);
+      // turnWheelNTimes(n);
+    }
+    String lastColor = colorSelected();
 
-      while (count < n * 8) {
-        spinner.set(.4);
-        SmartDashboard.putNumber("spinnerCount", count);
-        if (!lastColor.equals(colorSelected()) && !lastColor.equals("unknown")) {
-          lastColor = colorSelected();
-          count++;
-        }
+    while (count < n * 8) {
+      spinner.set(.4);
+      SmartDashboard.putNumber("spinnerCount", count);
+      if (!lastColor.equals(colorSelected()) && !lastColor.equals("unknown")) {
+        lastColor = colorSelected();
+        count++;
       }
-    
+    }
+
     return false;
   }
 }
