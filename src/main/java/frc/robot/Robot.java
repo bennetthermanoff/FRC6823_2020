@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     // running limelight code, normal joystick input is made unavailable.
     if (joystick.getRawButton(3)) {
       double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
-      swerveDrive.drive(autoAim[1] * 0, 0, autoAim[0] * .3); // limelight will control swerve to aim with target and
+      swerveDrive.drive(autoAim[1] * .1, 0, autoAim[0] * .3); // limelight will control swerve to aim with target and
                                                              // go to a set distance away
     } else if (joystick.getRawButton(4)) {
       double[] autoAim = limeLightAutoAimAutoSteer.strafeAndAim();
@@ -100,10 +100,12 @@ public class Robot extends TimedRobot {
       joyStickAxis1 = 0;
     else
       joyStickAxis1 = joystick.getRawAxis(1);
+
     if (Math.abs(joystick.getRawAxis(2)) < deadZone)
       joyStickAxis2 = 0;
     else
       joyStickAxis2 = joystick.getRawAxis(2);
+
     if (Math.abs(joystick.getRawAxis(0)) < deadZone)
       joyStickAxis0 = 0;
     else

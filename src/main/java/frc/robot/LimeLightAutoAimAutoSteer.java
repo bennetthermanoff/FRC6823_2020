@@ -13,6 +13,8 @@ public class LimeLightAutoAimAutoSteer {
     private Preferences prefs;
     private PIDController aimPidController, distancePidController, strafePidController;
 
+    MovingAverage xFilter;
+
     public LimeLightAutoAimAutoSteer(Preferences prefs) {
         this.prefs = prefs;
         double KpDistance = this.prefs.getDouble("KpDistance", .18); // speed in which distance is adjusted when
@@ -27,6 +29,8 @@ public class LimeLightAutoAimAutoSteer {
         ty = table.getEntry("ty");
         threeD = table.getEntry("camtran");
 
+        xFilter = new MovingAverage(1);
+
     }
 
     public void updatePrefs() {
@@ -38,8 +42,12 @@ public class LimeLightAutoAimAutoSteer {
 
     }
 
+
+
     public double[] aimAndSteer() {
         double x = tx.getDouble(0.0);
+        xFilter.nextVal(x);
+        x = xFilter.get();
         double y = ty.getDouble(0.0);
 
         prefs.putDouble("x", x);
@@ -55,7 +63,7 @@ public class LimeLightAutoAimAutoSteer {
     }
 
     public double[] strafeAndAim() {
-        double skew = threeD.getDoubleArray(new double[] { 0 })[0];
+        double skew = threeD.getDoubleArray(new double[] {0})[0]; //(x,y,z,pitch,yaw,roll)
         // if(tx.getDouble(0)>0){
         // strafePidController.setSetpoint(-90);
         // }
@@ -64,6 +72,8 @@ public class LimeLightAutoAimAutoSteer {
 
         double skewCommand = strafePidController.calculate(skew);
         double x = tx.getDouble(0.0);
+        xFilter.nextVal(skew);
+        skew = xFilter.get();
 
         prefs.putDouble("x", x);
 
