@@ -10,7 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
@@ -42,13 +44,19 @@ public class Robot extends TimedRobot {
                                                          // smartdashboard in calibration.)
 
         swerveDrive = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
+        /*
+         * frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
+         * frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+         * backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+         * backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
+         */ // This creates a swervedrive object, use it to
+            // interact
+            // with the swervedrive4
+        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
+        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
+        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
+        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
 
-        frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
-        frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
-        backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
-        backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25); // This creates a swervedrive object, use it to
-                                                                  // interact
-                                                                  // with the swervedrive
         limeLightAutoAimAutoSteer = new LimeLightAutoAimAutoSteer(prefs); // limelight class
         prefs.putBoolean("DEBUG_MODE", false);
         navX = new NavXHandler();
@@ -57,11 +65,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+
         navX.printEverythingDammit(prefs);
-        frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
-        frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
-        backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
-        backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
+        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
+        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
+        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
+        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
 
         limeLightAutoAimAutoSteer.updatePrefs(); // updates values to limelight class from SmartDashBoard
 
@@ -72,9 +81,9 @@ public class Robot extends TimedRobot {
         // running limelight code, normal joystick input is made unavailable.
         if (joystick.getRawButton(3)) {
             double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
-            swerveDrive.drive(autoAim[1] * .1, 0, autoAim[0] * .3); // limelight will control swerve to aim with target
-                                                                    // and
-                                                                    // go to a set distance away
+            swerveDrive.drive(autoAim[1] * .75, 0, autoAim[0] * .3); // limelight will control swerve to aim with target
+                                                                     // and
+                                                                     // go to a set distance away
         } else if (joystick.getRawButton(4)) {
             double[] autoAim = limeLightAutoAimAutoSteer.strafeAndAim();
             swerveDrive.drive(0, autoAim[1] * .1, autoAim[0] * .3); // limelight will control swerve to aim at target
@@ -86,8 +95,13 @@ public class Robot extends TimedRobot {
         } else if (joystick.getRawButton(9)) {
             swerveDrive.drive(0, 0, 0); // This is the swerve "STOP" button, it will tell the swerve to immidiately stop
                                         // and set all motors to brake.
-        } else
+        } else if (joystick.getRawButton(6)) {
+            double[] autoAim = limeLightAutoAimAutoSteer.aimSteerAndStrafe();
+            swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
+        } else {
             joystickDrive();
+            SmartDashboard.putBoolean("Shoot", false);
+        }
 
         backLeft.getVoltages();
         backRight.getVoltages();
@@ -160,6 +174,25 @@ public class Robot extends TimedRobot {
 
         swerveDrive.drive(joyStickAxis1 * speedRate, joyStickAxis0 * speedRate, joyStickAxis2 * turnRate);// zoooooom
 
+    }
+
+    public void fieldDrive() { // drives the swervedrive, also gets speed rates from smartdashboard.
+        double speedRate = prefs.getDouble("SpeedRate", 1);
+        double turnRate = prefs.getDouble("TurnRate", 1);// rates are broken rn. Keep at 1 until marked as fixed or
+                                                         // calculations will go bad.
+        if (!joystick.getRawButton(2)) { // this is for reversing drive direction
+            joyStickAxis0 *= -1;
+            joyStickAxis1 *= -1;
+        }
+
+        double xval = joyStickAxis1 * speedRate;
+        double yval = joyStickAxis0 * speedRate;
+        double spinval = joyStickAxis2 * turnRate;
+
+        double txval = swerveDrive.getTransX(xval, yval, navX.getAngleRad());
+        double tyval = swerveDrive.getTransY(xval, yval, navX.getAngleRad());
+
+        swerveDrive.drive(txval, tyval, spinval);// zoooooom
     }
 
 }

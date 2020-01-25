@@ -38,6 +38,10 @@ public class NavXHandler {
         prefs.putDouble("getVelocityZ()", ahrs.getVelocityZ());
     }
 
+    public double getAngleRad() {
+        return ahrs.getAngle() * 2 * Math.PI / 360d;
+    }
+
     public double yeetPerSecond() {
         return Math.sqrt(Math.pow(ahrs.getVelocityX(), 2) + Math.pow(ahrs.getVelocityY(), 2));
     }

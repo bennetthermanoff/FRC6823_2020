@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation;
-
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.MovingAverage;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -64,6 +65,36 @@ public class LimeLightAutoAimAutoSteer {
 
         return new double[] { aimCommand, distanceCommand };//
 
+    }
+
+    public double[] aimSteerAndStrafe() {
+        double skew = threeD.getDoubleArray(new double[] { 0 })[0]; // (x,y,z,pitch,yaw,roll)
+        // if(tx.getDouble(0)>0){
+        // strafePidController.setSetpoint(-90);
+        // }
+        // else
+        strafePidController.setSetpoint(0);
+
+        double skewCommand = strafePidController.calculate(skew);
+        double x = tx.getDouble(0.0);
+        double y = ty.getDouble(0);
+        xFilter.nextVal(skew);
+        skew = xFilter.get();
+
+        prefs.putDouble("x", x);
+
+        double aimCommand = aimPidController.calculate(x, 0);
+        double distanceCommand = distancePidController.calculate(y, 0);
+
+        prefs.putDouble("aimCommand", aimCommand);
+
+        if (Math.abs(x) < 3 && Math.abs(y) < 3 && Math.abs(skew) < 5) {
+            SmartDashboard.putBoolean("Shoot", true);
+        } else {
+            SmartDashboard.putBoolean("Shoot", false);
+        }
+
+        return new double[] { aimCommand, skewCommand * -1, distanceCommand };//
     }
 
     public double[] strafeAndAim() {
