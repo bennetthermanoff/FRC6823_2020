@@ -4,16 +4,17 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.util.MathUtil;
 
 public class WheelDrive {
     private final double MAX_VOLTS = 4.95; // Voltage for the Andymark Absolute Encoders used in the SDS kit.
+
     private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private PIDController pidController;
     private AnalogInput angleEncoder;
-    private double encoderOffset;
 
-    private boolean invertSpeed;
+    private double encoderOffset;
 
     public WheelDrive(int angleMotor, int speedMotor, AnalogInput angleEncoder, double encoderOffset) {
         this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
@@ -32,8 +33,6 @@ public class WheelDrive {
 
         pidController.enableContinuousInput(0, MAX_VOLTS); // This makes the PID controller understand the fact that for
                                                            // our setup, 4.95V is the same as 0 since the wheel loops.
-
-        invertSpeed = false;
     }
 
     public void setZero(double offset) {
@@ -43,41 +42,34 @@ public class WheelDrive {
     // angle is a value between -1 to 1
     public void drive(double speed, double angle) {
 
-        double currentEncoderValue = (angleEncoder.getVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from encoder
-        double currentDirection = invertSpeed ? (currentEncoderValue+MAX_VOLTS/2)% MAX_VOLTS : currentEncoderValue;
+        double currentEncoderValue = (angleEncoder.getVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from
+                                                                                              // encoder
 
+        // Optimization offset can be calculated here.
         double setpoint = angle * (MAX_VOLTS * 0.5) + (MAX_VOLTS * 0.5); // Optimization offset can be calculated here.
-        if (setpoint < 0) {
-            setpoint = MAX_VOLTS + setpoint;
-        }
-        if (setpoint > MAX_VOLTS) {
-            setpoint = setpoint - MAX_VOLTS;
-        } // converts angle into the same scale that the encoder uses.
+        setpoint += MAX_VOLTS;
+        setpoint %= MAX_VOLTS; // ensure setpoint is on scale 0-4.95
 
-        if (Math.abs(currentDirection - setpoint) > MAX_VOLTS/2) {
-            invertSpeed = !invertSpeed;
-            currentDirection = invertSpeed ? (currentEncoderValue+MAX_VOLTS/2)% MAX_VOLTS : currentEncoderValue;
+        // if the setpoint is more than pi/4 rad away form the current position, then
+        // just reverse the speed
+        if (MathUtil.getCyclicalDistance(currentEncoderValue, setpoint, MAX_VOLTS) > MAX_VOLTS / 4) {
+            speed *= -1;
+            setpoint = (setpoint + MAX_VOLTS / 2) % MAX_VOLTS;
         }
 
-        speedMotor.set(invertSpeed ? -speed : speed); // sets motor speed. google ternary operator
+        speedMotor.set(speed); // sets motor speed.
+        pidController.setSetpoint(setpoint);
 
+        double pidOut = pidController.calculate(currentEncoderValue, setpoint);
 
-        pidController.setSetpoint(setpoint); // sets setpoint from PID controller
-                                                                                        // with the encoderOffset that
-                                                                                        // can be changed in
-                                                                                        // SmartDashboard.
+        angleMotor.set(-pidOut);
 
-        double pidOut = pidController.calculate(currentEncoderValue, setpoint);// calculates using PID the angle motor
-                                                                         // command.
-
-        angleMotor.set(-pidOut); // colten is god for figuring out our problem on 1/14/20 was this not being
-                                 // negative.
-
-        Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] boundedOffset", currentEncoderValue);
-        Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] setpoint", setpoint);
-        Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] pidOut", pidOut);// These values are output
-                                                                                            // to the smartDashBoard for
-                                                                                            // checking if PID workin.
+        if (Robot.prefs.getBoolean("DEBUG_MODE", false)) {
+            Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
+                    currentEncoderValue);
+            Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] setpoint", setpoint);
+            Robot.prefs.putDouble("Encoder [" + angleEncoder.getChannel() + "] pidOut", pidOut);
+        }
 
         // This is for testing to find the max value of an encoder. The encoders we use
         // (and most encoders) give values from 0 - 4.95.
@@ -105,7 +97,4 @@ public class WheelDrive {
     public void restart() {
         pidController.setP(.5);
     }
-
-    double maxVal = 0; // This for the Encoder max value testcode above.
-
 }

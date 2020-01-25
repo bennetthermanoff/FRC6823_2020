@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.util;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -23,7 +23,8 @@ public class MovingAverage {
     }
 
     public double get() {
-        if (size == 0) return 0;
-        return sum/size;
+        if (size == 0)
+            return 0;
+        return sum / size;
     }
 }

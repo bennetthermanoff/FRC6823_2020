@@ -5,6 +5,12 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation;
+
+import frc.robot.util.MovingAverage;
+
+import com.kauailabs.navx.frc.AHRS;
 
 public class LimeLightAutoAimAutoSteer {
 
@@ -42,8 +48,6 @@ public class LimeLightAutoAimAutoSteer {
 
     }
 
-
-
     public double[] aimAndSteer() {
         double x = tx.getDouble(0.0);
         xFilter.nextVal(x);
@@ -63,7 +67,7 @@ public class LimeLightAutoAimAutoSteer {
     }
 
     public double[] strafeAndAim() {
-        double skew = threeD.getDoubleArray(new double[] {0})[0]; //(x,y,z,pitch,yaw,roll)
+        double skew = threeD.getDoubleArray(new double[] { 0 })[0]; // (x,y,z,pitch,yaw,roll)
         // if(tx.getDouble(0)>0){
         // strafePidController.setSetpoint(-90);
         // }
