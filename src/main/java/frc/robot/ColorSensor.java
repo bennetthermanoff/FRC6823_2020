@@ -38,6 +38,11 @@ public class ColorSensor {
 
   // rgb code
   private Spark RGB;
+  // weird stuff to get the spin 3 times to work
+  private int count = 0;
+  private boolean firstTime = true;
+  private String lastColor = "unknown";
+  private boolean spinningNTimes = false;
 
   public ColorSensor(I2C.Port i2cPort) {
     // rgb code
@@ -92,9 +97,9 @@ public class ColorSensor {
       activateSpinner();
     }
 
-    if (driveStick.getRawButtonPressed(12) && !isSpinning) {
-      isSpinning = true;
-      isSpinning = turnWheelNTimes(3.5);
+    if (driveStick.getRawButtonPressed(12) || spinning3Times) {
+      spinning3Times = true;
+      turnWheelNTimes(3.5);
     }
     showOnDashBoard(detectedColor);
     // rgb Code
@@ -206,24 +211,25 @@ public class ColorSensor {
   }
 
   // Turns a wheel n times
-  public boolean turnWheelNTimes(double n) {
-    int count = 0;
-    while (colorSelected().equals("unknown")) {
-      spinner.set(0.1);
-      // turnWheelNTimes(n);
+  public void turnWheelNTimes(double n) {
+    if(firstTime){
+      firstTime = false;
+      count = 0;
+      lastColor = colorSeen();
     }
-    String lastColor = colorSelected();
-
-    while (count < n * 8) {
-      spinner.set(.4);
-      SmartDashboard.putNumber("spinnerCount", count);
-      if (!lastColor.equals(colorSelected()) && !lastColor.equals("unknown")) {
-        lastColor = colorSelected();
-        count++;
-      }
+    if(!colorSeen().equals(lastColor) && !colorSeen().equals("unknown")){
+      count++;
+      lastColor = colorSeen();
     }
-
-    return false;
+    if(count < 8 * n){
+        spinner.set(0.15);
+    }else{
+      firstTime = true;
+      spinner.set(0);
+      spinning3Times = false;
+    }
+    SmartDashboard.putNumber("counter", count);
+ 
   }
 
   public double colorToRGB(String color) {
