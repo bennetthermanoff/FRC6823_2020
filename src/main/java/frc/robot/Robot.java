@@ -67,10 +67,10 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
 
         navX.printEverythingDammit(prefs);
-        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
-        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
-        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
-        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
+        frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+        backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+        backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
 
         limeLightAutoAimAutoSteer.updatePrefs(); // updates values to limelight class from SmartDashBoard
 
@@ -99,7 +99,8 @@ public class Robot extends TimedRobot {
             double[] autoAim = limeLightAutoAimAutoSteer.aimSteerAndStrafe();
             swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
         } else {
-            joystickDrive();
+            // joystickDrive();
+            fieldDrive();
             SmartDashboard.putBoolean("Shoot", false);
         }
 
