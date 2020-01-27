@@ -33,7 +33,6 @@ public class ColorSensor {
   // PID controller related shit
   private PIDController pidcontroller;
 
-  private boolean isSpinning;
   // in case there is another use for the i2cport in the robot code
 
   // rgb code
@@ -48,7 +47,6 @@ public class ColorSensor {
     // rgb code
     RGB = new Spark(9);
 
-    isSpinning = false;
     this.i2cPort = i2cPort;
     colorSensor = new ColorSensorV3(i2cPort);
     moving = false;
@@ -93,12 +91,15 @@ public class ColorSensor {
     }
     // it starts when you push button 11 and it stops the motor once it has reached
     // the right color and stopped moving
-    if (driveStick.getRawButtonPressed(11) || moving) {
+    // it won't run if it is spinning n times
+    if ((driveStick.getRawButtonPressed(11) || moving) && !spinningNTimes) {
       activateSpinner();
     }
 
-    if (driveStick.getRawButtonPressed(12) || spinning3Times) {
-      spinning3Times = true;
+    // it starts and sets spinning n times to true and stops once spinning n times
+    // has been set to false
+    if ((driveStick.getRawButtonPressed(12) || spinningNTimes)) {
+      spinningNTimes = true;
       turnWheelNTimes(3.5);
     }
     showOnDashBoard(detectedColor);
@@ -142,6 +143,8 @@ public class ColorSensor {
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Distance motor spins", directionOfSpin);
+    SmartDashboard.putNumber("How many color changes sensed since it started spinning n times", count);
+
   }
 
   // returns the color the color sensor see
@@ -212,24 +215,22 @@ public class ColorSensor {
 
   // Turns a wheel n times
   public void turnWheelNTimes(double n) {
-    if(firstTime){
+    if (firstTime) {
       firstTime = false;
       count = 0;
       lastColor = colorSeen();
     }
-    if(!colorSeen().equals(lastColor) && !colorSeen().equals("unknown")){
+    if (!colorSeen().equals(lastColor) && !colorSeen().equals("unknown")) {
       count++;
       lastColor = colorSeen();
     }
-    if(count < 8 * n){
-        spinner.set(0.15);
-    }else{
+    if (count < 8 * n) {
+      spinner.set(0.15);
+    } else {
       firstTime = true;
       spinner.set(0);
-      spinning3Times = false;
+      spinningNTimes = false;
     }
-    SmartDashboard.putNumber("counter", count);
- 
   }
 
   public double colorToRGB(String color) {
