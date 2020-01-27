@@ -67,7 +67,7 @@ public class LimeLightAutoAimAutoSteer {
 
     }
 
-    public double[] aimSteerAndStrafe() {
+    public double[] aimSteerAndStrafe() { //this is the big boy method, it do all the things
         double skew = threeD.getDoubleArray(new double[] { 0 })[0]; // (x,y,z,pitch,yaw,roll)
         // if(tx.getDouble(0)>0){
         // strafePidController.setSetpoint(-90);
