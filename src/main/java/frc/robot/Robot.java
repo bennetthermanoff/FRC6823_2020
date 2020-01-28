@@ -60,6 +60,8 @@ public class Robot extends TimedRobot {
         prefs.putBoolean("DEBUG_MODE", false);
         navX = new NavXHandler();
 
+        SmartDashboard.putBoolean("LemonPipeline", false);
+
     }
 
     @Override
@@ -102,8 +104,8 @@ public class Robot extends TimedRobot {
             swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
 
         } else {
-            // joystickDrive();
-            fieldDrive();
+            joystickDrive();
+            // fieldDrive();
             SmartDashboard.putBoolean("Shoot", false);
         }
 

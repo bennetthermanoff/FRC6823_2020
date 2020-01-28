@@ -42,6 +42,12 @@ public class LimeLight {
         aimPidController.setP(KpAim);
         distancePidController.setP(KpDistance);
 
+        if (SmartDashboard.getBoolean("LemonPipeline", false)) {
+            table.getEntry("pipeline").setNumber(1);
+        } else {
+            table.getEntry("pipeline").setNumber(0);
+        }
+
     }
 
     public double[] aimAndSteer() {
@@ -182,4 +188,5 @@ public class LimeLight {
         return new double[] { aimCommand, skewCommand * -1 };//
 
     }
+
 }
