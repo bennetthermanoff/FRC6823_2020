@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,7 +23,7 @@ public class Robot extends TimedRobot {
     private AnalogInput encoder0, encoder1, encoder2, encoder3;
     private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
     private NavXHandler navX;
-    private LimeLightAutoAimAutoSteer limeLightAutoAimAutoSteer;
+    private LimeLight limeLight;
 
     // swerve drive!
 
@@ -57,7 +56,7 @@ public class Robot extends TimedRobot {
         backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
         backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
 
-        limeLightAutoAimAutoSteer = new LimeLightAutoAimAutoSteer(prefs); // limelight class
+        limeLight = new LimeLight(prefs); // limelight class
         prefs.putBoolean("DEBUG_MODE", false);
         navX = new NavXHandler();
 
@@ -72,23 +71,21 @@ public class Robot extends TimedRobot {
         backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
         backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
 
-        limeLightAutoAimAutoSteer.updatePrefs(); // updates values to limelight class from SmartDashBoard
+        limeLight.updatePrefs(); // updates values to limelight class from SmartDashBoard
 
         // Joystick deadzone code
         deadZoneCalculate();
 
         // the following if statements are for "overide" modes. For example, when
         // running limelight code, normal joystick input is made unavailable.
-        if (joystick.getRawButton(3)) {
-            double[] autoAim = limeLightAutoAimAutoSteer.aimAndSteer();
-            swerveDrive.drive(autoAim[1] * .75, 0, autoAim[0] * .3); // limelight will control swerve to aim with target
-                                                                     // and
-                                                                     // go to a set distance away
-        } else if (joystick.getRawButton(4)) {
-            double[] autoAim = limeLightAutoAimAutoSteer.strafeAndAim();
-            swerveDrive.drive(0, autoAim[1] * .1, autoAim[0] * .3); // limelight will control swerve to aim at target
-                                                                    // and
-                                                                    // to strafe to be perpendicular with it.
+
+        if (joystick.getRawButton(3)) { // limelight goTo Polar command, gets values from smartdashboard for testing
+            limeLight.goToPolar(prefs.getDouble("PolarDistance", 50), prefs.getDouble("PolarTheta", 0));
+
+        } else if (joystick.getRawButton(4)) { // limelight goTo coordinate command, gets values from smartdashboard for
+                                               // testing
+            limeLight.goTo(prefs.getDouble("CY", 50), prefs.getDouble("CX", 0));
+
         } else if (joystick.getRawButton(12)) {
             swerveDrive.drive(0.2, 0, 0);// press button 12 to set the swerve just forward, this is for calibration
                                          // purposes
@@ -96,7 +93,7 @@ public class Robot extends TimedRobot {
             swerveDrive.drive(0, 0, 0); // This is the swerve "STOP" button, it will tell the swerve to immidiately stop
                                         // and set all motors to brake.
         } else if (joystick.getRawButton(6)) {
-            double[] autoAim = limeLightAutoAimAutoSteer.aimSteerAndStrafe();
+            double[] autoAim = limeLight.aimSteerAndStrafe();
             swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
         } else {
             // joystickDrive();
