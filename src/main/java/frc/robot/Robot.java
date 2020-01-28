@@ -80,21 +80,27 @@ public class Robot extends TimedRobot {
         // running limelight code, normal joystick input is made unavailable.
 
         if (joystick.getRawButton(3)) { // limelight goTo Polar command, gets values from smartdashboard for testing
-            limeLight.goToPolar(prefs.getDouble("PolarDistance", 50), prefs.getDouble("PolarTheta", 0));
+            double[] autoAim = limeLight.goToPolar(prefs.getDouble("PolarDistance", 50),
+                    prefs.getDouble("PolarTheta", 0));
+            swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
 
         } else if (joystick.getRawButton(4)) { // limelight goTo coordinate command, gets values from smartdashboard for
                                                // testing
-            limeLight.goTo(prefs.getDouble("CY", 50), prefs.getDouble("CX", 0));
+            double[] autoAim = limeLight.goTo(prefs.getDouble("CY", 50), prefs.getDouble("CX", 0));
+            swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
 
         } else if (joystick.getRawButton(12)) {
             swerveDrive.drive(0.2, 0, 0);// press button 12 to set the swerve just forward, this is for calibration
                                          // purposes
+
         } else if (joystick.getRawButton(9)) {
             swerveDrive.drive(0, 0, 0); // This is the swerve "STOP" button, it will tell the swerve to immidiately stop
                                         // and set all motors to brake.
+
         } else if (joystick.getRawButton(6)) {
             double[] autoAim = limeLight.aimSteerAndStrafe();
             swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
+
         } else {
             // joystickDrive();
             fieldDrive();
