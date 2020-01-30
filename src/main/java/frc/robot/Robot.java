@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
     cs.deploySpinner(driveStick);
 
     //RGB
-    if(driveStick.getRawButtonPressed(11))
+    if(driveStick.getRawButtonPressed(8))
       rgb.nextStep();
   }
 }
