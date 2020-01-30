@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
   private PIDController pidcontroller;
 
   private ColorSensor cs;
-  
+
   private RGB rgb;
 
   @Override
@@ -94,8 +94,9 @@ public class Robot extends TimedRobot {
     // Color Sensor
 
     cs.deploySpinner(driveStick);
-    //RGB
-    rgb.lightsBasedOffColors(cs);
 
+    //RGB
+    if(driveStick.getRawButtonPressed(11))
+      rgb.nextStep();
   }
 }
