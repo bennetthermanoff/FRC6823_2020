@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
   private PIDController pidcontroller;
 
   private ColorSensor cs;
+  
+  private RGB rgb;
 
   @Override
   public void robotInit() {
@@ -78,6 +80,7 @@ public class Robot extends TimedRobot {
     pidcontroller.enableContinuousInput(0, 1);
     spinner = new PWMVictorSPX(5);
     cs = new ColorSensor(spinner);
+    rgb = new RGB(new Spark(9));
 
   }
 
@@ -91,5 +94,8 @@ public class Robot extends TimedRobot {
     // Color Sensor
 
     cs.deploySpinner(driveStick);
+    //RGB
+    rgb.lightsBasedOffColors(cs);
+
   }
 }
