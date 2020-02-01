@@ -224,4 +224,15 @@ public class ColorSensor {
       spinningNTimes = false;
     }
   }
+public void colorToRGB(RGB rgb) {
+    if(!colorSelected().equals("unknown"))
+        if (colorSelected().equals("yellow"))
+            rgb.setYellow();
+        else if (colorSelected().equals("blue"))
+            rgb.setBlue();
+        else if (colorSelected().equals("green"))
+            rgb.setGreen();
+        else 
+            rgb.setRed();
+  }
 }

@@ -94,10 +94,23 @@ public class Robot extends TimedRobot {
     // Color Sensor
 
     cs.deploySpinner(driveStick);
-
+ 
     //RGB
+
+    // the structure of the code is a series of if statesments in order of importance of reasons the RGB should change
+    if(false)
+            ;
+    else if(!cs.colorSeen().equals("unknown"))
+        cs.colorToRGB(rgb);
+    else
+        rgb.normalMode();
+    /*
+    // test stuff
     if(driveStick.getRawButtonPressed(8))
       rgb.nextStep(); 
     SmartDashboard.putNumber("patern", rgb.getTest());
+
+    */
+
   }
 }
