@@ -11,8 +11,9 @@ import edu.wpi.first.wpilibj.Spark;
 public class RGB {
 
   private Spark RGB;
+// for testing purposes only remove this later
 
-  private double test;
+  public double test;
 
   /**
    * a constructer for the rgb which takes in a spark motor as a paramater
@@ -21,12 +22,16 @@ public class RGB {
   public RGB(Spark lights) {
     RGB = lights;
   }
-
+// for testing purposes only remove this later
   public void nextStep(){
     if (test == 0.99)
       test = -0.99;
     else
       test += 0.02;
+    RGB.set(test);
+  }
+  public double getTest(){
+      return test; 
   }
   /** This adjusts the RGB to the color selected (two ahead of the color seen)
    * @param colorsensor A Colors Sensor (constructed in the ColorSensor.java class [ not ColorSensorV3 or anything included in wpilib {this is a really weird custom solution and will not work if you are copying and pasting only this part of the code}] )

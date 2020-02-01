@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
 
     //RGB
     if(driveStick.getRawButtonPressed(8))
-      rgb.nextStep();
+      rgb.nextStep(); 
+    SmartDashboard.putNumber("patern", rgb.getTest());
   }
 }
