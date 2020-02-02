@@ -98,8 +98,8 @@ public class Robot extends TimedRobot {
     //RGB
 
     // the structure of the code is a series of if statesments in order of importance of reasons the RGB should change
-    if(false)
-            ;
+    if(driveStick.getRawButtonPressed(6))
+      rgb.graciousProfesionalism();
     else if(!cs.colorSeen().equals("unknown"))
         cs.colorToRGB(rgb);
     else
