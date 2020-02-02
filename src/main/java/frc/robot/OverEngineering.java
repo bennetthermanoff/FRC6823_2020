@@ -13,7 +13,6 @@ public class OverEngineering extends Thread {
 
     public void run() {
         startTime = System.currentTimeMillis();
-          //..- .-. -- --- -- --. .- -.--
         int[] message = { dash, dash, dot, dot, dash, dot, dot, dash, dash, dot, dash, dot, dot, dot, dash, dash, dash,
                 dot, dot, dash, dot, dot, dot, dot, dash, dash, dot, dot, dash, dot, dash, dash, dash, dot, dot, dash,
                 dot, dot, dot, dot, dot, dot, dot, dot, dot, dot, dash, dash, dash, dash, dot, dot, dash, dot, dash,
