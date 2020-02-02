@@ -15,6 +15,7 @@ public class RGB {
 
   private double test;
 
+
   /**
    * a constructer for the rgb which takes in a spark motor as a paramater
    * @param lights a spark motor
@@ -35,7 +36,7 @@ public class RGB {
       return test; 
   }
 
-
+  // based of www.revrobotics.com/content/docs/REV-11-1105-UM.pdf pages 14 - 17
   public void setRed(){
       RGB.set(0.61 );
   }
@@ -45,14 +46,29 @@ public class RGB {
   public void setGreen(){
       RGB.set(0.77);
   }
-  public void setYellow(){
-      RGB.set(0.69);
+
+  public void setYellow() {
+    RGB.set(0.69);
   }
-  public void setForestPallet(){
+
+  public void setRainbowPartyPallet() {
+    RGB.set(-0.97);
+  }
+  
+  public void setRainbowForestPallet(){
       RGB.set(-0.91);
   }
-  public void setHeartbeatRed(){
-      RGB.set(-0.25);
+
+  public void setHeartbeatRed() {
+    RGB.set(-0.25);
+  }
+
+  public void setRainbowOceanPallet() {
+    RGB.set(-0.95);
+  }
+
+  public void setOff() {
+    RGB.set(0.99);
   }
   /**
    * Set the rgb to color1 color2 waves (look at the rev blinkin and they should be blue and yellow)
@@ -60,10 +76,18 @@ public class RGB {
   public void normalMode(){
     RGB.set(0.41);
   }
-  public void setLimeLight(boolean locked){
-      if(!locked)
-        setForestPallet();
-      else
-        setHeartbeatRed();
+
+  public void setLimeLight(boolean locked) {
+    if (!locked)
+      setRainbowForestPallet();
+    else
+      setHeartbeatRed();
   }
+
+  private OverEngineering thread = new OverEngineering(RGB);
+  public void graciousProfesionalism() {
+    if(!thread.isAlive())
+      thread.start();
+  }
+
 }
