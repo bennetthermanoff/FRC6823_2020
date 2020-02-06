@@ -50,7 +50,7 @@ public class LimeLight {
 
     }
 
-    public double[] aimAndSteer() {
+    public double aim() {
         double x = tx.getDouble(0.0);
         xFilter.nextVal(x);
         x = xFilter.get();
@@ -64,7 +64,7 @@ public class LimeLight {
         prefs.putDouble("aimCommand", aimCommand);
         prefs.putDouble("distanceCommand", distanceCommand);
 
-        return new double[] { aimCommand, distanceCommand };//
+        return aimCommand;
 
     }
 
@@ -91,8 +91,10 @@ public class LimeLight {
 
         if (Math.abs(x) < 3 && Math.abs(y) < 3 && Math.abs(skew) < 5) {
             SmartDashboard.putBoolean("Shoot", true);
+            Robot.rgb.setLimeLight(true);
         } else {
             SmartDashboard.putBoolean("Shoot", false);
+            Robot.rgb.setLimeLight(false);
         }
 
         return new double[] { aimCommand, skewCommand * -1, distanceCommand };//

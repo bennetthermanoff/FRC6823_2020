@@ -7,6 +7,9 @@
 //hey look it's some code! Incredible
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -24,6 +27,12 @@ public class Robot extends TimedRobot {
     private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
     private NavXHandler navX;
     private LimeLight limeLight;
+    private CANSparkMax intake;
+    public static RGB rgb;
+
+    private double fieldAngle = 0;
+
+    private CANSparkMax launchBoi;
 
     // swerve drive!
 
@@ -41,6 +50,7 @@ public class Robot extends TimedRobot {
         frontRight = new WheelDrive(7, 3, encoder1, .697);
         frontLeft = new WheelDrive(8, 4, encoder0, .374);// angle,speed,encoder,offset (offset gets changed by
                                                          // smartdashboard in calibration.)
+        rgb = new RGB(9);
 
         swerveDrive = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
         /*
@@ -55,6 +65,10 @@ public class Robot extends TimedRobot {
         frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
         backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
         backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+
+        // launchBoi = new CANSparkMax(0, MotorType.kBrushless);
+
+        intake = new CANSparkMax(9, MotorType.kBrushed);
 
         limeLight = new LimeLight(prefs); // limelight class
         prefs.putBoolean("DEBUG_MODE", false);
@@ -101,12 +115,31 @@ public class Robot extends TimedRobot {
 
         } else if (joystick.getRawButton(6)) {
             double[] autoAim = limeLight.aimSteerAndStrafe();
-            swerveDrive.drive(autoAim[2] * .65, autoAim[1] * .1, autoAim[0] * .3);
+            swerveDrive.drive(autoAim[2] * .4, autoAim[1] * .15, autoAim[0] * .1);
 
+        } else if (joystick.getRawButton(10)) {
+            fieldDrive();
+        } else if (joystick.getRawButton(7)) {
+            fieldDriveTargetLimelight();
         } else {
             joystickDrive();
             // fieldDrive();
             SmartDashboard.putBoolean("Shoot", false);
+            rgb.setOff();
+        }
+
+        if (joystick.getRawButton(1))
+            intake.set(prefs.getDouble("intakeSpeed", .05));
+        else
+            intake.set(0);
+
+        if (joystick.getRawButton(8))
+            fieldAngle = navX.getAngleRad();
+
+        if (joystick.getTrigger()) {
+            launchBoi.set(.5);
+        } else {
+            launchBoi.set(0);
         }
 
         backLeft.getVoltages();
@@ -195,10 +228,29 @@ public class Robot extends TimedRobot {
         double yval = joyStickAxis0 * speedRate;
         double spinval = joyStickAxis2 * turnRate;
 
-        double txval = swerveDrive.getTransX(xval, yval, navX.getAngleRad());
-        double tyval = swerveDrive.getTransY(xval, yval, navX.getAngleRad());
+        double txval = swerveDrive.getTransX(xval, yval, navX.getAngleRad() - fieldAngle);
+        double tyval = swerveDrive.getTransY(xval, yval, navX.getAngleRad() - fieldAngle);
 
         swerveDrive.drive(txval, tyval, spinval);// zoooooom
     }
 
+    public void fieldDriveTargetLimelight() { // drives the swervedrive, also gets speed rates from smartdashboard.
+        double speedRate = prefs.getDouble("SpeedRate", 1);
+        double turnRate = prefs.getDouble("TurnRate", 1);// rates are broken rn. Keep at 1 until marked as fixed or
+                                                         // calculations will go bad.
+        if (!joystick.getRawButton(2)) { // this is for reversing drive direction
+            joyStickAxis0 *= -1;
+            joyStickAxis1 *= -1;
+        }
+
+        double xval = joyStickAxis1 * speedRate;
+        double yval = joyStickAxis0 * speedRate;
+
+        double spinval = joyStickAxis2 * turnRate;
+
+        double txval = swerveDrive.getTransX(xval, yval, navX.getAngleRad() - fieldAngle);
+        double tyval = swerveDrive.getTransY(xval, yval, navX.getAngleRad() - fieldAngle);
+
+        swerveDrive.drive(txval, tyval, limeLight.aim() * .25);// zoooooom
+    }
 }

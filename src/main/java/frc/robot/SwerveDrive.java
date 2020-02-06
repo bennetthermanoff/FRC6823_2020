@@ -29,8 +29,8 @@ public class SwerveDrive {
                                                         // is from the rotation
 
         double r = Math.sqrt((L * L) + (W * W));
-        // y1 *= -1;
-        // x1 *= -1;
+        y1 *= -1;
+        x1 *= -1;
 
         double a = x1 - x2 * (L / r);
         double b = x1 + x2 * (L / r);
@@ -54,7 +54,7 @@ public class SwerveDrive {
     }
 
     public double getTransX(double x, double y, double angle) {
-        return x * Math.cos(angle) + y * Math.sin(angle);
+        return x * Math.cos(angle) + -y * Math.sin(angle);
     }
 
     public double getTransY(double x, double y, double angle) {
