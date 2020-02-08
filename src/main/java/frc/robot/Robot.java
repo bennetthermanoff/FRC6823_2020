@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Servo;
 
 public class Robot extends TimedRobot {
 
@@ -29,13 +30,18 @@ public class Robot extends TimedRobot {
     private NavXHandler navX;
     private LimeLight limeLight;
     private CANSparkMax intake;
+    private CANSparkMax launchBoi1;
+    private CANSparkMax launchBoi2;
+    private CANSparkMax conveyor;
+    private CANSparkMax lift1;
+    private CANSparkMax lift2;
+    private CANSparkMax BarMove;
+    private CANSparkMax WheelOfFortune;
+    private Servo ShroudAim;
     public static RGB rgb;
     private DigitalInput ConveyorSight;
 
     private double fieldAngle = 0;
-
-    private CANSparkMax launchBoi;
-    private CANSparkMax conveyor;
 
     private boolean seen = false;
 
@@ -72,11 +78,15 @@ public class Robot extends TimedRobot {
         backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
         backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
 
-        launchBoi = new CANSparkMax(8, MotorType.kBrushless);
-
-        conveyor = new CANSparkMax(10, MotorType.kBrushless);
-
-        intake = new CANSparkMax(9, MotorType.kBrushed);
+        launchBoi1 = new CANSparkMax(10, MotorType.kBrushless);
+        launchBoi2 = new CANSparkMax(11, MotorType.kBrushless);
+        conveyor = new CANSparkMax(9, MotorType.kBrushless);
+        intake = new CANSparkMax(8, MotorType.kBrushed);
+        lift1 = new CANSparkMax(12, MotorType.kBrushed);
+        lift2 = new CANSparkMax(13, MotorType.kBrushed);
+        BarMove = new CANSparkMax(14, MotorType.kBrushed);
+        WheelOfFortune = new CANSparkMax(15, MotorType.kBrushed);
+        ShroudAim = new Servo(1);
 
         limeLight = new LimeLight(prefs); // limelight class
         prefs.putBoolean("DEBUG_MODE", false);
@@ -145,9 +155,11 @@ public class Robot extends TimedRobot {
             fieldAngle = navX.getAngleRad();
 
         if (joystick.getTrigger()) {
-            launchBoi.set(.5);
+            launchBoi1.set(.5);
+            launchBoi2.set(-.5);
         } else {
-            launchBoi.set(0);
+            launchBoi1.set(0);
+            launchBoi1.set(0);
         }
 
         if (joystick.getRawButton(5)){
