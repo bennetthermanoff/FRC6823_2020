@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Preferences;
@@ -29,10 +30,14 @@ public class Robot extends TimedRobot {
     private LimeLight limeLight;
     private CANSparkMax intake;
     public static RGB rgb;
+    private DigitalInput ConveyorSight;
 
     private double fieldAngle = 0;
 
     private CANSparkMax launchBoi;
+    private CANSparkMax conveyor;
+
+    private boolean seen = false;
 
     // swerve drive!
 
@@ -45,6 +50,7 @@ public class Robot extends TimedRobot {
         encoder1 = new AnalogInput(1);
         encoder2 = new AnalogInput(2);
         encoder3 = new AnalogInput(3);
+        ConveyorSight = new DigitalInput(4);
         backRight = new WheelDrive(5, 1, encoder3, -4.70);// These are the motors and encoder ports for swerve drive,
         backLeft = new WheelDrive(6, 2, encoder2, .884);
         frontRight = new WheelDrive(7, 3, encoder1, .697);
@@ -66,7 +72,9 @@ public class Robot extends TimedRobot {
         backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
         backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
 
-        // launchBoi = new CANSparkMax(0, MotorType.kBrushless);
+        launchBoi = new CANSparkMax(8, MotorType.kBrushless);
+
+        conveyor = new CANSparkMax(10, MotorType.kBrushless);
 
         intake = new CANSparkMax(9, MotorType.kBrushed);
 
@@ -140,6 +148,17 @@ public class Robot extends TimedRobot {
             launchBoi.set(.5);
         } else {
             launchBoi.set(0);
+        }
+
+        if (joystick.getRawButton(5)){
+          seen = false;
+          while (!seen){
+            conveyor.set(.5);
+            if (ConveyorSight.get()){
+              seen = true;
+            }
+          }
+          conveyor.set(0);
         }
 
         backLeft.getVoltages();
