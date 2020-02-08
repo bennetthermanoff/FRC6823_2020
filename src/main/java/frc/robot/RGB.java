@@ -8,73 +8,54 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
 
-public class RGB {
-
-  private Spark RGB;
-// for testing purposes only remove this later
-
-  private double test;
-
-
+public class RGB extends Spark{
+  // you could control it like a spark motor, but why would you want to?
   /**
-   * a constructer for the rgb which takes in a spark motor as a paramater
-   * @param lights a spark motor
+   * Makes a new RGB
+   * @param channel the pwm the rgb is on
    */
-  public RGB(Spark lights) {
-    RGB = lights;
-    test = -0.99;
-  }
-// for testing purposes only remove this later
-  public void nextStep(){
-    if (test == 0.99)
-      test = -0.99;
-    else
-      test += 0.02;
-    RGB.set(test);
-  }
-  public double getTest(){
-      return test; 
+  public RGB(int channel) {
+    super(channel);
   }
 
-  // based of www.revrobotics.com/content/docs/REV-11-1105-UM.pdf pages 14 - 17
+  // based of https://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf (BLINKIN
+  // LED DRIVER USER'S MANUAL) pages 14 - 17
   public void setRed(){
-      RGB.set(0.61 );
+      set(0.61);
   }
     public void setBlue(){
-      RGB.set(0.87);
+      set(0.87);
   }
   public void setGreen(){
-      RGB.set(0.77);
+      set(0.77);
   }
-
   public void setYellow() {
-    RGB.set(0.69);
+    set(0.69);
   }
-
   public void setRainbowPartyPallet() {
-    RGB.set(-0.97);
+    set(-0.97);
   }
-  
   public void setRainbowForestPallet(){
-      RGB.set(-0.91);
+      set(-0.91);
   }
-
-  public void setHeartbeatRed() {
-    RGB.set(-0.25);
-  }
-
   public void setRainbowOceanPallet() {
-    RGB.set(-0.95);
+    set(-0.95);
+  }
+  public void setHeartbeatRed() {
+    set(-0.25);
   }
 
+  /**
+   * Set the rgb to black (off)
+   */
   public void setOff() {
-    RGB.set(0.99);
+    set(0.99);
   }
   /**
    * Set the rgb to color1 color2 waves (look at the rev blinkin and they should be blue and yellow)
    */
   public void normalMode(){
-    RGB.set(0.41);
+    set(0.41);
   }
 
   public void setLimeLight(boolean locked) {
@@ -83,11 +64,27 @@ public class RGB {
     else
       setHeartbeatRed();
   }
-
-  private OverEngineering thread = new OverEngineering(RGB);
+  private OverEngineering thread = new OverEngineering(this);
+  /**
+   * a message in morse code
+   */
   public void graciousProfesionalism() {
     if(!thread.isAlive())
       thread.start();
   }
-
+  /**
+   * Sets the rgb to a color put in
+   * @param color the color it should become
+   */
+  public void setRGBtoColor(String color) {
+    if (!color.equals("unknown"))
+      if (color.equals("yellow"))
+        setYellow();
+      else if (color.equals("blue"))
+        setBlue();
+      else if (color.equals("green"))
+        setGreen();
+      else
+        setRed();
+  }
 }

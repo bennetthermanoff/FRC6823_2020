@@ -99,7 +99,9 @@ public class ColorSensor {
     showOnDashBoard(detectedColor);
   }
 
-  // returns true if the rgb of two colors is within the error value
+  /**
+   * returns true if the rgb of two colors is within the error value
+   */
   public boolean closeEnough(String color) {
     Color detectedColor = colorSensor.getColor();
     red = detectedColor.red;
@@ -158,7 +160,8 @@ public class ColorSensor {
     }
   }
 
-  // returns color selected by the field sensor
+  /** returns color selected by the field sensor
+   */
   public String colorSelected() {
     if (colorSeen().equals("red")) {
       return "blue";
@@ -172,8 +175,9 @@ public class ColorSensor {
       return "green";
     }
   }
-
-  // convert color (String) to number for the pid controller
+  
+  /* convert color (String) to number for the pid controller
+  */
   public double convertToNumber(String color) {
     if (color.equals("yellow")) {
       return 0;
@@ -185,17 +189,18 @@ public class ColorSensor {
       return 0.75;
     }
   }
-
-  // calculate the direction and speed (not used) for the spinning, takes the
-  // shortest route
+  
+  /** calculate the direction and speed (not used) for the spinning, takes the shortest route 
+  */
   public double NextSpin() {
     double setpoint = convertToNumber(colors[colorSelection]);
     pidcontroller.setSetpoint(setpoint);
     return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint);
   }
 
-  // turn the spinner according to the direction of next spin, if the color sensor
-  // doesn't recognize the color it keeps the motor spinning
+  /* turn the spinner according to the direction of next spin/ if the color sensor
+  * doesn't recognize the color it keeps the motor spinning
+  */
   public void activateSpinner() {
     directionOfSpin = NextSpin();
     if (!colorSelected().equals("unknown")) {// if the color is unknown it won't set a direction and keep doing what its
@@ -205,7 +210,8 @@ public class ColorSensor {
     moving = directionOfSpin != 0;
   }
 
-  // Turns a wheel n times
+  /* Turns the wheel of fortune n times
+  */
   public void turnWheelNTimes(double n) {
     if (firstTime) {
       firstTime = false;
@@ -223,16 +229,5 @@ public class ColorSensor {
       spinner.set(0);
       spinningNTimes = false;
     }
-  }
-public void colorToRGB(RGB rgb) {
-    if(!colorSelected().equals("unknown"))
-        if (colorSelected().equals("yellow"))
-            rgb.setYellow();
-        else if (colorSelected().equals("blue"))
-            rgb.setBlue();
-        else if (colorSelected().equals("green"))
-            rgb.setGreen();
-        else 
-            rgb.setRed();
   }
 }

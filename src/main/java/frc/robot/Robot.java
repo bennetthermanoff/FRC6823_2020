@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     pidcontroller.enableContinuousInput(0, 1);
     spinner = new PWMVictorSPX(5);
     cs = new ColorSensor(spinner);
-    rgb = new RGB(new Spark(9));
+    rgb = new RGB(9);
 
   }
 
@@ -101,16 +101,8 @@ public class Robot extends TimedRobot {
     if(driveStick.getRawButtonPressed(6))
       rgb.graciousProfesionalism();
     else if(!cs.colorSeen().equals("unknown"))
-        cs.colorToRGB(rgb);
+      rgb.setRGBtoColor(cs.colorSelected());
     else
-        rgb.normalMode();
-    /*
-    // test stuff
-    if(driveStick.getRawButtonPressed(8))
-      rgb.nextStep(); 
-    SmartDashboard.putNumber("patern", rgb.getTest());
-
-    */
-
+      rgb.normalMode();
   }
 }
