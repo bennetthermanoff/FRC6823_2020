@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
@@ -27,7 +28,8 @@ public class Robot extends TimedRobot {
     private double joyStickAxis1, joyStickAxis0, joyStickAxis2;
     private NavXHandler navX;
     private LimeLight limeLight;
-    private CANSparkMax intake;
+    private CANSparkMax intake, conveyor, leftShoot, rightShoot;
+    private SpeedControllerGroup shooter;
     public static RGB rgb;
 
     private double fieldAngle = 0;
@@ -76,6 +78,10 @@ public class Robot extends TimedRobot {
         // launchBoi = new CANSparkMax(0, MotorType.kBrushless);
 
         intake = new CANSparkMax(9, MotorType.kBrushed);
+        conveyor = new CANSparkMax(10, MotorType.kBrushed);
+        leftShoot = new CANSparkMax(11, MotorType.kBrushed);
+        rightShoot = new CANSparkMax(12, MotorType.kBrushed);
+        shooter = new SpeedControllerGroup(leftShoot, rightShoot);
 
         limeLight = new LimeLight(prefs); // limelight class
         prefs.putBoolean("DEBUG_MODE", false);
@@ -123,10 +129,6 @@ public class Robot extends TimedRobot {
             swerveDrive.drive(0.2, 0, 0);// press button 12 to set the swerve just forward, this is for calibration
                                          // purposes
 
-        } else if (joystick.getRawButton(9)) {
-            swerveDrive.drive(0, 0, 0); // This is the swerve "STOP" button, it will tell the swerve to immidiately stop
-                                        // and set all motors to brake.
-
         } else if (joystick.getRawButton(6)) {
             double[] autoAim = limeLight.aimSteerAndStrafe();
             swerveDrive.drive(autoAim[2] * .4, autoAim[1] * .15, autoAim[0] * .1);
@@ -149,6 +151,15 @@ public class Robot extends TimedRobot {
 
         if (joystick.getRawButton(8))
             fieldAngle = navX.getAngleRad();
+
+        if (joystick.getRawButton(11))
+            shooter.set(prefs.getDouble("ShootSpeed", 0));
+        else
+            shooter.set(0);
+        if (joystick.getRawButton(9))
+            conveyor.set(prefs.getDouble("ConveyorSpeed", 0));
+        else
+            conveyor.set(0);
 
         /**
          * if (joystick.getTrigger()) { launchBoi.set(.5); } else { launchBoi.set(0); }
