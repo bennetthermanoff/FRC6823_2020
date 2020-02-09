@@ -45,10 +45,10 @@ public class Robot extends TimedRobot {
         encoder1 = new AnalogInput(1);
         encoder2 = new AnalogInput(2);
         encoder3 = new AnalogInput(3);
-        backRight = new WheelDrive(5, 1, encoder3, -4.70);// These are the motors and encoder ports for swerve drive,
-        backLeft = new WheelDrive(6, 2, encoder2, .884);
-        frontRight = new WheelDrive(7, 3, encoder1, .697);
-        frontLeft = new WheelDrive(8, 4, encoder0, .374);// angle,speed,encoder,offset (offset gets changed by
+        backRight = new WheelDrive(7, 6, encoder3, -4.70);// These are the motors and encoder ports for swerve drive,
+        backLeft = new WheelDrive(5, 4, encoder2, .884);
+        frontRight = new WheelDrive(3, 2, encoder1, .697);
+        frontLeft = new WheelDrive(1, 8, encoder0, .374);// angle,speed,encoder,offset (offset gets changed by
                                                          // smartdashboard in calibration.)
         rgb = new RGB(9);
 
@@ -61,10 +61,17 @@ public class Robot extends TimedRobot {
          */ // This creates a swervedrive object, use it to
             // interact
             // with the swervedrive4
-        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
-        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
-        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
-        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        if (!SmartDashboard.getBoolean("PracticeBot", false)) {
+            frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
+            frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
+            backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
+            backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        } else {
+            frontLeft.setZero(SmartDashboard.getNumber("FLOffsetPractice", 0) + 1.25);
+            frontRight.setZero(SmartDashboard.getNumber("FROffsetPractice", 0) + 1.25);
+            backLeft.setZero(SmartDashboard.getNumber("BLOffsetPractice", 0) + 1.25);
+            backRight.setZero(SmartDashboard.getNumber("BROffsetPractice", 0) + 1.25);
+        }
 
         // launchBoi = new CANSparkMax(0, MotorType.kBrushless);
 
@@ -82,10 +89,17 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
 
         navX.printEverythingDammit(prefs);
-        frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
-        frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
-        backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
-        backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
+        if (!SmartDashboard.getBoolean("PracticeBot", false)) {
+            frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
+            frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
+            backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
+            backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        } else {
+            frontLeft.setZero(SmartDashboard.getNumber("FLOffsetPractice", 0) + 1.25);
+            frontRight.setZero(SmartDashboard.getNumber("FROffsetPractice", 0) + 1.25);
+            backLeft.setZero(SmartDashboard.getNumber("BLOffsetPractice", 0) + 1.25);
+            backRight.setZero(SmartDashboard.getNumber("BROffsetPractice", 0) + 1.25);
+        }
 
         limeLight.updatePrefs(); // updates values to limelight class from SmartDashBoard
 
@@ -136,11 +150,9 @@ public class Robot extends TimedRobot {
         if (joystick.getRawButton(8))
             fieldAngle = navX.getAngleRad();
 
-        if (joystick.getTrigger()) {
-            launchBoi.set(.5);
-        } else {
-            launchBoi.set(0);
-        }
+        /**
+         * if (joystick.getTrigger()) { launchBoi.set(.5); } else { launchBoi.set(0); }
+         */
 
         backLeft.getVoltages();
         backRight.getVoltages();
