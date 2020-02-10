@@ -69,8 +69,10 @@ public class RGB extends Spark{
    * a message in morse code
    */
   public void graciousProfesionalism() {
-    if(!thread.isAlive())
+    if (!thread.isAlive()) {
+      thread.setMessage("ok boomer"); // look at OverEngineering.java to see acceptable characters
       thread.start();
+    }
   }
   /**
    * Sets the rgb to a color put in

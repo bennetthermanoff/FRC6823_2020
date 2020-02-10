@@ -34,7 +34,6 @@ public class ColorSensor {
 
   // in case there is another use for the i2cport in the robot code
 
-  // rgb code
   // weird stuff to get the spin 3 times to work
   private int count = 0;
   private boolean firstTime = true;
@@ -151,7 +150,9 @@ public class ColorSensor {
     return "unknown";
   }
 
-  // cycles through the colors for driver color selection
+  /** 
+   * cycles through the colors for driver color selection
+   * */
   public void nextColor() {
     if (colorSelection == colors.length - 1) {
       colorSelection = 0;
@@ -159,8 +160,9 @@ public class ColorSensor {
       colorSelection++;
     }
   }
-
-  /** returns color selected by the field sensor
+  
+  /** 
+   * returns color selected by the field sensor
    */
   public String colorSelected() {
     if (colorSeen().equals("red")) {
@@ -176,7 +178,8 @@ public class ColorSensor {
     }
   }
   
-  /* convert color (String) to number for the pid controller
+  /**
+   *  convert color (String) to number for the pid controller
   */
   public double convertToNumber(String color) {
     if (color.equals("yellow")) {
@@ -190,7 +193,8 @@ public class ColorSensor {
     }
   }
   
-  /** calculate the direction and speed (not used) for the spinning, takes the shortest route 
+  /** 
+   * calculate the direction and speed (not used) for the spinning, takes the shortest route 
   */
   public double NextSpin() {
     double setpoint = convertToNumber(colors[colorSelection]);
@@ -198,7 +202,7 @@ public class ColorSensor {
     return pidcontroller.calculate(convertToNumber(colorSelected()), setpoint);
   }
 
-  /* turn the spinner according to the direction of next spin/ if the color sensor
+  /** turn the spinner according to the direction of next spin/ if the color sensor
   * doesn't recognize the color it keeps the motor spinning
   */
   public void activateSpinner() {
@@ -210,7 +214,8 @@ public class ColorSensor {
     moving = directionOfSpin != 0;
   }
 
-  /* Turns the wheel of fortune n times
+  /**
+   * Turns the wheel of fortune n times
   */
   public void turnWheelNTimes(double n) {
     if (firstTime) {
