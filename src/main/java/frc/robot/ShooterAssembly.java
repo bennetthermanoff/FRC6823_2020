@@ -2,11 +2,13 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 
 class ShooterAssembly {
     private ConveyorControl conveyorControl;
     private CANSparkMax intakeMotor, leftMotor, rightMotor;
+    private SpeedControllerGroup shooter;
     private PIDController rpmController;
 
     ShooterAssembly(int intakePort, int shooterPort, int intakeMotor, int conveyorMotor, int leftMotor,
@@ -26,7 +28,8 @@ class ShooterAssembly {
     }
 
     public void update(boolean shoot) {
-
-        conveyorControl.setMotor(shoot, Robot.prefs.getBoolean("converyorShutoffOveride", false));
+        conveyorControl.setMotor(shoot, Robot.prefs.getBoolean("conveyorShutoffOveride", false));
+        rpmController.setSetpoint(Robot.prefs.getDouble("shooterTargetRPM", 0));
+        shooter.set(rpmController.calculate(rightMotor.getEncoder().getVelocity()));
     }
 }
