@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-    public static Preferences PREFS;
+    public static Preferences PREFS = Preferences.getInstance();
 
     private CANSparkMax intake;
     public static RGB rgb;

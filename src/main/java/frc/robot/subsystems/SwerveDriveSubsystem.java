@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.WheelDrive;
 
-public class SwerveDriveSubsystem implements Subsystem {
+public class SwerveDriveSubsystem extends SubsystemBase {
     /**
      * What does this class do? some weird math to take controller inputs and
      * convert them into rotation and speed values for each motor (which is
@@ -23,15 +23,14 @@ public class SwerveDriveSubsystem implements Subsystem {
     private SwerveWheelModuleSubsystem frontLeft;
 
     public SwerveDriveSubsystem() {
-        backRight = new SwerveWheelModuleSubsystem(5, 1, 3, -4.70);// These are the motors and encoder ports for swerve drive,
-        backLeft = new SwerveWheelModuleSubsystem(6, 2, 2, .884);
-        frontRight = new SwerveWheelModuleSubsystem(7, 3, 1, .697);
-        frontLeft = new SwerveWheelModuleSubsystem(8, 4, 0, .374);// angle,speed,encoder,offset (offset gets changed by
+        backRight = new SwerveWheelModuleSubsystem(7, 6, 3, -4.70);// These are the motors and encoder ports for swerve
+                                                                   // drive,
+        backLeft = new SwerveWheelModuleSubsystem(5, 4, 2, .884);
+        frontRight = new SwerveWheelModuleSubsystem(3, 2, 1, .697);
+        frontLeft = new SwerveWheelModuleSubsystem(1, 8, 0, .374);// angle,speed,encoder,offset (offset gets changed by
+        // smartdashboard in calibration.)// angle,speed,encoder,offset (offset gets
+        // changed by
 
-        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
-        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
-        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
-        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
     }
 
     public void drive(double x1, double y1, double x2) {
@@ -62,9 +61,11 @@ public class SwerveDriveSubsystem implements Subsystem {
         frontLeft.drive(frontLeftSpeed, frontLeftAngle);
     }
 
-
     @Override
     public void periodic() {
-
+        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
+        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
+        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
     }
 }

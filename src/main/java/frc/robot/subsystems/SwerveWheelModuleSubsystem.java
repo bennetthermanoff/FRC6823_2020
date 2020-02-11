@@ -4,11 +4,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.MathUtil;
 
-public class SwerveWheelModuleSubsystem implements Subsystem {
+public class SwerveWheelModuleSubsystem extends SubsystemBase {
     private final double MAX_VOLTS = 4.95; // Voltage for the Andymark Absolute Encoders used in the SDS kit.
     private final double P = .5;
 
@@ -19,7 +19,8 @@ public class SwerveWheelModuleSubsystem implements Subsystem {
 
     private double encoderOffset;
 
-    public SwerveWheelModuleSubsystem(int angleMotorChannel, int speedMotorChannel, int angleEncoderChannel, double encoderOffset) {
+    public SwerveWheelModuleSubsystem(int angleMotorChannel, int speedMotorChannel, int angleEncoderChannel,
+            double encoderOffset) {
         // We're using CANSparkMax controllers, but not their encoders.
         this.angleMotor = new CANSparkMax(angleMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.speedMotor = new CANSparkMax(speedMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -101,6 +102,6 @@ public class SwerveWheelModuleSubsystem implements Subsystem {
 
     @Override
     public void periodic() {
-
+        getVoltages();
     }
 }

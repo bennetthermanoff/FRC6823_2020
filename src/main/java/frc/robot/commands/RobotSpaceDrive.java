@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.JoystickHandler;
 import frc.robot.Robot;
@@ -21,8 +22,8 @@ public class RobotSpaceDrive extends CommandBase {
 
     @Override
     public void execute() {
-        double speedRate = Robot.PREFS.getDouble("SpeedRate", 1);
-        double turnRate = Robot.PREFS.getDouble("TurnRate", 1);
+        double speedRate = Preferences.getInstance().getDouble("SpeedRate", 1);
+        double turnRate = Preferences.getInstance().getDouble("TurnRate", 1);
 
         double xval = joystickHandler.getAxis1() * speedRate;
         double yval = joystickHandler.getAxis0() * speedRate;

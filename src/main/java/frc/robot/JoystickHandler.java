@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.util.MathUtil;
 
@@ -10,7 +11,7 @@ public class JoystickHandler {
 
     public JoystickHandler() {
         this.joystick = new Joystick(0);
-        this.deadZone = Robot.PREFS.getDouble("DeadZone", .1);
+        this.deadZone = Preferences.getInstance().getDouble("DeadZone", .1);
     }
 
     public double getRawAxis0() {
