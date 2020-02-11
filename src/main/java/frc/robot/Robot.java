@@ -63,16 +63,16 @@ public class Robot extends TimedRobot {
          */ // This creates a swervedrive object, use it to
             // interact
             // with the swervedrive4
-        if (!SmartDashboard.getBoolean("PracticeBot", false)) {
-            frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
-            frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
-            backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
-            backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        if (!prefs.getBoolean("PracticeBot", false)) {
+            frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
+            frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+            backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+            backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
         } else {
-            frontLeft.setZero(SmartDashboard.getNumber("FLOffsetPractice", 0) + 1.25);
-            frontRight.setZero(SmartDashboard.getNumber("FROffsetPractice", 0) + 1.25);
-            backLeft.setZero(SmartDashboard.getNumber("BLOffsetPractice", 0) + 1.25);
-            backRight.setZero(SmartDashboard.getNumber("BROffsetPractice", 0) + 1.25);
+            frontLeft.setZero(prefs.getDouble("FLOffsetPractice", 0) + 1.25);
+            frontRight.setZero(prefs.getDouble("FROffsetPractice", 0) + 1.25);
+            backLeft.setZero(prefs.getDouble("BLOffsetPractice", 0) + 1.25);
+            backRight.setZero(prefs.getDouble("BROffsetPractice", 0) + 1.25);
         }
 
         // launchBoi = new CANSparkMax(0, MotorType.kBrushless);
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
         intake = new CANSparkMax(9, MotorType.kBrushed);
         conveyor = new CANSparkMax(10, MotorType.kBrushed);
         leftShoot = new CANSparkMax(11, MotorType.kBrushed);
-        rightShoot = new CANSparkMax(12, MotorType.kBrushed);
+        rightShoot = new CANSparkMax(13, MotorType.kBrushed);
         shooter = new SpeedControllerGroup(leftShoot, rightShoot);
 
         limeLight = new LimeLight(prefs); // limelight class
@@ -95,18 +95,17 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
 
         navX.printEverythingDammit(prefs);
-        if (!SmartDashboard.getBoolean("PracticeBot", false)) {
-            frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
-            frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
-            backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
-            backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        if (!prefs.getBoolean("PracticeBot", false)) {
+            frontLeft.setZero(prefs.getDouble("FLOffset", 0) + 1.25);
+            frontRight.setZero(prefs.getDouble("FROffset", 0) + 1.25);
+            backLeft.setZero(prefs.getDouble("BLOffset", 0) + 1.25);
+            backRight.setZero(prefs.getDouble("BROffset", 0) + 1.25);
         } else {
-            frontLeft.setZero(SmartDashboard.getNumber("FLOffsetPractice", 0) + 1.25);
-            frontRight.setZero(SmartDashboard.getNumber("FROffsetPractice", 0) + 1.25);
-            backLeft.setZero(SmartDashboard.getNumber("BLOffsetPractice", 0) + 1.25);
-            backRight.setZero(SmartDashboard.getNumber("BROffsetPractice", 0) + 1.25);
+            frontLeft.setZero(prefs.getDouble("FLOffsetPractice", 0) + 1.25);
+            frontRight.setZero(prefs.getDouble("FROffsetPractice", 0) + 1.25);
+            backLeft.setZero(prefs.getDouble("BLOffsetPractice", 0) + 1.25);
+            backRight.setZero(prefs.getDouble("BROffsetPractice", 0) + 1.25);
         }
-
         limeLight.updatePrefs(); // updates values to limelight class from SmartDashBoard
 
         // Joystick deadzone code
@@ -152,10 +151,15 @@ public class Robot extends TimedRobot {
         if (joystick.getRawButton(8))
             fieldAngle = navX.getAngleRad();
 
-        if (joystick.getRawButton(11))
-            shooter.set(prefs.getDouble("ShootSpeed", 0));
-        else
-            shooter.set(0);
+        if (joystick.getRawButton(11)) {
+            leftShoot.set(1);
+            rightShoot.set(1);
+
+        } else {
+            leftShoot.set(0);
+            rightShoot.set(0);
+
+        }
         if (joystick.getRawButton(9))
             conveyor.set(prefs.getDouble("ConveyorSpeed", 0));
         else
