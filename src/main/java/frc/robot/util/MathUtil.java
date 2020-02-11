@@ -17,4 +17,8 @@ public class MathUtil {
     public static double mod(double a, double b) {
         return ((a % b) + b) % b;
     }
+
+    public static double clipToZero(double val, double min) {
+        return val > min || val < -min ? val : 0;
+    }
 }

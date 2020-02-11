@@ -1,13 +1,16 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.util.MathUtil;
 
-public class WheelDrive {
+public class SwerveWheelModuleSubsystem implements Subsystem {
     private final double MAX_VOLTS = 4.95; // Voltage for the Andymark Absolute Encoders used in the SDS kit.
+    private final double P = .5;
 
     private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
@@ -16,23 +19,21 @@ public class WheelDrive {
 
     private double encoderOffset;
 
-    public WheelDrive(int angleMotor, int speedMotor, AnalogInput angleEncoder, double encoderOffset) {
-        this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
-        this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless); // We're using CANSparkMax controllers, but
-                                                                             // not their encoders.
-        this.angleEncoder = angleEncoder;
+    public SwerveWheelModuleSubsystem(int angleMotorChannel, int speedMotorChannel, int angleEncoderChannel, double encoderOffset) {
+        // We're using CANSparkMax controllers, but not their encoders.
+        this.angleMotor = new CANSparkMax(angleMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
+        this.speedMotor = new CANSparkMax(speedMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
+        this.angleEncoder = new AnalogInput(angleEncoderChannel);
         this.encoderOffset = encoderOffset;
 
-        // pidController = new PIDController(1, 0, 0, new AnalogInput(encoder),
-        // this.angleMotor);
-        pidController = new PIDController(.5, 0, 0); // This is the PID constant, we're not using any
-                                                     // Integral/Derivative control but changing the P value will make
-                                                     // the motors more aggressive to changing to angles.
+        pidController = new PIDController(P, 0, 0); // This is the PID constant, we're not using any
+        // Integral/Derivative control but changing the P value will make
+        // the motors more aggressive to changing to angles.
 
         // pidController.setTolerance(20); //sets tolerance, shouldn't be needed.
 
         pidController.enableContinuousInput(0, MAX_VOLTS); // This makes the PID controller understand the fact that for
-                                                           // our setup, 4.95V is the same as 0 since the wheel loops.
+        // our setup, 4.95V is the same as 0 since the wheel loops.
     }
 
     public void setZero(double offset) {
@@ -43,7 +44,7 @@ public class WheelDrive {
     public void drive(double speed, double angle) {
 
         double currentEncoderValue = (angleEncoder.getVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from
-                                                                                              // encoder
+        // encoder
 
         // Optimization offset can be calculated here.
         double setpoint = angle * (MAX_VOLTS * 0.5) + (MAX_VOLTS * 0.5); // Optimization offset can be calculated here.
@@ -95,6 +96,11 @@ public class WheelDrive {
     }
 
     public void restart() {
-        pidController.setP(.5);
+        pidController.setP(P);
+    }
+
+    @Override
+    public void periodic() {
+
     }
 }

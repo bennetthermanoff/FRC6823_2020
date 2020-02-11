@@ -1,8 +1,10 @@
-package frc.robot;
+package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.WheelDrive;
 
-public class SwerveDrive {
+public class SwerveDriveSubsystem implements Subsystem {
     /**
      * What does this class do? some weird math to take controller inputs and
      * convert them into rotation and speed values for each motor (which is
@@ -13,22 +15,27 @@ public class SwerveDrive {
      */
     public final double L = 1; //
     public final double W = 1; // These are from the Length and Width between wheels. CHANGE THESE IF YOUR
-                               // ROBOT IS NOT A SQUARE
+    // ROBOT IS NOT A SQUARE
 
-    private WheelDrive backRight;
-    private WheelDrive backLeft;
-    private WheelDrive frontRight;
-    private WheelDrive frontLeft;
+    private SwerveWheelModuleSubsystem backRight;
+    private SwerveWheelModuleSubsystem backLeft;
+    private SwerveWheelModuleSubsystem frontRight;
+    private SwerveWheelModuleSubsystem frontLeft;
 
-    public SwerveDrive(WheelDrive backRight, WheelDrive backLeft, WheelDrive frontRight, WheelDrive frontLeft) {
-        this.backRight = backRight;
-        this.backLeft = backLeft;
-        this.frontRight = frontRight;
-        this.frontLeft = frontLeft;
+    public SwerveDriveSubsystem() {
+        backRight = new SwerveWheelModuleSubsystem(5, 1, 3, -4.70);// These are the motors and encoder ports for swerve drive,
+        backLeft = new SwerveWheelModuleSubsystem(6, 2, 2, .884);
+        frontRight = new SwerveWheelModuleSubsystem(7, 3, 1, .697);
+        frontLeft = new SwerveWheelModuleSubsystem(8, 4, 0, .374);// angle,speed,encoder,offset (offset gets changed by
+
+        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
+        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
+        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
+        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
     }
 
-    public void drive(double x1, double y1, double x2) {// x1, y1 are from the position of the joystick, x2
-                                                        // is from the rotation
+    public void drive(double x1, double y1, double x2) {
+        // x1, y1 are from the position of the joystick, x2 is from the rotation
 
         double r = Math.sqrt((L * L) + (W * W));
         y1 *= -1;
@@ -55,11 +62,9 @@ public class SwerveDrive {
         frontLeft.drive(frontLeftSpeed, frontLeftAngle);
     }
 
-    public double getTransX(double x, double y, double angle) {
-        return x * Math.cos(angle) + -y * Math.sin(angle);
-    }
 
-    public double getTransY(double x, double y, double angle) {
-        return x * Math.sin(angle) + y * Math.cos(angle);
+    @Override
+    public void periodic() {
+
     }
 }
