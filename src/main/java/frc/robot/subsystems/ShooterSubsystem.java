@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,12 +11,16 @@ import frc.robot.WheelDrive;
 
 public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax intake, conveyor, leftShoot, rightShoot;
+    private DigitalInput bottomSensor, secondSensor;
+    private boolean manualControl;
 
     public ShooterSubsystem() {
         intake = new CANSparkMax(9, MotorType.kBrushed);
         conveyor = new CANSparkMax(10, MotorType.kBrushed);
         leftShoot = new CANSparkMax(11, MotorType.kBrushed);
         rightShoot = new CANSparkMax(13, MotorType.kBrushed);
+        bottomSensor = new DigitalInput(0);
+        secondSensor = new DigitalInput(1);
     }
 
     public void startShooterSpin() {
@@ -30,10 +35,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void startConveyorSpin() {
         conveyor.set(Preferences.getInstance().getDouble("ConveyorSpeed", 0));
+        manualControl = true;
     }
 
     public void stopConveyorSpin() {
         conveyor.set(0);
+        manualControl = false;
     }
 
     public void startIntakeSpin() {
@@ -46,6 +53,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        if ((!bottomSensor.get() || !secondSensor.get()) && !manualControl) {
+            conveyor.set(Preferences.getInstance().getDouble("ConveyorSpeed", 0));
+        } else if (!manualControl) {
+            conveyor.set(0);
+        }
+        Preferences.getInstance().putDouble("shootRPM", leftShoot.getEncoder().getVelocity());
     }
 }
