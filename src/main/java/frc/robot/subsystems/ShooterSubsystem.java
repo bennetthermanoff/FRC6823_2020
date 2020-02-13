@@ -11,7 +11,7 @@ import frc.robot.WheelDrive;
 
 public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax intake, conveyor, leftShoot, rightShoot;
-    private DigitalInput bottomSensor, secondSensor;
+    private DigitalInput bottomSensor, secondSensor, topSensor;
     private boolean manualControl;
 
     public ShooterSubsystem() {
@@ -21,16 +21,19 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShoot = new CANSparkMax(13, MotorType.kBrushed);
         bottomSensor = new DigitalInput(0);
         secondSensor = new DigitalInput(1);
+        topSensor = new DigitalInput(2);
     }
 
     public void startShooterSpin() {
         leftShoot.set(Preferences.getInstance().getDouble("ShootSpeed", 1));
         rightShoot.set(Preferences.getInstance().getDouble("ShootSpeed", 1));
+        conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
     }
 
     public void stopShooterSpin() {
         leftShoot.set(0);
         rightShoot.set(0);
+        conveyor.set(0);
     }
 
     public void startConveyorSpin() {
@@ -53,7 +56,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if ((!bottomSensor.get() || !secondSensor.get()) && !manualControl) {
+        if ((!bottomSensor.get() || !secondSensor.get()) && !manualControl && topSensor.get()) {
             conveyor.set(Preferences.getInstance().getDouble("ConveyorSpeed", 0));
         } else if (!manualControl) {
             conveyor.set(0);
