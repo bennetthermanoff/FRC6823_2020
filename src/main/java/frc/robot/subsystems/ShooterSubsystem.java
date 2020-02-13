@@ -61,6 +61,6 @@ public class ShooterSubsystem extends SubsystemBase {
         } else if (!manualControl) {
             conveyor.set(0);
         }
-        Preferences.getInstance().putDouble("shootRPM", leftShoot.getEncoder().getVelocity());
+        Preferences.getInstance().putDouble("shootRPM", leftShoot.getAlternateEncoder(EncoderType.kQuadrature, 1024).getVelocity();
     }
 }

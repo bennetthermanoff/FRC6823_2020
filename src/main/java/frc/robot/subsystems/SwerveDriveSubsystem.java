@@ -38,8 +38,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         // x1, y1 are from the position of the joystick, x2 is from the rotation
 
         double r = Math.sqrt((L * L) + (W * W));
-        y1 *= -1;
-        x1 *= -1;
+        // y1 *= -1;
+        // x1 *= -1;
 
         double a = x1 - x2 * (L / r);
         double b = x1 + x2 * (L / r);
