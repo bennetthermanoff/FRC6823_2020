@@ -27,7 +27,7 @@ public class RobotSpaceDrive extends CommandBase {
 
         double xval = joystickHandler.getAxis1() * speedRate;
         double yval = joystickHandler.getAxis0() * speedRate;
-        double spinval = joystickHandler.getAxis2() * turnRate;
+        double spinval = joystickHandler.getAxis5() * turnRate;
 
         swerveDrive.drive(xval, yval, spinval);// zoooooom
     }

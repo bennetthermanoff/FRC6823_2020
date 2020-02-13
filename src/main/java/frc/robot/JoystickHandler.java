@@ -10,8 +10,8 @@ public class JoystickHandler {
     private double deadZone;
 
     public JoystickHandler() {
-        this.joystick = new Joystick(0);
-        this.deadZone = Preferences.getInstance().getDouble("DeadZone", .1);
+        this.joystick = new Joystick(1);
+        this.deadZone = Preferences.getInstance().getDouble("DeadZone", .05);
     }
 
     public double getRawAxis0() {
@@ -22,8 +22,8 @@ public class JoystickHandler {
         return joystick.getRawAxis(1);
     }
 
-    public double getRawAxis2() {
-        return joystick.getRawAxis(2);
+    public double getRawAxis5() {
+        return joystick.getRawAxis(5);
     }
 
     public double getAxis0() {
@@ -34,8 +34,8 @@ public class JoystickHandler {
         return MathUtil.clipToZero(getRawAxis1(), deadZone);
     }
 
-    public double getAxis2() {
-        return MathUtil.clipToZero(getRawAxis2(), deadZone);
+    public double getAxis5() {
+        return MathUtil.clipToZero(getRawAxis5(), deadZone);
     }
 
     public Joystick joy() {

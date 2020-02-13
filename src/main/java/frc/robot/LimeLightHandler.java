@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.MovingAverage;
 
@@ -12,10 +13,12 @@ public class LimeLightHandler {
     private NetworkTable table;
     private NetworkTableEntry tx, ty, threeD;
     private PIDController aimPidController, distancePidController, strafePidController;
+    private Servo servo;
+    private boolean lemon;
 
     MovingAverage xFilter;
 
-    public LimeLightHandler() {
+    public LimeLightHandler(int servoPort) {
         double KpDistance = Robot.PREFS.getDouble("KpDistance", .18); // speed in which distance is adjusted when
         // autoaiming
         double KpAim = Robot.PREFS.getDouble("KpAim", -.036); // speed in which aiming is adjusted when autoaiming
@@ -27,23 +30,17 @@ public class LimeLightHandler {
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         threeD = table.getEntry("camtran");
-
+        this.servo = new Servo(servoPort);
         xFilter = new MovingAverage(1);
 
     }
 
     public void updatePrefs() {
         double KpDistance = Robot.PREFS.getDouble("KpDistance", .18); // speed in which distance is adjusted when
-                                                                     // autoaiming
+                                                                      // autoaiming
         double KpAim = Robot.PREFS.getDouble("KpAim", -.036); // speed in which aiming is adjusted when autoaiming
         aimPidController.setP(KpAim);
         distancePidController.setP(KpDistance);
-
-        if (SmartDashboard.getBoolean("LemonPipeline", false)) {
-            table.getEntry("pipeline").setNumber(1);
-        } else {
-            table.getEntry("pipeline").setNumber(0);
-        }
 
     }
 
@@ -186,6 +183,20 @@ public class LimeLightHandler {
 
         return new double[] { aimCommand, skewCommand * -1 };//
 
+    }
+
+    public void pipeLineSelect() {
+        this.lemon = !this.lemon;
+        if (this.lemon) {
+            servo.setAngle(Preferences.getInstance().getDouble("LemonAngle", 45));
+
+        } else {
+            servo.setAngle(Preferences.getInstance().getDouble("NonLemonAngle", 20));
+        }
+    }
+
+    public boolean LemonPipeline() {
+        return lemon;
     }
 
 }
