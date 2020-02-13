@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.WheelDrive;
@@ -63,9 +64,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
-        backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
-        frontRight.setZero(SmartDashboard.getNumber("FROffset", 0) + 1.25);
-        frontLeft.setZero(SmartDashboard.getNumber("FLOffset", 0) + 1.25);
+        if (Preferences.getInstance().getBoolean("PracticeBot", false)) {
+            backRight.setZero(Preferences.getInstance().getDouble("PracticeBROffset", 0) + 1.25);
+            backLeft.setZero(Preferences.getInstance().getDouble("PracticeBLOffset", 0) + 1.25);
+            frontRight.setZero(Preferences.getInstance().getDouble("PracticeFROffset", 0) + 1.25);
+            frontLeft.setZero(Preferences.getInstance().getDouble("PracticeFLOffset", 0) + 1.25);
+        } else {
+            backRight.setZero(Preferences.getInstance().getDouble("BROffset", 0) + 1.25);
+            backLeft.setZero(Preferences.getInstance().getDouble("BLOffset", 0) + 1.25);
+            frontRight.setZero(Preferences.getInstance().getDouble("FROffset", 0) + 1.25);
+            frontLeft.setZero(Preferences.getInstance().getDouble("FLOffset", 0) + 1.25);
+        }
     }
 }
