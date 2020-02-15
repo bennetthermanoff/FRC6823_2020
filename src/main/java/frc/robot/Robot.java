@@ -78,12 +78,12 @@ public class Robot extends TimedRobot {
         backLeft.setZero(SmartDashboard.getNumber("BLOffset", 0) + 1.25);
         backRight.setZero(SmartDashboard.getNumber("BROffset", 0) + 1.25);
 
-        launchBoi1 = new CANSparkMax(10, MotorType.kBrushless);
+        launchBoi1 = new CANSparkMax(13, MotorType.kBrushless);
         launchBoi2 = new CANSparkMax(11, MotorType.kBrushless);
-        conveyor = new CANSparkMax(9, MotorType.kBrushless);
+        conveyor = new CANSparkMax(12, MotorType.kBrushless);
         intake = new CANSparkMax(8, MotorType.kBrushed);
-        lift1 = new CANSparkMax(12, MotorType.kBrushed);
-        lift2 = new CANSparkMax(13, MotorType.kBrushed);
+        lift1 = new CANSparkMax(9, MotorType.kBrushed);
+        lift2 = new CANSparkMax(10, MotorType.kBrushed);
         BarMove = new CANSparkMax(14, MotorType.kBrushed);
         WheelOfFortune = new CANSparkMax(15, MotorType.kBrushed);
         ShroudAim = new Servo(1);
