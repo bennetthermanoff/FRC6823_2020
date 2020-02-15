@@ -33,8 +33,6 @@ public class Robot extends TimedRobot {
 
         rgb = new RGB(9);
 
-        intake = new CANSparkMax(9, MotorType.kBrushed);
-
         PREFS.putBoolean("DEBUG_MODE", false);
         SmartDashboard.putBoolean("LemonPipeline", false);
     }

@@ -26,6 +26,10 @@ public class JoystickHandler {
         return joystick.getRawAxis(5);
     }
 
+    public double getRawAxis6() {
+        return joystick.getRawAxis(6);
+    }
+
     public double getAxis0() {
         return MathUtil.clipToZero(getRawAxis0(), deadZone);
     }

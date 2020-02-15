@@ -22,7 +22,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem();
 
         joystickHandler = new JoystickHandler(); // joystick input
-        limeLight = new LimeLightHandler(0); // limelight input
+        limeLight = new LimeLightHandler(0, shooterSubsystem); // limelight input
         navX = new NavXHandler(); // navx input
 
         // field space also uses navx to get its angle
@@ -63,24 +63,41 @@ public class RobotContainer {
          * autoAim[1] * .15, autoAim[0] * .1); }, swerveDriveSubsystem);
          **/
 
+        // this will set the current orientation to be "forward" for field drive
+        joystickHandler.button(14).whenPressed(() -> fieldSpaceDriveCommand.zero());
+
+        // holding 10 will enable field space drive, instead of robot space
+        joystickHandler.button(7).whileHeld(fieldSpaceDriveCommand);
+
+        joystickHandler.button(15).whileActiveContinuous(shooterSubsystem::shooterPID, shooterSubsystem)
+                .whenInactive(shooterSubsystem::stopShooterSpin);
+
+        joystickHandler.button(5).whenPressed(limeLight::aimReset);
+        joystickHandler.button(5).whileHeld(() -> {
+            double[] autoAim = limeLight.programmedDistances(joystickHandler.getRawAxis6());
+            swerveDriveSubsystem.drive(autoAim[2] * .15, autoAim[1] * .1, autoAim[0] * .25);
+        }, swerveDriveSubsystem);
+
         joystickHandler.button(11).whenPressed(shooterSubsystem::startConveyorSpin)
                 .whenReleased(shooterSubsystem::stopConveyorSpin);
 
         joystickHandler.button(12).whenPressed(shooterSubsystem::startReverseConveyor)
                 .whenReleased(shooterSubsystem::stopConveyorSpin);
 
-        joystickHandler.button(15).whenPressed(shooterSubsystem::startShooterSpin)
-                .whenReleased(shooterSubsystem::stopShooterSpin);
+        // joystickHandler.button(15).whenPressed(shooterSubsystem::startShooterSpin)
+        // .whenReleased(shooterSubsystem::stopShooterSpin);
 
         joystickHandler.button(1).whenPressed(shooterSubsystem::startIntakeSpin)
                 .whenReleased(shooterSubsystem::stopIntakeSpin);
-
-        joystickHandler.button(4).whenPressed(limeLight::pipeLineSelect);
+        joystickHandler.button(15).whenPressed(shooterSubsystem::startTimer).whenReleased(shooterSubsystem::stopTimer);
+        joystickHandler.button(4).whenPressed(limeLight::pipeLineSwitch);
 
         joystickHandler.button(9).whenPressed(shooterSubsystem::startIntakeSpin)
                 .whenReleased(shooterSubsystem::stopIntakeSpin);
         joystickHandler.button(10).whenPressed(shooterSubsystem::startReverseIntake)
                 .whenReleased(shooterSubsystem::stopIntakeSpin);
+        joystickHandler.button(16).whenPressed(shooterSubsystem::coolShooter)
+                .whenReleased(shooterSubsystem::stopShooterSpin);
 
     }
 }
