@@ -174,8 +174,8 @@ public class Robot extends TimedRobot {
         }
 
         if (joystick.getRawButton(11)){
-            lift1.set(1);
-            lift2.set(1);
+            lift1.set(.1);
+            lift2.set(.1);
         }else{
             lift1.set(0);
             lift2.set(0);
