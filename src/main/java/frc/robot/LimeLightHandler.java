@@ -116,7 +116,7 @@ public class LimeLightHandler {
                                                                // the Limelight 3D pipeline, this is experimental, and
                                                                // if unstable, we may want to use the standard limelight
                                                                // pipeline instead
-        this.pipeLineSelect(true);
+
         double skewOffset = threeD.getDoubleArray(new double[] { 0 })[0]; // (x,y,z,pitch,yaw,roll)
         double skew = distance * Math.sin(theta);
         double ySetpoint = distance * Math.cos(theta);
@@ -233,33 +233,30 @@ public class LimeLightHandler {
 
     public double[] programmedDistances(double input) {
         this.updatePrefs();
-        if (aimed) {
-            return new double[] { 0, 0, 0 };
-        }
+        // if (aimed) {
+        // return new double[] { 0, 0, 0 };
+        // }
         double rpm;
+
         double[] array;
         if (input < .33) { // lo
+            this.pipeLineSelect(true);
             array = goToPolar(-56, 0);
             rpm = 8500;
-        } else if (input < .66) { // med
-            array = goToPolar(-100, 0);
-            rpm = 10000;
-        } else { // hi
-            array = goToPolar(-150, 0);
+        } else { // med
+            this.pipeLineSelect(false);
+            array = goToPolar(-170, 0);
             rpm = 10000;
         }
+        Preferences.getInstance().putDouble("RPMControl", rpm);
 
-        if (array[3] == 1) {
-            timer.start();
-        }
-
-        if (!(array[3] == 1)) {
-            return new double[] { array[0], array[1], array[2] };
-        } else {
-            // shooterSubsystem.shooterPIDAuto(rpm);
-            aimed = true;
-            return new double[] { 0, 0, 0 };
-        }
+        // if (!(array[3] == 1)) {
+        return new double[] { array[0], array[1], array[2] };
+        // } else {
+        // shooterSubsystem.shooterPIDAuto(rpm);
+        // aimed = true;
+        // return new double[] { 0, 0, 0 };
+        // }
 
     }
 
