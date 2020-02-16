@@ -67,10 +67,10 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShoot.set(out);
         rightShoot.set(out);
         count++;
-        if (count > 30) {
+        //if (count > 30) {
             conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
             manualControl = true;
-        }
+       // }
     }
 
     public void shooterPIDAuto(double rpm) {

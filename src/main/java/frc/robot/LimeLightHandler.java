@@ -246,7 +246,7 @@ public class LimeLightHandler {
         } else { // med
             this.pipeLineSelect(false);
             array = goToPolar(-170, 0);
-            rpm = 10000;
+            rpm = 8850;
         }
         Preferences.getInstance().putDouble("RPMControl", rpm);
 
