@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -44,23 +45,13 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {
-        robotContainer.shooterSubsystem.stopShooterSpin();
+    public void autonomousInit() {
+        robotContainer.getAutoCommand().schedule();
     }
 
     @Override
-    public void teleopPeriodic() {
-
+    public void teleopInit() {
+        robotContainer.getAutoCommand().cancel();
     }
 
-    public void autonomousPeriodic() {
-        if (PREFS.getBoolean("auto", false)) {
-
-            double[] autoAim = robotContainer.limeLight.programmedDistances(0);
-            robotContainer.swerveDriveSubsystem.drive(autoAim[2] * .15, autoAim[1] * .1, autoAim[0] * .25);
-
-            robotContainer.shooterSubsystem.shooterPID();
-
-        }
-    }
 }
