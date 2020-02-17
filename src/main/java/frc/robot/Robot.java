@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
 
         PREFS.putBoolean("DEBUG_MODE", false);
         SmartDashboard.putBoolean("LemonPipeline", false);
+
     }
 
     @Override
@@ -44,11 +45,22 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        robotContainer.shooterSubsystem.stopShooterSpin();
     }
 
     @Override
     public void teleopPeriodic() {
 
+    }
+
+    public void autonomousPeriodic() {
+        if (PREFS.getBoolean("auto", false)) {
+
+            double[] autoAim = robotContainer.limeLight.programmedDistances(0);
+            robotContainer.swerveDriveSubsystem.drive(autoAim[2] * .15, autoAim[1] * .1, autoAim[0] * .25);
+
+            robotContainer.shooterSubsystem.shooterPID();
+
+        }
     }
 }

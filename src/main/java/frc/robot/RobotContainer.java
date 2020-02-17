@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.RobotSpaceDrive;
@@ -7,15 +8,15 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;;
 
 public class RobotContainer {
-    private SwerveDriveSubsystem swerveDriveSubsystem;
-    private ShooterSubsystem shooterSubsystem;
+    public SwerveDriveSubsystem swerveDriveSubsystem;
+    public ShooterSubsystem shooterSubsystem;
 
     private FieldSpaceDrive fieldSpaceDriveCommand;
     private RobotSpaceDrive robotSpaceDriveCommand;
 
     private JoystickHandler joystickHandler;
     private NavXHandler navX;
-    private LimeLightHandler limeLight;
+    public LimeLightHandler limeLight;
 
     public RobotContainer() {
         swerveDriveSubsystem = new SwerveDriveSubsystem();
@@ -98,6 +99,14 @@ public class RobotContainer {
                 .whenReleased(shooterSubsystem::stopIntakeSpin);
         joystickHandler.button(16).whenPressed(shooterSubsystem::coolShooter)
                 .whenReleased(shooterSubsystem::stopShooterSpin);
-
+        /**
+         * joystickHandler.button(2).whileHeld(() -> {
+         * Preferences.getInstance().putDouble("ConveyorShootSpeed", 15000);
+         * shooterSubsystem.shooterPID();
+         * 
+         * 
+         * }, shooterSubsystem);
+         * joystickHandler.button(2).whenReleased(shooterSubsystem::stopShooterSpin);
+         **/
     }
 }

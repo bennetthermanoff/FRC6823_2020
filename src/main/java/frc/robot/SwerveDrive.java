@@ -31,8 +31,8 @@ public class SwerveDrive {
                                                         // is from the rotation
 
         double r = Math.sqrt((L * L) + (W * W));
-        y1 *= -1;
-        x1 *= -1;
+        // y1 *= -1;
+        // x1 *= -1;
 
         double a = x1 - x2 * (L / r);
         double b = x1 + x2 * (L / r);
