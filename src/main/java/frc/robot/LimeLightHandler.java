@@ -7,11 +7,13 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.util.MovingAverage;
 
-public class LimeLightHandler {
+public class LimeLightHandler extends SubsystemBase {
     private NetworkTable table;
     private NetworkTableEntry tx, ty, threeD;
     private PIDController aimPidController, distancePidController, strafePidController;
@@ -40,6 +42,7 @@ public class LimeLightHandler {
         timer = new Timer();
         aimed = false;
 
+        this.register(); // registers limelight as a subsystem
     }
 
     public void aimReset() {
@@ -54,6 +57,11 @@ public class LimeLightHandler {
         aimPidController.setP(KpAim);
         distancePidController.setP(KpDistance);
         strafePidController.setP(KpStrafe);
+        if (SmartDashboard.getBoolean("LemonPipeline", false)) {
+            table.getEntry("pipeline").setNumber(1);
+        } else {
+            table.getEntry("pipeline").setNumber(0);
+        }
 
     }
 
@@ -137,7 +145,7 @@ public class LimeLightHandler {
 
         Robot.PREFS.putDouble("aimCommand", aimCommand);
 
-        if (Math.abs(x) < 15 && (Math.abs(r) - distance) < 15
+        if (Math.abs(x) < 15 && (Math.abs(r - distance)) < 15
                 && Math.abs(threeD.getDoubleArray(new double[] { 0 })[0]) < 15) {
             SmartDashboard.putBoolean("Shoot", true);
             out = 1;
@@ -216,6 +224,11 @@ public class LimeLightHandler {
         } else {
             servo.setAngle(Preferences.getInstance().getDouble("NonLemonAngle", 20));
         }
+        if (this.lemon) {
+            table.getEntry("pipeline").setNumber(1);
+        } else {
+            table.getEntry("pipeline").setNumber(0);
+        }
     }
 
     public void pipeLineSelect(boolean lemon) {
@@ -224,6 +237,7 @@ public class LimeLightHandler {
 
         } else {
             servo.setAngle(Preferences.getInstance().getDouble("NonLemonAngle", 20));
+
         }
     }
 
@@ -240,7 +254,7 @@ public class LimeLightHandler {
 
         double[] array;
         if (input < .33) { // lo
-            this.pipeLineSelect(true);
+            this.pipeLineSelect(false);
             array = goToPolar(-56, 0);
             rpm = 8500;
         } else { // med

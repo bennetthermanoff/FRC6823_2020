@@ -6,18 +6,21 @@ import frc.robot.LimeLightHandler;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class Auto extends CommandBase {
+public class AutoCommand extends CommandBase {
 
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private ShooterSubsystem shooterSubsystem;
     private LimeLightHandler limeLightHandler;
     private Timer timer;
 
-    public Auto(SwerveDriveSubsystem swerveDriveSubsystem, ShooterSubsystem shooterSubsystem,
+    public AutoCommand(SwerveDriveSubsystem swerveDriveSubsystem, ShooterSubsystem shooterSubsystem,
             LimeLightHandler limeLightHandler) {
         this.limeLightHandler = limeLightHandler;
         this.shooterSubsystem = shooterSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+
+        addRequirements(swerveDriveSubsystem);
+        addRequirements(shooterSubsystem);
     }
 
     @Override
