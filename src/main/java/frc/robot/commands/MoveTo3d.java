@@ -6,22 +6,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class MoveTo extends CommandBase {
+public class MoveTo3d extends CommandBase {
 
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
     private PIDController strafeController, distController, aimController;
     private double x,z;
 
-    public MoveTo(SwerveDriveSubsystem swerveDriveSubsystem,
+    public MoveTo3d(SwerveDriveSubsystem swerveDriveSubsystem,
             LimeLightSubsystem limeLightSubsystem, double x, double z) {
         this.limeLightSubsystem = limeLightSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.x=x;
         this.z=z;
 
-        addRequirements(swerveDriveSubsystem);
-        addRequirements(limeLightSubsystem);
+        addRequirements(limeLightSubsystem, swerveDriveSubsystem);
     }
 
     @Override

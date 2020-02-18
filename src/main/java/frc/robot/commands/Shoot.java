@@ -13,6 +13,7 @@ public class Shoot extends CommandBase{
     public Shoot(ShooterSubsystem shooterSubsystem,double rpm){
         this.shooterSubsystem = shooterSubsystem;
         this.rpm=rpm;
+        addRequirements(shooterSubsystem);
     }
 
     @Override

@@ -9,7 +9,7 @@ public class AutoCommandGroup extends SequentialCommandGroup{
 
     public AutoCommandGroup(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem, SwerveDriveSubsystem swerveDriveSubsystem){
         addCommands(
-            new MoveTo(swerveDriveSubsystem, limeLightSubsystem, 0, -56),
+            new MoveTo3d(swerveDriveSubsystem, limeLightSubsystem, 0, -56),
             new Shoot(shooterSubsystem, 8500)
         );
     }
