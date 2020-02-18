@@ -11,14 +11,14 @@ public class MoveTo3d extends CommandBase {
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
     private PIDController strafeController, distController, aimController;
-    private double x,z;
+    private double x, z;
 
-    public MoveTo3d(SwerveDriveSubsystem swerveDriveSubsystem,
-            LimeLightSubsystem limeLightSubsystem, double x, double z) {
+    public MoveTo3d(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem, double x,
+            double z) {
         this.limeLightSubsystem = limeLightSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.x=x;
-        this.z=z;
+        this.x = x;
+        this.z = z;
 
         addRequirements(limeLightSubsystem, swerveDriveSubsystem);
     }
@@ -29,30 +29,29 @@ public class MoveTo3d extends CommandBase {
         double distanceCommand = distController.calculate(limeLightSubsystem.getZ());
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
 
-        swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand);
+        swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand * -1);
     }
 
     @Override
     public void initialize() {
         limeLightSubsystem.setPipeline(0);
-        limeLightSubsystem.setServo(65);
 
-        strafeController = new PIDController(.1, 0, 0);
-        distController = new PIDController(.1, 0, 0);
-        aimController = new PIDController(.1, 0, 0);
+        strafeController = new PIDController(.01, 0, 0);
+        distController = new PIDController(.015, 0, 0);
+        aimController = new PIDController(.008, 0, 0);
 
         strafeController.setSetpoint(x);
         distController.setSetpoint(z);
         aimController.setSetpoint(0);
-        
+
     }
 
     @Override
     public boolean isFinished() {
-        if(Math.abs(strafeController.getPositionError())<5&&Math.abs(distController.getPositionError())<5&&Math.abs(aimController.getPositionError())<2){
+        if (Math.abs(strafeController.getPositionError()) < 5 && Math.abs(distController.getPositionError()) < 5
+                && Math.abs(aimController.getPositionError()) < 2) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

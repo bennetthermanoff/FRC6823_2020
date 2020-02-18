@@ -14,14 +14,14 @@ public class LimeLightSubsystem extends SubsystemBase {
 
     public LimeLightSubsystem(int servo) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        this.setPipeline(0);
         this.servo = new Servo(servo);
+        this.setPipeline(0);
     }
 
     public void setPipeline(int pipeline) {
         table.getEntry("pipeline").setNumber(pipeline);
         if (pipeline == 0) {
-            this.setServo(65);
+            this.setServo(75);
         } else if (pipeline == 1) {
             this.setServo(0);
         }
@@ -32,8 +32,8 @@ public class LimeLightSubsystem extends SubsystemBase {
         return (int) table.getEntry("getpipe").getDouble(0);
     }
 
-    public void setServo(int degree) {
-        servo.set(degree);
+    public void setServo(int degrees) {
+        servo.setAngle(degrees);
     }
 
     // "T"x is for theta, aka this is from 2d pipelines, non "T" methods get 3d

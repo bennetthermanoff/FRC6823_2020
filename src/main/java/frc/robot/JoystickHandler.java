@@ -49,4 +49,8 @@ public class JoystickHandler {
     public JoystickButton button(int buttonNumber) {
         return new JoystickButton(joystick, buttonNumber);
     }
+
+    public boolean isJoyInUse() {
+        return getAxis0() != 0 || getAxis1() != 0 || getAxis5() != 0;
+    }
 }
