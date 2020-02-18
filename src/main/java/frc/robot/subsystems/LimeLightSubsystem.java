@@ -29,7 +29,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     }
 
     public int getPipeline() {
-        return [int] table.getEntry("getpipe").getDouble(defaultValue);
+        return (int) table.getEntry("getpipe").getDouble(0);
     }
 
     public void setServo(int degree) {

@@ -73,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
        // }
     }
 
-    public void shooterPIDAuto(double rpm) {
+    public void shooterPID(double rpm) {
 
         speedController.setP((Preferences.getInstance().getDouble("rpmk", .0001)));
         speedController.setI(Preferences.getInstance().getDouble("rpmi", 0));
@@ -82,9 +82,11 @@ public class ShooterSubsystem extends SubsystemBase {
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
         leftShoot.set(out);
         rightShoot.set(out);
-
-        conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
-        manualControl = true;
+        count++;
+        if (count > 20) {
+            conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
+            manualControl = true;
+        }
     }
 
     public void startConveyorSpin() {

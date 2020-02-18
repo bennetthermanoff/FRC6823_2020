@@ -2,10 +2,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutoCommand;
+import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.RobotSpaceDrive;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;;
 
 public class RobotContainer {
@@ -14,11 +15,12 @@ public class RobotContainer {
 
     private FieldSpaceDrive fieldSpaceDriveCommand;
     private RobotSpaceDrive robotSpaceDriveCommand;
-    private AutoCommand autoCommand; // gotta construct auto by giving it the swerve bas
+    private AutoCommandGroup autoCommandGroup; // gotta construct auto by giving it the swerve bas
 
     private JoystickHandler joystickHandler;
     private NavXHandler navX;
     public LimeLightHandler limeLight;
+    private LimeLightSubsystem limeLightSubsystem;
 
     public RobotContainer() {
         swerveDriveSubsystem = new SwerveDriveSubsystem();
@@ -26,19 +28,20 @@ public class RobotContainer {
 
         joystickHandler = new JoystickHandler(); // joystick input
         limeLight = new LimeLightHandler(0, shooterSubsystem); // limelight input
+        limeLightSubsystem = new LimeLightSubsystem(0);
         navX = new NavXHandler(); // navx input
 
         // field space also uses navx to get its angle
         fieldSpaceDriveCommand = new FieldSpaceDrive(swerveDriveSubsystem, joystickHandler, navX);
         robotSpaceDriveCommand = new RobotSpaceDrive(swerveDriveSubsystem, joystickHandler);
-        autoCommand = new AutoCommand(swerveDriveSubsystem, shooterSubsystem, limeLight);
+        autoCommandGroup = new AutoCommandGroup(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem);
         CommandScheduler.getInstance().setDefaultCommand(swerveDriveSubsystem, robotSpaceDriveCommand);
 
         configureButtonBindings();
     }
 
-    public AutoCommand getAutoCommand() {
-        return autoCommand;
+    public AutoCommandGroup getAutoCommandGroup() {
+        return autoCommandGroup;
     }
 
     private void configureButtonBindings() {
