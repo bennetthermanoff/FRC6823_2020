@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoAim3d;
 import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.RobotSpaceDrive;
@@ -16,7 +17,7 @@ public class RobotContainer {
     private FieldSpaceDrive fieldSpaceDriveCommand;
     private RobotSpaceDrive robotSpaceDriveCommand;
     private AutoCommandGroup autoCommandGroup; // gotta construct auto by giving it the swerve bas
-
+    private AutoAim3d autoAim3d;
     private JoystickHandler joystickHandler;
     private NavXHandler navX;
     public LimeLightHandler limeLight;
@@ -30,6 +31,7 @@ public class RobotContainer {
         limeLight = new LimeLightHandler(0, shooterSubsystem); // limelight input
         limeLightSubsystem = new LimeLightSubsystem(0);
         navX = new NavXHandler(); // navx input
+        autoAim3d = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, positionSelect());
 
         // field space also uses navx to get its angle
         fieldSpaceDriveCommand = new FieldSpaceDrive(swerveDriveSubsystem, joystickHandler, navX);
@@ -45,7 +47,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-            
+
         // press button 12 to set the swerve just forward, this is for calibration
         // purposes
         // joystickHandler.button(12).whileHeld(() -> swerveDriveSubsystem.drive(0.2, 0,
@@ -62,7 +64,10 @@ public class RobotContainer {
 
         joystickHandler.button(5).whenPressed(limeLight::aimReset);
     
-        joystickHandler.button(5).whenHeld(autoCommandGroup);
+        joystickHandler.button(5).whenPressed(() -> {
+                autoAim3d.setPosition(this.positionSelect());
+                autoAim3d.schedule();
+        });
 
         joystickHandler.button(11).whenPressed(shooterSubsystem::startConveyorSpin)
                 .whenReleased(shooterSubsystem::stopConveyorSpin);
@@ -82,5 +87,12 @@ public class RobotContainer {
         joystickHandler.button(16).whenPressed(shooterSubsystem::coolShooter)
                 .whenReleased(shooterSubsystem::stopShooterSpin);
 
+    }
+    private int positionSelect(){
+        if(joystickHandler.getRawAxis6()<.33){
+                return 0;
+        } 
+        else
+                return 1;
     }
 }
