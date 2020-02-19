@@ -7,23 +7,14 @@
 //hey look it's some code! Incredible
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public static Preferences PREFS = Preferences.getInstance();
-
-    private CANSparkMax intake;
     public static RGB rgb;
-
-    private CANSparkMax launchBoi;
-
     private RobotContainer robotContainer;
 
     @Override

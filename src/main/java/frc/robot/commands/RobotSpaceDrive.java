@@ -3,10 +3,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.JoystickHandler;
-import frc.robot.Robot;
-import frc.robot.subsystems.SwerveDriveSubsystem;
 
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class RobotSpaceDrive extends CommandBase {
     // The subsystem the command runs on

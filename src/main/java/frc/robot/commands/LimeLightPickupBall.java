@@ -22,7 +22,7 @@ public class LimeLightPickupBall extends CommandBase {
         this.shooterSubsystem = shooterSubsystem;
         this.limeLightSubsystem = limeLightSubsystem;
 
-        addRequirements(swerveDriveSubsystem, shooterSubsystem, limelightSubsystem);
+        addRequirements(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem);
     }
 
     @Override

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.WheelDrive;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -33,14 +34,14 @@ public class ShooterSubsystem extends SubsystemBase {
         topSensor = new DigitalInput(2);
         encoder = new Encoder(8, 9, false, Encoder.EncodingType.k1X);
         encoder.setDistancePerPulse(1);
-        speedController = new PIDController(Preferences.getInstance().getDouble("rpmk", .0001), 0, 0);
+        speedController = new PIDController(Robot.PREFS.getDouble("rpmk", .0001), 0, 0);
 
     }
 
     public void startShooterSpin() {
-        leftShoot.set(Preferences.getInstance().getDouble("ShootSpeed", 1));
-        rightShoot.set(Preferences.getInstance().getDouble("ShootSpeed", 1));
-        conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
+        leftShoot.set(Robot.PREFS.getDouble("ShootSpeed", 1));
+        rightShoot.set(Robot.PREFS.getDouble("ShootSpeed", 1));
+        conveyor.set(Robot.PREFS.getDouble("ConveyorShootSpeed", 0));
         manualControl = true;
     }
 
@@ -59,38 +60,38 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shooterPID() {
-        speedController.setP((Preferences.getInstance().getDouble("rpmk", .0001)));
-        speedController.setI(Preferences.getInstance().getDouble("rpmi", 0));
-        speedController.setD(Preferences.getInstance().getDouble("rpmd", 0));
-        speedController.setSetpoint(Preferences.getInstance().getDouble("RPMControl", 0));
+        speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
+        speedController.setI(Robot.PREFS.getDouble("rpmi", 0));
+        speedController.setD(Robot.PREFS.getDouble("rpmd", 0));
+        speedController.setSetpoint(Robot.PREFS.getDouble("RPMControl", 0));
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
         leftShoot.set(out);
         rightShoot.set(out);
         count++;
-        //if (count > 30) {
-            conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
-            manualControl = true;
-       // }
+        // if (count > 30) {
+        conveyor.set(Robot.PREFS.getDouble("ConveyorShootSpeed", 0));
+        manualControl = true;
+        // }
     }
 
     public void shooterPID(double rpm) {
 
-        speedController.setP((Preferences.getInstance().getDouble("rpmk", .0001)));
-        speedController.setI(Preferences.getInstance().getDouble("rpmi", 0));
-        speedController.setD(Preferences.getInstance().getDouble("rpmd", 0));
+        speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
+        speedController.setI(Robot.PREFS.getDouble("rpmi", 0));
+        speedController.setD(Robot.PREFS.getDouble("rpmd", 0));
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
         leftShoot.set(out);
         rightShoot.set(out);
         count++;
         if (count > 20) {
-            conveyor.set(Preferences.getInstance().getDouble("ConveyorShootSpeed", 0));
+            conveyor.set(Robot.PREFS.getDouble("ConveyorShootSpeed", 0));
             manualControl = true;
         }
     }
 
     public void startConveyorSpin() {
-        conveyor.set(Preferences.getInstance().getDouble("ConveyorSpeed", 0));
+        conveyor.set(Robot.PREFS.getDouble("ConveyorSpeed", 0));
         manualControl = true;
     }
 
@@ -103,7 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void startReverseConveyor() {
-        conveyor.set(-1 * Preferences.getInstance().getDouble("ConveyorSpeed", 0));
+        conveyor.set(-1 * Robot.PREFS.getDouble("ConveyorSpeed", 0));
         manualControl = true;
     }
 
@@ -113,7 +114,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void startIntakeSpin() {
-        intake.set(Preferences.getInstance().getDouble("IntakeSpeed", .05));
+        intake.set(Robot.PREFS.getDouble("IntakeSpeed", .05));
     }
 
     public void stopIntakeSpin() {
@@ -121,17 +122,17 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void startReverseIntake() {
-        intake.set(-1 * Preferences.getInstance().getDouble("IntakeSpeed", .05));
+        intake.set(-1 * Robot.PREFS.getDouble("IntakeSpeed", .05));
     }
 
     @Override
     public void periodic() {
         if ((!bottomSensor.get() || !secondSensor.get()) && !manualControl && topSensor.get()) {
-            conveyor.set(Preferences.getInstance().getDouble("ConveyorSpeed", 0));
+            conveyor.set(Robot.PREFS.getDouble("ConveyorSpeed", 0));
         } else if (!manualControl) {
             conveyor.set(0);
         }
-        Preferences.getInstance().putDouble("shootRPM", encoder.getRate() * 60 / 1024);
+        Robot.PREFS.putDouble("shootRPM", encoder.getRate() * 60 / 1024);
 
     }
 }
