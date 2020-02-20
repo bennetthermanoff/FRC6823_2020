@@ -125,14 +125,18 @@ public class ShooterSubsystem extends SubsystemBase {
         intake.set(-1 * Robot.PREFS.getDouble("IntakeSpeed", .05));
     }
 
+    public boolean doesSenseBall() {
+        return (!bottomSensor.get() || !secondSensor.get());
+    }
+
     @Override
     public void periodic() {
-        if ((!bottomSensor.get() || !secondSensor.get()) && !manualControl && topSensor.get()) {
+        // get returns true when nothing is there
+        if (doesSenseBall() && !manualControl && topSensor.get()) {
             conveyor.set(Robot.PREFS.getDouble("ConveyorSpeed", 0));
         } else if (!manualControl) {
             conveyor.set(0);
         }
         Robot.PREFS.putDouble("shootRPM", encoder.getRate() * 60 / 1024);
-
     }
 }

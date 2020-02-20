@@ -4,93 +4,98 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoAim3d;
 import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.FieldSpaceDrive;
+import frc.robot.commands.LimeLightPickupBall;
 import frc.robot.commands.RobotSpaceDrive;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;;
 
 public class RobotContainer {
-        public SwerveDriveSubsystem swerveDriveSubsystem;
-        public ShooterSubsystem shooterSubsystem;
+    public SwerveDriveSubsystem swerveDriveSubsystem;
+    public ShooterSubsystem shooterSubsystem;
 
-        private FieldSpaceDrive fieldSpaceDriveCommand;
-        private RobotSpaceDrive robotSpaceDriveCommand;
-        private AutoCommandGroup autoCommandGroup; // gotta construct auto by giving it the swerve bas
-        private AutoAim3d autoAim3d;
-        private JoystickHandler joystickHandler;
-        private NavXHandler navX;
-        private LimeLightSubsystem limeLightSubsystem;
+    private FieldSpaceDrive fieldSpaceDriveCommand;
+    private RobotSpaceDrive robotSpaceDriveCommand;
+    private AutoCommandGroup autoCommandGroup; // gotta construct auto by giving it the swerve bas
+    private AutoAim3d autoAim3d;
+    private JoystickHandler joystickHandler;
+    private NavXHandler navX;
+    private LimeLightSubsystem limeLightSubsystem;
 
-        public RobotContainer() {
-                swerveDriveSubsystem = new SwerveDriveSubsystem();
-                shooterSubsystem = new ShooterSubsystem();
+    private LimeLightPickupBall pickupBallCommand;
 
-                joystickHandler = new JoystickHandler(); // joystick input
-                limeLightSubsystem = new LimeLightSubsystem(0);
-                navX = new NavXHandler(); // navx input
-                autoAim3d = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, positionSelect());
+    public RobotContainer() {
+        swerveDriveSubsystem = new SwerveDriveSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
 
-                // field space also uses navx to get its angle
-                fieldSpaceDriveCommand = new FieldSpaceDrive(swerveDriveSubsystem, joystickHandler, navX);
-                robotSpaceDriveCommand = new RobotSpaceDrive(swerveDriveSubsystem, joystickHandler);
-                autoCommandGroup = new AutoCommandGroup(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem);
-                CommandScheduler.getInstance().setDefaultCommand(swerveDriveSubsystem, robotSpaceDriveCommand);
+        joystickHandler = new JoystickHandler(); // joystick input
+        limeLightSubsystem = new LimeLightSubsystem(0);
+        navX = new NavXHandler(); // navx input
+        autoAim3d = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, positionSelect());
+        this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0);
 
-                configureButtonBindings();
-        }
+        // field space also uses navx to get its angle
+        fieldSpaceDriveCommand = new FieldSpaceDrive(swerveDriveSubsystem, joystickHandler, navX);
+        robotSpaceDriveCommand = new RobotSpaceDrive(swerveDriveSubsystem, joystickHandler);
+        autoCommandGroup = new AutoCommandGroup(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem);
+        CommandScheduler.getInstance().setDefaultCommand(swerveDriveSubsystem, robotSpaceDriveCommand);
 
-        public AutoCommandGroup getAutoCommandGroup() {
-                return autoCommandGroup;
-        }
+        configureButtonBindings();
+    }
 
-        private void configureButtonBindings() {
+    public AutoCommandGroup getAutoCommandGroup() {
+        return autoCommandGroup;
+    }
 
-                // press button 12 to set the swerve just forward, this is for calibration
-                // purposes
-                // joystickHandler.button(12).whileHeld(() -> swerveDriveSubsystem.drive(0.2, 0,
-                // 0), swerveDriveSubsystem);
+    private void configureButtonBindings() {
 
-                // this will set the current orientation to be "forward" for field drive
-                joystickHandler.button(14).whenPressed(() -> fieldSpaceDriveCommand.zero());
+        // press button 12 to set the swerve just forward, this is for calibration
+        // purposes
+        // joystickHandler.button(12).whileHeld(() -> swerveDriveSubsystem.drive(0.2, 0,
+        // 0), swerveDriveSubsystem);
 
-                // holding 10 will enable field space drive, instead of robot space
-                joystickHandler.button(7).whenHeld(fieldSpaceDriveCommand);
+        // this will set the current orientation to be "forward" for field drive
+        joystickHandler.button(14).whenPressed(() -> fieldSpaceDriveCommand.zero());
 
-                joystickHandler.button(15).whileActiveContinuous(shooterSubsystem::shooterPID, shooterSubsystem)
-                                .whenInactive(shooterSubsystem::stopShooterSpin);
+        // holding 10 will enable field space drive, instead of robot space
+        joystickHandler.button(7).whenHeld(fieldSpaceDriveCommand);
 
-                joystickHandler.button(5).whenPressed(() -> {
-                        autoAim3d.setPosition(this.positionSelect());
-                        autoAim3d.schedule();
-                });
+        joystickHandler.button(15).whileActiveContinuous(shooterSubsystem::shooterPID, shooterSubsystem)
+                .whenInactive(shooterSubsystem::stopShooterSpin);
 
-                joystickHandler.button(11).whenPressed(shooterSubsystem::startConveyorSpin)
-                                .whenReleased(shooterSubsystem::stopConveyorSpin);
+        joystickHandler.button(5).whenPressed(() -> {
+            autoAim3d.setPosition(this.positionSelect());
+            autoAim3d.schedule();
+        }).whenReleased(autoAim3d::cancel);
 
-                joystickHandler.button(12).whenPressed(shooterSubsystem::startReverseConveyor)
-                                .whenReleased(shooterSubsystem::stopConveyorSpin);
+        joystickHandler.button(11).whenPressed(shooterSubsystem::startConveyorSpin)
+                .whenReleased(shooterSubsystem::stopConveyorSpin);
 
-                joystickHandler.button(1).whenPressed(shooterSubsystem::startIntakeSpin)
-                                .whenReleased(shooterSubsystem::stopIntakeSpin);
-                joystickHandler.button(15).whenPressed(shooterSubsystem::startTimer)
-                                .whenReleased(shooterSubsystem::stopTimer);
+        joystickHandler.button(12).whenPressed(shooterSubsystem::startReverseConveyor)
+                .whenReleased(shooterSubsystem::stopConveyorSpin);
 
-                joystickHandler.button(9).whenPressed(shooterSubsystem::startIntakeSpin)
-                                .whenReleased(shooterSubsystem::stopIntakeSpin);
-                joystickHandler.button(10).whenPressed(shooterSubsystem::startReverseIntake)
-                                .whenReleased(shooterSubsystem::stopIntakeSpin);
-                joystickHandler.button(16).whenPressed(shooterSubsystem::coolShooter)
-                                .whenReleased(shooterSubsystem::stopShooterSpin);
+        joystickHandler.button(1).whenPressed(shooterSubsystem::startIntakeSpin)
+                .whenReleased(shooterSubsystem::stopIntakeSpin);
+        joystickHandler.button(15).whenPressed(shooterSubsystem::startTimer).whenReleased(shooterSubsystem::stopTimer);
 
-                // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
-                // limeLightSubsystem, 0, 100));
+        joystickHandler.button(9).whenPressed(shooterSubsystem::startIntakeSpin)
+                .whenReleased(shooterSubsystem::stopIntakeSpin);
+        joystickHandler.button(10).whenPressed(shooterSubsystem::startReverseIntake)
+                .whenReleased(shooterSubsystem::stopIntakeSpin);
+        joystickHandler.button(16).whenPressed(shooterSubsystem::coolShooter)
+                .whenReleased(shooterSubsystem::stopShooterSpin);
 
-        }
+        joystickHandler.button(14).whileActiveOnce(pickupBallCommand);
 
-        private int positionSelect() {
-                if (joystickHandler.getRawAxis6() < .33) {
-                        return 0;
-                } else
-                        return 1;
-        }
+        // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
+        // limeLightSubsystem, 0, 100));
+
+    }
+
+    private int positionSelect() {
+        if (joystickHandler.getRawAxis6() < .33) {
+            return 0;
+        } else
+            return 1;
+    }
 }

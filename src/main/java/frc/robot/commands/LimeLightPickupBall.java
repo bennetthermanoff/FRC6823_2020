@@ -12,54 +12,89 @@ public class LimeLightPickupBall extends CommandBase {
     private ShooterSubsystem shooterSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
 
-    private PIDController strafeController, distController, aimController;
-    private double x, z;
+    private PIDController distController, aimController;
+    private double y;
+
+    private long whenStartedGorging;
+    private int stage; // 0=noteating, 1=spinningwithoutball, 2=chomping
 
     public LimeLightPickupBall(SwerveDriveSubsystem swerveDriveSubsystem, ShooterSubsystem shooterSubsystem,
-            LimeLightSubsystem limeLightSubsystem) {
+            LimeLightSubsystem limeLightSubsystem, double y) {
 
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.limeLightSubsystem = limeLightSubsystem;
+
+        distController = new PIDController(.008, 0, 0);
+        aimController = new PIDController(.008, 0, 0);
+
+        this.y = y;
+        stage = 0;
 
         addRequirements(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem);
     }
 
     @Override
     public void execute() {
-        double strafeCommand = strafeController.calculate(limeLightSubsystem.getX());
-        double distanceCommand = distController.calculate(limeLightSubsystem.getZ());
+        double distanceCommand = distController.calculate(limeLightSubsystem.getTy());
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
 
-        swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand * -1);
+        if (stage == 0) {
+            // far from ball, need to move towards it using limelight
+            swerveDriveSubsystem.drive(distanceCommand, 0, aimCommand * -1);
+
+            if (Math.abs(distController.getPositionError()) < 1) {
+                stage = 1;
+                whenStartedGorging = System.currentTimeMillis();
+                shooterSubsystem.startIntakeSpin();
+            }
+        } else if (stage == 1) {
+            // close to ball, move towards it despite not seeing it
+            swerveDriveSubsystem.drive(-.1, 0, 0);
+
+            if (shooterSubsystem.doesSenseBall() == true) {
+                stage = 2;
+            }
+
+            // stop after 2 seconds
+            if (System.currentTimeMillis() - whenStartedGorging > 1000) {
+                stage = 0;
+                shooterSubsystem.stopIntakeSpin();
+            }
+        } else if (stage == 2) {
+            // sensor has ball, eating it
+            if (shooterSubsystem.doesSenseBall() == false) {
+                stage = 0;
+                shooterSubsystem.stopIntakeSpin();
+            }
+        }
+
     }
 
     @Override
     public void initialize() {
         limeLightSubsystem.setPipeline(1);
 
-        strafeController = new PIDController(.01, 0, 0);
-        distController = new PIDController(.015, 0, 0);
-        aimController = new PIDController(.008, 0, 0);
-
-        strafeController.setSetpoint(x);
-        distController.setSetpoint(z);
+        distController.setSetpoint(y);
         aimController.setSetpoint(0);
 
+        stage = 0;
     }
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(strafeController.getPositionError()) < 5 && Math.abs(distController.getPositionError()) < 5
-                && Math.abs(aimController.getPositionError()) < 2) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
+        // if (Math.abs(distController.getPositionError()) < 5 &&
+        // Math.abs(aimController.getPositionError()) < 2) {
+        // return true;
+        // } else {
+        // return false;
+        // }
     }
 
     @Override
     public void end(boolean interrupted) {
         swerveDriveSubsystem.drive(0, 0, 0);
+        shooterSubsystem.stopIntakeSpin();
     }
 }
