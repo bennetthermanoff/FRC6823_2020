@@ -34,10 +34,10 @@ public class Robot extends TimedRobot {
     encoder1 = new AnalogInput(1);
     encoder2 = new AnalogInput(2);
     encoder3 = new AnalogInput(3);
-    backRight = new WheelDrive(5, 1, encoder3, -4.70);// These are the motors and encoder ports for swerve drive,
-    backLeft = new WheelDrive(6, 2, encoder2, .884);
-    frontRight = new WheelDrive(7, 3, encoder1, .697);
-    frontLeft = new WheelDrive(8, 4, encoder0, .374);// angle,speed,encoder,offset (offset gets changed by
+    backRight = new WheelDrive(7, 6, encoder3, -4.70);// These are the motors and encoder ports for swerve drive,
+    backLeft = new WheelDrive(5, 4, encoder2, .884);
+    frontRight = new WheelDrive(3, 2, encoder1, .697);
+    frontLeft = new WheelDrive(1, 8, encoder0, .374);// angle,speed,encoder,offset (offset gets changed by
                                                      // smartdashboard in calibration.)
 
     swerveDrive = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
