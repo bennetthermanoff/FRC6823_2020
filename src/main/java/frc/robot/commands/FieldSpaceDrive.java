@@ -8,7 +8,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class FieldSpaceDrive extends CommandBase {
     // The subsystem the command runs on
-    private final SwerveDriveSubsystem swerveDrive;
+    private SwerveDriveSubsystem swerveDrive;
     private JoystickHandler joystickHandler;
     private NavXHandler navXHandler;
 

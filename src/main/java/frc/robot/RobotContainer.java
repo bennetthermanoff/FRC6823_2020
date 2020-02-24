@@ -38,7 +38,7 @@ public class RobotContainer {
         fieldSpaceDriveCommand = new FieldSpaceDrive(swerveDriveSubsystem, joystickHandler, navX);
         robotSpaceDriveCommand = new RobotSpaceDrive(swerveDriveSubsystem, joystickHandler);
         autoCommandGroup = new AutoCommandGroup(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem);
-        CommandScheduler.getInstance().setDefaultCommand(swerveDriveSubsystem, robotSpaceDriveCommand);
+        CommandScheduler.getInstance().setDefaultCommand(swerveDriveSubsystem, fieldSpaceDriveCommand);
 
         configureButtonBindings();
     }
@@ -51,8 +51,7 @@ public class RobotContainer {
 
         // press button 12 to set the swerve just forward, this is for calibration
         // purposes
-        // joystickHandler.button(12).whileHeld(() -> swerveDriveSubsystem.drive(0.2, 0,
-        // 0), swerveDriveSubsystem);
+        joystickHandler.button(13).whileHeld(() -> swerveDriveSubsystem.drive(0.1, 0, 0), swerveDriveSubsystem);
 
         // this will set the current orientation to be "forward" for field drive
         joystickHandler.button(14).whenPressed(() -> fieldSpaceDriveCommand.zero());
@@ -85,7 +84,7 @@ public class RobotContainer {
         joystickHandler.button(16).whenPressed(shooterSubsystem::coolShooter)
                 .whenReleased(shooterSubsystem::stopShooterSpin);
 
-        joystickHandler.button(14).whileActiveOnce(pickupBallCommand);
+        // joystickHandler.button(14).whileActiveOnce(pickupBallCommand);
 
         // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
         // limeLightSubsystem, 0, 100));
