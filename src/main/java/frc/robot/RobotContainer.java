@@ -31,7 +31,7 @@ public class RobotContainer {
 
                 joystickHandler = new JoystickHandler(); // joystick input
                 limeLightSubsystem = new LimeLightSubsystem(0);
-                liftSubsystem = new LiftSubsystem(leftMotor, rightMotor); // enter CAN Id's for the lift motors.
+                liftSubsystem = new LiftSubsystem(14, 15); // enter CAN Id's for the lift motors.
                 navX = new NavXHandler(); // navx input
                 autoAim3d = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, positionSelect());
                 this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem,
