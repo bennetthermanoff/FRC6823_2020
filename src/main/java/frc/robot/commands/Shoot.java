@@ -6,18 +6,22 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class Shoot extends CommandBase {
     private ShooterSubsystem shooterSubsystem;
-    private double rpm;
+    private double rpm, conveyorPower;
     private Timer timer;
+    private int time;
 
-    public Shoot(ShooterSubsystem shooterSubsystem, double rpm) {
+    public Shoot(ShooterSubsystem shooterSubsystem, double rpm, double conveyorPower, int time) {
         this.shooterSubsystem = shooterSubsystem;
         this.rpm = rpm;
+        this.conveyorPower = conveyorPower;
+        this.time = time;
         addRequirements(shooterSubsystem);
     }
 
     @Override
     public void execute() {
-        shooterSubsystem.shooterPID();
+        // shooterSubsystem.shooterPID(rpm, 20);
+        shooterSubsystem.shooterPID(rpm, 20, conveyorPower);
     }
 
     @Override
@@ -29,7 +33,7 @@ public class Shoot extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.hasPeriodPassed(3);
+        return timer.hasPeriodPassed(time);
     }
 
     @Override

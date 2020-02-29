@@ -24,6 +24,8 @@ public class FieldSpaceDrive extends CommandBase {
 
     @Override
     public void execute() {
+        navXHandler.printEverythingDammit();
+
         double speedRate = Robot.PREFS.getDouble("SpeedRate", 1);
         double turnRate = Robot.PREFS.getDouble("TurnRate", 1);
 

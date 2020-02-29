@@ -24,20 +24,22 @@ public class MoveTo3d extends CommandBase {
 
     @Override
     public void execute() {
+        limeLightSubsystem.setPipeline(0);
         double strafeCommand = strafeController.calculate(limeLightSubsystem.getX());
         double distanceCommand = distController.calculate(limeLightSubsystem.getZ());
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
-
-        swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand * -1);
+        if (limeLightSubsystem.hasTarget())
+            swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand * -1);
     }
 
     @Override
     public void initialize() {
         limeLightSubsystem.setPipeline(0);
+        limeLightSubsystem.setServoAngle(65);
 
         strafeController = new PIDController(.01, 0, 0);
         distController = new PIDController(.015, 0, 0);
-        aimController = new PIDController(.008, 0, 0);
+        aimController = new PIDController(.016, 0, 0);
 
         strafeController.setSetpoint(x);
         distController.setSetpoint(z);
@@ -47,7 +49,7 @@ public class MoveTo3d extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(strafeController.getPositionError()) < 5 && Math.abs(distController.getPositionError()) < 5
+        if (Math.abs(strafeController.getPositionError()) < 5 && Math.abs(distController.getPositionError()) < 3
                 && Math.abs(aimController.getPositionError()) < 2) {
             return true;
         } else {

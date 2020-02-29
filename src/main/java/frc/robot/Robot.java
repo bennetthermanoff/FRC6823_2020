@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
 
         rgb = new RGB(9);
 
-        PREFS.putBoolean("DEBUG_MODE", false);
+        // PREFS.putBoolean("DEBUG_MODE", false);
         SmartDashboard.putBoolean("LemonPipeline", false);
 
     }

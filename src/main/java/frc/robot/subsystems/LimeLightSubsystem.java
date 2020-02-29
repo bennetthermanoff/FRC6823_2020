@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -16,23 +19,29 @@ public class LimeLightSubsystem extends SubsystemBase {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         this.servo = new Servo(servo);
         this.setPipeline(0);
+
+        SendableRegistry.addLW(this, "LimeLight Subsystem");
     }
 
     public void setPipeline(int pipeline) {
         table.getEntry("pipeline").setNumber(pipeline);
         if (pipeline == 0) {
-            this.setServo(75);
+            this.setServoAngle(65);
         } else if (pipeline == 1) {
-            this.setServo(0);
+            this.setServoAngle(15);
         }
         // else if..... (for other pipeline based servo angles)
+    }
+
+    public double getServoAngle() {
+        return this.servo.getAngle();
     }
 
     public int getPipeline() {
         return (int) table.getEntry("getpipe").getDouble(0);
     }
 
-    public void setServo(int degrees) {
+    public void setServoAngle(double degrees) {
         servo.setAngle(degrees);
     }
 
@@ -54,6 +63,15 @@ public class LimeLightSubsystem extends SubsystemBase {
     // this is the 3d strafe
     public double getX() {
         return table.getEntry("camtran").getDoubleArray(new double[] { 0 })[0];
+    }
+
+    public boolean hasTarget() {
+        return table.getEntry("tv").getDouble(0) != 0;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Servo_Angle", getServoAngle());
     }
 
 }

@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.MathUtil;
@@ -35,6 +36,12 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
 
         pidController.enableContinuousInput(0, MAX_VOLTS); // This makes the PID controller understand the fact that for
         // our setup, 4.95V is the same as 0 since the wheel loops.
+
+        SendableRegistry.addChild(this, angleMotor);
+        SendableRegistry.addChild(this, speedMotor);
+        SendableRegistry.addChild(this, angleEncoder);
+        SendableRegistry.addLW(this, "Swerve Wheel Module");
+
     }
 
     public void setZero(double offset) {
@@ -87,7 +94,6 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
     // this method outputs voltages of the encoder to the smartDashBoard, useful for
     // calibrating the encoder offsets
     public double getVoltages() {
-        Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
         return angleEncoder.getVoltage();
     }
 
@@ -102,6 +108,7 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        getVoltages();
+        // Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "]
+        // getVoltage", angleEncoder.getVoltage());
     }
 }

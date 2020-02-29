@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -15,23 +17,22 @@ public class NavXHandler {
              * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
              * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
              ***********************************************************************/
-            ahrs = new AHRS(SPI.Port.kMXP);
+            ahrs = new AHRS(SerialPort.Port.kMXP);
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
     }
 
-    public void printEverythingDammit(Preferences prefs) {
+    public void printEverythingDammit() {
+        SmartDashboard.putNumber("getAngle()", ahrs.getAngle());
 
-        prefs.putDouble("getAngle()", ahrs.getAngle());
+        SmartDashboard.putNumber("getDisplacementX()", ahrs.getDisplacementX());
+        SmartDashboard.putNumber("getDisplacementY()", ahrs.getDisplacementY());
+        SmartDashboard.putNumber("getDisplacementZ()", ahrs.getDisplacementZ());
 
-        prefs.putDouble("getDisplacementX()", ahrs.getDisplacementX());
-        prefs.putDouble("getDisplacementY()", ahrs.getDisplacementY());
-        prefs.putDouble("getDisplacementZ()", ahrs.getDisplacementZ());
-
-        prefs.putDouble("getVelocityX()", ahrs.getVelocityX());
-        prefs.putDouble("getVelocityY()", ahrs.getVelocityY());
-        prefs.putDouble("getVelocityZ()", ahrs.getVelocityZ());
+        SmartDashboard.putNumber("getVelocityX()", ahrs.getVelocityX());
+        SmartDashboard.putNumber("getVelocityY()", ahrs.getVelocityY());
+        SmartDashboard.putNumber("getVelocityZ()", ahrs.getVelocityZ());
     }
 
     public double getAngleRad() {

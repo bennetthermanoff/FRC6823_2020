@@ -17,13 +17,13 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void startUp() {
-        leftMotor.set(Robot.PREFS.getDouble("LiftPower", 0));
-        rightMotor.set(Robot.PREFS.getDouble("LiftPower", 0) * -1);
+        leftMotor.set(Robot.PREFS.getDouble("LiftPower", 0)*-1);
+        rightMotor.set(Robot.PREFS.getDouble("LiftPower", 0));
     }
 
     public void startReverse() {
         leftMotor.set(Robot.PREFS.getDouble("LiftPower", 0));
-        rightMotor.set(Robot.PREFS.getDouble("LiftPower", 0) * -1);
+        rightMotor.set(Robot.PREFS.getDouble("LiftPower", 0)*-1);
     }
 
     public void stop() {

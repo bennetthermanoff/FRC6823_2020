@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -32,6 +33,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         frontLeft = new SwerveWheelModuleSubsystem(1, 8, 0, .374);// angle,speed,encoder,offset (offset gets changed by
         // smartdashboard in calibration.)// angle,speed,encoder,offset (offset gets
         // changed by
+
+        SendableRegistry.addChild(this, backRight);
+        SendableRegistry.addChild(this, backLeft);
+        SendableRegistry.addChild(this, frontRight);
+        SendableRegistry.addChild(this, frontLeft);
+
+        SendableRegistry.addLW(this, "Swerve Drive Subsystem");
 
     }
 

@@ -6,6 +6,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.util.MathUtil;
 
 public class JoystickHandler {
+    public static final int T1 = 9;
+    public static final int T2 = 10;
+    public static final int T3 = 11;
+    public static final int T4 = 12;
+    public static final int T5 = 13;
+    public static final int T6 = 14;
+
     private Joystick joystick;
     private double deadZone;
 
