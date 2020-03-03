@@ -51,8 +51,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void coolShooter() {
 
-        leftShoot.set(.1);
-        rightShoot.set(.1);
+        leftShoot.set(.05);
+        rightShoot.set(.05);
 
     }
 
@@ -85,6 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
+        out = out > 0 ? out : 0;
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
@@ -104,6 +105,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
+        out = out > 0 ? out : 0;
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);

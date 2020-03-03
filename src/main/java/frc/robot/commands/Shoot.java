@@ -6,11 +6,18 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class Shoot extends CommandBase {
     private ShooterSubsystem shooterSubsystem;
-    private double rpm, conveyorPower;
+    private double conveyorPower;
     private Timer timer;
     private int time;
 
+    private LongRange2dAutoShoot.DoubleContainer rpm;
+
     public Shoot(ShooterSubsystem shooterSubsystem, double rpm, double conveyorPower, int time) {
+        this(shooterSubsystem, new LongRange2dAutoShoot.DoubleContainer(rpm), conveyorPower, time);
+    }
+
+    public Shoot(ShooterSubsystem shooterSubsystem, LongRange2dAutoShoot.DoubleContainer rpm, double conveyorPower,
+            int time) {
         this.shooterSubsystem = shooterSubsystem;
         this.rpm = rpm;
         this.conveyorPower = conveyorPower;
@@ -21,7 +28,7 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         // shooterSubsystem.shooterPID(rpm, 20);
-        shooterSubsystem.shooterPID(rpm, 20, conveyorPower);
+        shooterSubsystem.shooterPID(rpm.value, 20, conveyorPower);
     }
 
     @Override

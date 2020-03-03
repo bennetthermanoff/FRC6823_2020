@@ -13,6 +13,7 @@ import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.LimeLightPickupBall;
 import frc.robot.commands.LimeLightSeek;
 import frc.robot.commands.LongRange2d;
+import frc.robot.commands.LongRange2dAutoShoot;
 import frc.robot.commands.RobotSpaceDrive;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -103,9 +104,14 @@ public class RobotContainer {
 
         joystickHandler.button(14).whileActiveOnce(pickupBallCommand);
 
+        // joystickHandler.button(JoystickHandler.T5)
+        // .whileActiveOnce(new SequentialCommandGroup(new
+        // ChangePipeline(limeLightSubsystem, 2),
+        // new LongRange2d(swerveDriveSubsystem, limeLightSubsystem,
+        // shooterSubsystem)));
+
         joystickHandler.button(JoystickHandler.T5)
-                .whileActiveOnce(new SequentialCommandGroup(new ChangePipeline(limeLightSubsystem, 2),
-                        new LongRange2d(swerveDriveSubsystem, limeLightSubsystem, shooterSubsystem)));
+                .whileActiveOnce(new LongRange2dAutoShoot(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem));
 
         // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
         // limeLightSubsystem, 0, 100));

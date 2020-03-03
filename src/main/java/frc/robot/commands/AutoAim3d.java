@@ -22,14 +22,14 @@ public class AutoAim3d extends SequentialCommandGroup {
 
         if (position == 0) {
             distance = -56;
-            rpm = 7200;
+            rpm = 5925;
         } else if (position == 1) {
             distance = -125;
-            rpm = 7800;
+            rpm = 6525;
         }
 
         super.addCommands(new MoveTo3d(swerveDriveSubsystem, limeLightSubsystem, 0, distance), new ParallelRaceGroup(
-                new Shoot(shooterSubsystem, rpm, .35, 5), new JustAim(swerveDriveSubsystem, limeLightSubsystem)));
+                new Shoot(shooterSubsystem, rpm, .8, 7), new JustAim(swerveDriveSubsystem, limeLightSubsystem)));
     }
 
     // public void setPosition(int position) {

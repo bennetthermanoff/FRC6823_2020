@@ -34,7 +34,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
             } else {
                 addCommands(
                         new MoveTo3d(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem, 0, -56));
-                rpm = 7250;
+                rpm = 7000;
                 conveyorSpeed = .5;
             }
             addCommands(new ParallelRaceGroup(new Shoot(robotContainer.shooterSubsystem, rpm, conveyorSpeed, 5),

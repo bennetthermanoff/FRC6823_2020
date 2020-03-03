@@ -16,11 +16,25 @@ public class LongRange2d extends CommandBase {
     private ShooterSubsystem shooterSubsystem;
     private PIDController aimController;
 
+    private LongRange2dAutoShoot.DoubleContainer rpm;
+
+    public LongRange2d(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem,
+            ShooterSubsystem shooterSubsystem, LongRange2dAutoShoot.DoubleContainer rpm) {
+        this.limeLightSubsystem = limeLightSubsystem;
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
+        this.shooterSubsystem = shooterSubsystem;
+
+        this.rpm = rpm;
+
+        this.addRequirements(limeLightSubsystem, swerveDriveSubsystem);
+    }
+
     public LongRange2d(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem,
             ShooterSubsystem shooterSubsystem) {
         this.limeLightSubsystem = limeLightSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.shooterSubsystem = shooterSubsystem;
+
         this.addRequirements(limeLightSubsystem, swerveDriveSubsystem);
     }
 
@@ -45,7 +59,7 @@ public class LongRange2d extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !limeLightSubsystem.hasTarget()
+        return limeLightSubsystem.hasTarget()
                 && (Math.abs(aimController.getPositionError()) < .2 && Math.abs(limeLightSubsystem.getTy()) < .2);
     }
 
@@ -59,7 +73,14 @@ public class LongRange2d extends CommandBase {
         // + 9 * Math.pow(10, 6));// (int) limeLightSubsystem.getServoAngle(); // PUT
         // FUNCTION
         // HERE
-        CommandScheduler.getInstance().schedule(new Shoot(shooterSubsystem, rpm, .35, 5));// ,
+        if (this.rpm != null)
+            this.rpm.value = rpmFromAngle(t);
+        // CommandScheduler.getInstance().schedule(new Shoot(shooterSubsystem, rpm, .35,
+        // 5));
         // new JustAim(swerveDriveSubsystem, limeLightSubsystem)));
+    }
+
+    private double rpmFromAngle(double angle) {
+        return 0;
     }
 }
