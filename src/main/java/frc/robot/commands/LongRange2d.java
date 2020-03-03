@@ -29,15 +29,6 @@ public class LongRange2d extends CommandBase {
         this.addRequirements(limeLightSubsystem, swerveDriveSubsystem);
     }
 
-    public LongRange2d(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem,
-            ShooterSubsystem shooterSubsystem) {
-        this.limeLightSubsystem = limeLightSubsystem;
-        this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.shooterSubsystem = shooterSubsystem;
-
-        this.addRequirements(limeLightSubsystem, swerveDriveSubsystem);
-    }
-
     @Override
     public void execute() {
         // if (!limeLightSubsystem.hasTarget())
@@ -47,7 +38,7 @@ public class LongRange2d extends CommandBase {
 
         swerveDriveSubsystem.drive(0, 0, aimCommand * -1);
 
-        limeLightSubsystem.setServoAngle(limeLightSubsystem.getServoAngle() + .1 * limeLightSubsystem.getTy());
+        limeLightSubsystem.setServoAngle(limeLightSubsystem.getServoAngle() + .2 * limeLightSubsystem.getTy());
     }
 
     @Override

@@ -19,7 +19,7 @@ public class ChangePipeline extends CommandBase {
         limeLightSubsystem.setPipeline(pipeline);
         timer = new Timer();
         timer.start();
-        limeLightSubsystem.setServoAngle(55);
+        limeLightSubsystem.setServoAngle(58);
     }
 
     @Override

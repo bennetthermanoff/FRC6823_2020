@@ -41,7 +41,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
                     new JustAim(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem)));
         } else {
             addCommands(new LongRange2d(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem,
-                    robotContainer.shooterSubsystem));
+                    robotContainer.shooterSubsystem, null));
         }
 
         // addCommands(new MoveTo3d(robotContainer.swerveDriveSubsystem,
