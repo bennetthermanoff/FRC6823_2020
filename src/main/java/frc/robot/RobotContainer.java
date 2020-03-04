@@ -54,13 +54,18 @@ public class RobotContainer {
         robotSpaceDriveCommand = new RobotSpaceDrive(swerveDriveSubsystem, joystickHandler);
         swerveDriveSubsystem.setDefaultCommand(fieldSpaceDriveCommand);
 
+        limeLightSubsystem.setServoAngle(65);
+
         configureButtonBindings();
     }
 
     public AutoCommandGroup getAutoCommandGroup() {
-        return new AutoCommandGroup(this, Robot.PREFS.getBoolean("leftRight", true),
-                Robot.PREFS.getBoolean("backShoot", false), Robot.PREFS.getBoolean("sideShoot", false),
-                (int) Robot.PREFS.getDouble("waitTime", 0));
+        return new AutoCommandGroup(this);
+
+        // return new AutoCommandGroup(this, Robot.PREFS.getBoolean("leftRight", true),
+        // Robot.PREFS.getBoolean("backShoot", false),
+        // Robot.PREFS.getBoolean("sideShoot", false),
+        // (int) Robot.PREFS.getDouble("waitTime", 0));
     }
 
     private void configureButtonBindings() {
@@ -72,8 +77,9 @@ public class RobotContainer {
 
         // this will set the current orientation to be "forward" for field drive
         joystickHandler.button(3).whenPressed(fieldSpaceDriveCommand::zero);
-        // joystickHandler.button(14).whenPressed(liftSubsystem::startUp).whenReleased(liftSubsystem::stop);
-        // joystickHandler.button(13).whenPressed(liftSubsystem::startReverse).whenReleased(liftSubsystem::stop);
+
+        joystickHandler.button(14).whenPressed(liftSubsystem::startUp).whenReleased(liftSubsystem::stop);
+        joystickHandler.button(13).whenPressed(liftSubsystem::startReverse).whenReleased(liftSubsystem::stop);
 
         // holding 10 will enable field space drive, instead of robot space
         joystickHandler.button(7).whenHeld(robotSpaceDriveCommand);
@@ -98,11 +104,16 @@ public class RobotContainer {
                 .whenReleased(shooterSubsystem::stopIntakeSpin);
         joystickHandler.button(10).whenPressed(shooterSubsystem::startReverseIntake)
                 .whenReleased(shooterSubsystem::stopIntakeSpin);
-        joystickHandler.button(16).toggleWhenPressed(
-                new StartEndCommand(shooterSubsystem::coolShooter, shooterSubsystem::stopShooterSpin));
-        joystickHandler.button(4).whenPressed(shooterSubsystem::raiseIntake);
+        // joystickHandler.button(16).toggleWhenPressed(
+        // new StartEndCommand(shooterSubsystem::coolShooter,
+        // shooterSubsystem::stopShooterSpin));
+        joystickHandler.button(16).whenPressed(shooterSubsystem::raiseIntake);
 
-        joystickHandler.button(14).whileActiveOnce(pickupBallCommand);
+        joystickHandler.button(2).whileActiveContinuous(() -> shooterSubsystem.shooterPID(10000, 30), shooterSubsystem)
+                .whenInactive(shooterSubsystem::stopShooterSpin);
+        joystickHandler.button(2).whenPressed(shooterSubsystem::startTimer).whenReleased(shooterSubsystem::stopTimer);
+
+        // joystickHandler.button(14).whileActiveOnce(pickupBallCommand);
 
         // joystickHandler.button(JoystickHandler.T5)
         // .whileActiveOnce(new SequentialCommandGroup(new
@@ -110,7 +121,7 @@ public class RobotContainer {
         // new LongRange2d(swerveDriveSubsystem, limeLightSubsystem,
         // shooterSubsystem)));
 
-        joystickHandler.button(JoystickHandler.T5)
+        joystickHandler.button(4)
                 .whileActiveOnce(new LongRange2dAutoShoot(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem));
 
         // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,

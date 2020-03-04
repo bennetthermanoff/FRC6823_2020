@@ -17,7 +17,7 @@ public class LimeLightSeek extends CommandBase {
         if (isFinished())
             return;
 
-        limeLightSubsystem.setPipeline(2);
+        limeLightSubsystem.setPipeline(0);
 
         degrees = 50;
     }

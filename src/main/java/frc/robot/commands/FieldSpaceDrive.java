@@ -29,6 +29,11 @@ public class FieldSpaceDrive extends CommandBase {
         double speedRate = Robot.PREFS.getDouble("SpeedRate", 1);
         double turnRate = Robot.PREFS.getDouble("TurnRate", 1);
 
+        if (joystickHandler.isYeet()) {
+            speedRate = 1;
+            turnRate = .6; // value per carson
+        }
+
         double xval = joystickHandler.getAxis1() * speedRate;
         double yval = joystickHandler.getAxis0() * speedRate;
         double spinval = joystickHandler.getAxis5() * turnRate;

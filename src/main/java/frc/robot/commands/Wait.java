@@ -9,13 +9,17 @@ public class Wait extends CommandBase {
     private Timer timer;
 
     public Wait(int seconds) {
+        this.seconds = seconds;
         timer = new Timer();
+    }
+
+    @Override
+    public void initialize() {
         timer.start();
     }
 
     @Override
     public void execute() {
-        return;
     }
 
     @Override

@@ -25,11 +25,11 @@ public class LimeLightSubsystem extends SubsystemBase {
 
     public void setPipeline(int pipeline) {
         table.getEntry("pipeline").setNumber(pipeline);
-        if (pipeline == 0) {
-            this.setServoAngle(65);
-        } else if (pipeline == 1) {
-            this.setServoAngle(15);
-        }
+        // if (pipeline == 0) {
+        // this.setServoAngle(65);
+        // } else if (pipeline == 1) {
+        // this.setServoAngle(15);
+        // }
         // else if..... (for other pipeline based servo angles)
     }
 
@@ -74,4 +74,8 @@ public class LimeLightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Servo_Angle", getServoAngle());
     }
 
+    // @Override
+    // public void initialize() {
+
+    // }
 }

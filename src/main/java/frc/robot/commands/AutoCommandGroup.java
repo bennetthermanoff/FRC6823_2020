@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -10,8 +11,12 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class AutoCommandGroup extends SequentialCommandGroup {
 
-    public AutoCommandGroup(RobotContainer robotContainer, Boolean leftRight, boolean back, boolean sideShoot,
-            int waitSeconds) {
+    public AutoCommandGroup(RobotContainer robotContainer) {
+        boolean leftRight = Preferences.getInstance().getBoolean("leftRight", false);
+        boolean back = Preferences.getInstance().getBoolean("backShoot", false);
+        boolean sideShoot = Preferences.getInstance().getBoolean("sideShoot", false);
+        int waitSeconds = (int) Preferences.getInstance().getDouble("waitTime", 1);
+
         addCommands(new Wait(waitSeconds));
 
         if (leftRight && !back) {
@@ -27,21 +32,21 @@ public class AutoCommandGroup extends SequentialCommandGroup {
             int rpm = 7250;
             if (back) {
                 addCommands(
-                        new MoveTo3d(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem, 0, -130));
-                rpm = 7800;
-                conveyorSpeed = .35;
+                        new MoveTo3d(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem, 0, -140));
+                rpm = 6700;
+                conveyorSpeed = .6;
 
             } else {
                 addCommands(
                         new MoveTo3d(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem, 0, -56));
-                rpm = 7000;
+                rpm = 5925;
                 conveyorSpeed = .5;
             }
             addCommands(new ParallelRaceGroup(new Shoot(robotContainer.shooterSubsystem, rpm, conveyorSpeed, 5),
                     new JustAim(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem)));
         } else {
             addCommands(new LongRange2d(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem,
-                    robotContainer.shooterSubsystem, null));
+                    robotContainer.shooterSubsystem, null, 0));
         }
 
         // addCommands(new MoveTo3d(robotContainer.swerveDriveSubsystem,

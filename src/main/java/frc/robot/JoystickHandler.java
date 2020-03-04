@@ -33,8 +33,18 @@ public class JoystickHandler {
         return joystick.getRawAxis(5);
     }
 
+    public double getRawAxis2() {
+        return joystick.getRawAxis(2);
+    }
+
     public double getRawAxis6() {
         return joystick.getRawAxis(6);
+    }
+
+    public boolean isYeet() {
+        // -1 is forward, 1 is backward
+        // so if forward, yeet.
+        return getRawAxis2() < -.9;
     }
 
     public double getAxis0() {
