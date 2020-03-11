@@ -80,8 +80,8 @@ public class RobotContainer {
                 // this will set the current orientation to be "forward" for field drive
                 joystickHandler.button(3).whenPressed(fieldSpaceDriveCommand::zero);
 
-                joystickHandler.button(14).whenPressed(liftSubsystem::startUp).whenReleased(liftSubsystem::stop);
-                joystickHandler.button(13).whenPressed(liftSubsystem::startReverse).whenReleased(liftSubsystem::stop);
+                joystickHandler.button(13).whenPressed(liftSubsystem::startUp).whenReleased(liftSubsystem::stop);
+                joystickHandler.button(14).whenPressed(liftSubsystem::startReverse).whenReleased(liftSubsystem::stop);
 
                 // holding 10 will enable field space drive, instead of robot space
                 joystickHandler.button(7).whenHeld(robotSpaceDriveCommand);
