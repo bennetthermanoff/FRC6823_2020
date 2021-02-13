@@ -19,6 +19,7 @@ public class LimeLightPickupBall extends CommandBase {
 
     private long whenStartedGorging;
     private int stage = -1; // -1= never started before, 0=noteating, 1=spinningwithoutball, 2=chomping
+    private boolean isItFinished = false;
 
     public LimeLightPickupBall(SwerveDriveSubsystem swerveDriveSubsystem, ShooterSubsystem shooterSubsystem,
             LimeLightSubsystem limeLightSubsystem, double y) {
@@ -45,6 +46,7 @@ public class LimeLightPickupBall extends CommandBase {
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
 
         limeLightSubsystem.setPipeline(1);
+        limeLightSubsystem.setServoAngle(15);
         SmartDashboard.putNumber("Ball Eat Stage", stage);
         SmartDashboard.putNumber("Ball Distance", distanceCommand);
         SmartDashboard.putNumber("Aim Command Ball", aimCommand);
@@ -60,23 +62,25 @@ public class LimeLightPickupBall extends CommandBase {
             }
         } else if (stage == 1) {
             // close to ball, move towards it despite not seeing it
-            swerveDriveSubsystem.drive(-.1, 0, 0);
+            swerveDriveSubsystem.drive(-.5, 0, 0);
 
             if (shooterSubsystem.doesSenseBall() == true) {
                 stage = 2;
             }
 
             // stop after 2 seconds
-            if (System.currentTimeMillis() - whenStartedGorging > 1000) {
-                stage = 0;
+            if (System.currentTimeMillis() - whenStartedGorging > 2000) {
+                isItFinished = true;
                 shooterSubsystem.stopIntakeSpin();
+                this.end(true);
             }
         } else if (stage == 2) {
+            isItFinished = true;
             // sensor has ball, eating it
             if (shooterSubsystem.doesSenseBall() == false) {
-                stage = 0;
                 shooterSubsystem.stopIntakeSpin();
             }
+            this.end(true);
         }
 
     }
