@@ -18,14 +18,16 @@ public class NavXHandler {
              * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
              ***********************************************************************/
             ahrs = new AHRS(SerialPort.Port.kMXP);
+            ahrs.resetDisplacement();
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
     }
 
     public void printEverythingDammit() {
-        SmartDashboard.putNumber("getAngle()", ahrs.getAngle());
 
+        SmartDashboard.putNumber("getAngle()", ahrs.getAngle());
+        SmartDashboard.putNumber("	getActualUpdateRate()", ahrs.getActualUpdateRate());
         SmartDashboard.putNumber("getDisplacementX()", ahrs.getDisplacementX());
         SmartDashboard.putNumber("getDisplacementY()", ahrs.getDisplacementY());
         SmartDashboard.putNumber("getDisplacementZ()", ahrs.getDisplacementZ());

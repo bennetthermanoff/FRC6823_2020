@@ -17,7 +17,7 @@ public class JoystickHandler {
     private double deadZone;
 
     public JoystickHandler() {
-        this.joystick = new Joystick(1);
+        this.joystick = new Joystick(3);
         this.deadZone = Robot.PREFS.getDouble("DeadZone", .05);
     }
 

@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.LimeLightSubsystem;
@@ -16,7 +18,7 @@ public class LimeLightPickupBall extends CommandBase {
     private double y;
 
     private long whenStartedGorging;
-    private int stage; // 0=noteating, 1=spinningwithoutball, 2=chomping
+    private int stage = -1; // -1= never started before, 0=noteating, 1=spinningwithoutball, 2=chomping
 
     public LimeLightPickupBall(SwerveDriveSubsystem swerveDriveSubsystem, ShooterSubsystem shooterSubsystem,
             LimeLightSubsystem limeLightSubsystem, double y) {
@@ -25,25 +27,33 @@ public class LimeLightPickupBall extends CommandBase {
         this.shooterSubsystem = shooterSubsystem;
         this.limeLightSubsystem = limeLightSubsystem;
 
-        distController = new PIDController(.008, 0, 0);
-        aimController = new PIDController(.008, 0, 0);
-
         this.y = y;
         stage = 0;
 
         addRequirements(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem);
     }
 
+    public int getStage() {
+        return stage;
+    }
+
     @Override
     public void execute() {
+        stage = stage == -1 ? 0 : stage;
+
         double distanceCommand = distController.calculate(limeLightSubsystem.getTy());
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
+
+        limeLightSubsystem.setPipeline(1);
+        SmartDashboard.putNumber("Ball Eat Stage", stage);
+        SmartDashboard.putNumber("Ball Distance", distanceCommand);
+        SmartDashboard.putNumber("Aim Command Ball", aimCommand);
 
         if (stage == 0) {
             // far from ball, need to move towards it using limelight
             swerveDriveSubsystem.drive(distanceCommand, 0, aimCommand * -1);
 
-            if (Math.abs(distController.getPositionError()) < 1) {
+            if (Math.abs(distController.getPositionError()) < 2) {
                 stage = 1;
                 whenStartedGorging = System.currentTimeMillis();
                 shooterSubsystem.startIntakeSpin();
@@ -74,6 +84,8 @@ public class LimeLightPickupBall extends CommandBase {
     @Override
     public void initialize() {
         limeLightSubsystem.setPipeline(1);
+        aimController = new PIDController(.016, 0, 0);
+        distController = new PIDController(.016, 0, 0);
 
         distController.setSetpoint(y);
         aimController.setSetpoint(0);
