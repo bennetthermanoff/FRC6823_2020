@@ -26,6 +26,9 @@ public class AutoAim3d extends SequentialCommandGroup {
         } else if (position == 1) {
             distance = -125;
             rpm = 6575;
+        } else if (position == -1) {
+            distance = -37;
+            rpm = 6000;
         }
 
         super.addCommands(new MoveTo3d(swerveDriveSubsystem, limeLightSubsystem, 0, distance), new ParallelRaceGroup(
