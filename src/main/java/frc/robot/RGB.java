@@ -90,6 +90,14 @@ public class RGB {
             setHeartbeatRed();
     }
 
+    public void setPattern(double setting){
+        RGB.set(setting);
+    }
+
+    /*public void setPattern(String name){
+        RGB.set(RGBColor.getColorCode(RGBColor.));
+    }*/
+
     /**
      * private OverEngineering thread = new OverEngineering(RGB ayyyLmao);
      * 
