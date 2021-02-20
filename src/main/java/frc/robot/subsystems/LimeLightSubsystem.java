@@ -19,6 +19,7 @@ public class LimeLightSubsystem extends SubsystemBase {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         this.servo = new Servo(servo);
         this.setPipeline(0);
+        this.setPipeline(1);
 
         SendableRegistry.addLW(this, "LimeLight Subsystem");
     }

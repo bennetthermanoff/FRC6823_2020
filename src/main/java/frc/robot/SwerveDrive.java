@@ -57,6 +57,7 @@ public class SwerveDrive {
 
     public double getTransX(double x, double y, double angle) {
         return x * Math.cos(angle) + -y * Math.sin(angle);
+        // idk
     }
 
     public double getTransY(double x, double y, double angle) {
