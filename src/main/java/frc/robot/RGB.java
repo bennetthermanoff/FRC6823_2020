@@ -75,6 +75,10 @@ public class RGB {
         RGB.set(0.99);
     }
 
+    public void setPattern(double setting){
+        RGB.set(setting);
+    }
+
     /**
      * Set the rgb to color1 color2 waves (look at the rev blinkin and they should
      * be blue and yellow)
