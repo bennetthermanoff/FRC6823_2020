@@ -38,6 +38,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         robotContainer.getAutoCommandGroup().schedule();
+        // robotContainer.getMoreCommands().schedule();
+
     }
 
     @Override

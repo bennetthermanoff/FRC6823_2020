@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.AutoAim3d;
 import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.ChangePipeline;
+import frc.robot.commands.DeterminePathandDoItCommand;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.LimeLightPickupBall;
 import frc.robot.commands.LimeLightSeek;
@@ -25,17 +26,33 @@ import frc.robot.subsystems.ShooterSubsystem;;
 public class RobotContainer {
     public SwerveDriveSubsystem swerveDriveSubsystem;
     public ShooterSubsystem shooterSubsystem;
+    public NavXHandler navX;
 
     public FieldSpaceDrive fieldSpaceDriveCommand;
     private RobotSpaceDrive robotSpaceDriveCommand;
-    private AutoCommandGroup autoCommandGroup; // gotta construct auto by giving it the swerve bas
+    private AutoCommandGroup auton; // gotta construct auto by giving it the swerve bas
     private AutoAim3d autoAim3dClose, autoAim3dSuperClose;
     private AutoAim3d autoAim3dFar;
     private JoystickHandler joystickHandler;
-    private NavXHandler navX;
     public LimeLightSubsystem limeLightSubsystem;
     private LiftSubsystem liftSubsystem;
     private LimeLightPickupBall pickupBallCommand;
+
+    public LimeLightSubsystem getLimeLightSubsystem() {
+        return limeLightSubsystem;
+    }
+
+    public SwerveDriveSubsystem getSwervedriveSubsystem() {
+        return swerveDriveSubsystem;
+    }
+
+    public ShooterSubsystem getShooterSubsystem() {
+        return shooterSubsystem;
+    }
+
+    public NavXHandler getNavXHandler() {
+        return navX;
+    }
 
     public RobotContainer() {
         swerveDriveSubsystem = new SwerveDriveSubsystem();
@@ -63,13 +80,18 @@ public class RobotContainer {
     }
 
     public AutoCommandGroup getAutoCommandGroup() {
-        return new AutoCommandGroup(this);
-
+        auton = new AutoCommandGroup(this);
+        return auton;
         // return new AutoCommandGroup(this, Robot.PREFS.getBoolean("leftRight", true),
         // Robot.PREFS.getBoolean("backShoot", false),
         // Robot.PREFS.getBoolean("sideShoot", false),
         // (int) Robot.PREFS.getDouble("waitTime", 0));
     }
+
+    // public DeterminePathandDoItCommand getMoreCommands() {
+    // return new DeterminePathandDoItCommand(swerveDriveSubsystem, navX,
+    // limeLightSubsystem, shooterSubsystem);
+    // }
 
     private void configureButtonBindings() {
 

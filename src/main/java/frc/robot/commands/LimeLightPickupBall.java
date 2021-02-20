@@ -72,7 +72,7 @@ public class LimeLightPickupBall extends CommandBase {
             if (System.currentTimeMillis() - whenStartedGorging > 2000) {
                 isItFinished = true;
                 shooterSubsystem.stopIntakeSpin();
-                this.end(true);
+
             }
         } else if (stage == 2) {
             isItFinished = true;
@@ -80,7 +80,7 @@ public class LimeLightPickupBall extends CommandBase {
             if (shooterSubsystem.doesSenseBall() == false) {
                 shooterSubsystem.stopIntakeSpin();
             }
-            this.end(true);
+            isItFinished = true;
         }
 
     }
@@ -99,7 +99,7 @@ public class LimeLightPickupBall extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return isItFinished;
         // if (Math.abs(distController.getPositionError()) < 5 &&
         // Math.abs(aimController.getPositionError()) < 2) {
         // return true;
@@ -112,5 +112,8 @@ public class LimeLightPickupBall extends CommandBase {
     public void end(boolean interrupted) {
         swerveDriveSubsystem.drive(0, 0, 0);
         shooterSubsystem.stopIntakeSpin();
+
+        stage = 0;
+        isItFinished = false;
     }
 }

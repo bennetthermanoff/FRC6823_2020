@@ -15,12 +15,11 @@ public class LimeLightSubsystem extends SubsystemBase {
     private int pipeline;
     private NetworkTable table;
 
-    public static final int towardsGround = 15, forward = 50, towardsTarget = 65;
-
     public LimeLightSubsystem(int servo) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         this.servo = new Servo(servo);
         this.setPipeline(0);
+        this.setPipeline(1);
 
         SendableRegistry.addLW(this, "LimeLight Subsystem");
     }
