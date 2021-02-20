@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -90,7 +91,7 @@ public class LimeLightPickupBall extends CommandBase {
         limeLightSubsystem.setPipeline(1);
         aimController = new PIDController(.016, 0, 0);
         distController = new PIDController(.016, 0, 0);
-
+      
         distController.setSetpoint(y);
         aimController.setSetpoint(0);
 

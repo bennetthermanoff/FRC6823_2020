@@ -19,9 +19,9 @@ public class JoystickHandler {
     public JoystickHandler() {
         this.joystick = new Joystick(3);
         this.deadZone = Robot.PREFS.getDouble("DeadZone", .05);
-    }
+	}
 
-    public double getRawAxis0() {
+	public double getRawAxis0() {
         return joystick.getRawAxis(0);
     }
 

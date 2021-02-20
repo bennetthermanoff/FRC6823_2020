@@ -25,7 +25,6 @@ public class NavXHandler {
     }
 
     public void printEverythingDammit() {
-
         SmartDashboard.putNumber("getAngle()", ahrs.getAngle());
         SmartDashboard.putNumber("	getActualUpdateRate()", ahrs.getActualUpdateRate());
         SmartDashboard.putNumber("getDisplacementX()", ahrs.getDisplacementX());
