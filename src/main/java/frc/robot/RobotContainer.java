@@ -72,7 +72,7 @@ public class RobotContainer {
         swerveDriveSubsystem.setDefaultCommand(fieldSpaceDriveCommand);
         // limeLightSubsystem.setServoAngle(70);
 
-        limeLightSubsystem.setServoAngle(10);
+        limeLightSubsystem.setServoAngle(65); //set to 10 for auto
         this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0);
 
         configureButtonBindings();
