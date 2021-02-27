@@ -1,21 +1,21 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
+//import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.NavXHandler;
+//import frc.robot.NavXHandler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class RotateRightUntillSeeBall extends CommandBase {
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
-    private NavXHandler navXHandler;
+    //private NavXHandler navXHandler;
     private boolean isFinished = false;
-    private double newDirection;
-    private double margin = 0.5; // margin of degrees
-    private PIDController angleController;
+    //private double newDirection;
+    //private double margin = 0.5; // margin of degrees
+    //private PIDController angleController;
 
-    private static double initialDegrees;
+    //private static double initialDegrees;
 
     public RotateRightUntillSeeBall(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem) {
 

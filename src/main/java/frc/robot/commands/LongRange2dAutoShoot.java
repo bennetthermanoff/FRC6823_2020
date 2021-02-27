@@ -7,17 +7,17 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class LongRange2dAutoShoot extends SequentialCommandGroup {
-    private LimeLightSubsystem limeLightSubsystem;
-    private SwerveDriveSubsystem swerveDriveSubsystem;
-    private ShooterSubsystem shooterSubsystem;
+    // private LimeLightSubsystem limeLightSubsystem;
+    // private SwerveDriveSubsystem swerveDriveSubsystem;
+    // private ShooterSubsystem shooterSubsystem;
 
     private DoubleContainer rpm;
 
     public LongRange2dAutoShoot(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
             SwerveDriveSubsystem swerveDriveSubsystem) {
-        this.shooterSubsystem = shooterSubsystem;
-        this.limeLightSubsystem = limeLightSubsystem;
-        this.swerveDriveSubsystem = swerveDriveSubsystem;
+        // this.shooterSubsystem = shooterSubsystem;
+        // this.limeLightSubsystem = limeLightSubsystem;
+        // this.swerveDriveSubsystem = swerveDriveSubsystem;
 
         // super.addCommands(new ChangePipeline(limeLightSubsystem, 2),
         // new LongRange2d(swerveDriveSubsystem, limeLightSubsystem, shooterSubsystem,

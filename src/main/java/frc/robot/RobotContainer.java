@@ -1,23 +1,23 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+//import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.AutoAim3d;
 import frc.robot.commands.AutoCommandGroup;
-import frc.robot.commands.ChangePipeline;
-import frc.robot.commands.DeterminePathandDoItCommand;
+//import frc.robot.commands.ChangePipeline;
+//import frc.robot.commands.DeterminePathandDoItCommand;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.LimeLightPickupBall;
-import frc.robot.commands.LimeLightSeek;
-import frc.robot.commands.LongRange2d;
+//import frc.robot.commands.LimeLightSeek;
+//import frc.robot.commands.LongRange2d;
 import frc.robot.commands.LongRange2dAutoShoot;
 import frc.robot.commands.RobotSpaceDrive;
-import frc.robot.commands.Wait;
+//import frc.robot.commands.Wait;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
@@ -158,14 +158,14 @@ public class RobotContainer {
                 .whenPressed(() -> SmartDashboard.putNumber("PickupBallCommand stage", pickupBallCommand.getStage()));
     }
 
-    private int positionSelect() {
-        if (joystickHandler.getRawAxis6() < .33) {
-            return -1;
-        } else if (joystickHandler.getRawAxis6() < .85) {
-            return 0;
-        } else {
-            return 1;
-        }
-        // cooleo
-    }
+    // private int positionSelect() {
+    //     if (joystickHandler.getRawAxis6() < .33) {
+    //         return -1;
+    //     } else if (joystickHandler.getRawAxis6() < .85) {
+    //         return 0;
+    //     } else {
+    //         return 1;
+    //     }
+    //     // cooleo
+    // }
 }

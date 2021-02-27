@@ -1,10 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.NavXHandler;
@@ -20,7 +20,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
     private ShooterSubsystem shooterSubsystem;
 
     private ScanFieldForLemons scanCommand;
-    private LimeLightPickupBall eatBallCommand;
+    ////private LimeLightPickupBall eatBallCommand;
 
     private NavXHandler navXHandler;
 
@@ -39,10 +39,10 @@ public class AutoCommandGroup extends SequentialCommandGroup {
     }
 
     public AutoCommandGroup(RobotContainer robotContainer) {
-        boolean leftRight = Preferences.getInstance().getBoolean("leftRight", false);
-        boolean back = Preferences.getInstance().getBoolean("backShoot", false);
-        boolean sideShoot = Preferences.getInstance().getBoolean("sideShoot", false);
-        int waitSeconds = (int) Preferences.getInstance().getDouble("waitTime", 1);
+        //boolean leftRight = Preferences.getInstance().getBoolean("leftRight", false);
+        //boolean back = Preferences.getInstance().getBoolean("backShoot", false);
+        //boolean sideShoot = Preferences.getInstance().getBoolean("sideShoot", false);
+        //int waitSeconds = (int) Preferences.getInstance().getDouble("waitTime", 1);
 
         limeLightSubsystem = robotContainer.getLimeLightSubsystem();
         swerveDriveSubsystem = robotContainer.getSwervedriveSubsystem();
