@@ -28,6 +28,12 @@ public class MoveTo3d extends CommandBase {
         double strafeCommand = strafeController.calculate(limeLightSubsystem.getX());
         double distanceCommand = distController.calculate(limeLightSubsystem.getZ());
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
+
+        if (distanceCommand > 0.5) {
+            distanceCommand = 0.4;
+        } else if (distanceCommand < -0.5) {
+            distanceCommand = -0.4;
+        }
         if (limeLightSubsystem.hasTarget())
             swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand * -1);
     }
@@ -49,8 +55,11 @@ public class MoveTo3d extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(strafeController.getPositionError()) < 5 && Math.abs(distController.getPositionError()) < 3
-                && Math.abs(aimController.getPositionError()) < 2) {
+        // if (Math.abs(strafeController.getPositionError()) < 5 &&
+        // Math.abs(distController.getPositionError()) < 3
+        // && Math.abs(aimController.getPositionError()) < 2) {
+        if (Math.abs(strafeController.getPositionError()) < 1 && Math.abs(distController.getPositionError()) < 1
+                && Math.abs(aimController.getPositionError()) < 0.5) {
             return true;
         } else {
             return false;

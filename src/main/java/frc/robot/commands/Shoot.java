@@ -3,32 +3,38 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class Shoot extends CommandBase {
     private ShooterSubsystem shooterSubsystem;
     private double conveyorPower;
     private Timer timer;
     private int time;
+    private SwerveDriveSubsystem swerveDriveSubsystem;
 
     private LongRange2dAutoShoot.DoubleContainer rpm;
 
-    public Shoot(ShooterSubsystem shooterSubsystem, double rpm, double conveyorPower, int time) {
-        this(shooterSubsystem, new LongRange2dAutoShoot.DoubleContainer(rpm), conveyorPower, time);
+    public Shoot(ShooterSubsystem shooterSubsystem, double rpm, double conveyorPower, int time,
+            SwerveDriveSubsystem swerveDriveSubsystem) {
+        this(shooterSubsystem, new LongRange2dAutoShoot.DoubleContainer(rpm), conveyorPower, time,
+                swerveDriveSubsystem);
     }
 
     public Shoot(ShooterSubsystem shooterSubsystem, LongRange2dAutoShoot.DoubleContainer rpm, double conveyorPower,
-            int time) {
+            int time, SwerveDriveSubsystem swerveDriveSubsystem) {
         this.shooterSubsystem = shooterSubsystem;
         this.rpm = rpm;
         this.conveyorPower = conveyorPower;
         this.time = time;
-        addRequirements(shooterSubsystem);
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
+        addRequirements(shooterSubsystem, swerveDriveSubsystem);
     }
 
     @Override
     public void execute() {
         // shooterSubsystem.shooterPID(rpm, 20);
-        shooterSubsystem.shooterPID(rpm.value, 30, conveyorPower);
+        shooterSubsystem.shooterPID(rpm.value, 60, conveyorPower);
+        swerveDriveSubsystem.drive(0, 0, 0);
     }
 
     @Override

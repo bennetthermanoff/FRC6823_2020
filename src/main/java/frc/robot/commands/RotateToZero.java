@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.NavXHandler;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -9,8 +10,9 @@ public class RotateToZero extends CommandBase {
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private NavXHandler navXHandler;
     private boolean isFinished = false;
-    private double margin = 0.5; // margin of degrees
+    private double margin = 0.1; // margin of Radians
     private PIDController angleController;
+    public static final double kToleranceDegrees = 2.0f;
 
     private static double initialDegrees;
 
@@ -22,13 +24,13 @@ public class RotateToZero extends CommandBase {
 
     }
 
-    public static void setInitialDegrees(double angle) {
-        RotateToZero.initialDegrees = angle;
+    public static void setInitialAngle(double angle) {
+        RotateToZero.initialDegrees = ((angle % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
     }
 
     @Override
     public void execute() {
-        double currentAngle = navXHandler.getAngle();
+        double currentAngle = ((navXHandler.getAngleRad() % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
         double rotateCommand = angleController.calculate(currentAngle);
 
         if (rotateCommand > 0.2) {
@@ -36,8 +38,8 @@ public class RotateToZero extends CommandBase {
         } else if (rotateCommand < -0.2) {
             rotateCommand = -0.2;
         }
-
-        swerveDriveSubsystem.drive(0, 0, rotateCommand * -1);
+        SmartDashboard.putNumber("ROTATE", rotateCommand);
+        swerveDriveSubsystem.drive(0, 0, rotateCommand);
         if (Math.abs(currentAngle - initialDegrees) < margin) {
             isFinished = true;
         }
@@ -51,13 +53,15 @@ public class RotateToZero extends CommandBase {
 
     @Override
     public void initialize() {
-        angleController = new PIDController(.016, 0, 0);
+        angleController = new PIDController(.3, 0, 0);
+        angleController.enableContinuousInput(0, Math.PI * 2);
         angleController.setSetpoint(initialDegrees);
     }
 
     @Override
     public void end(boolean interrupted) {
         swerveDriveSubsystem.drive(0, 0, 0);
+        isFinished = false;
     }
 
 }

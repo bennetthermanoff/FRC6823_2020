@@ -31,8 +31,7 @@ public class LongRange2dAutoShoot extends SequentialCommandGroup {
         // new LongRange2d(swerveDriveSubsystem, limeLightSubsystem, shooterSubsystem,
         // rpm, 0));
         addCommands(new LongRange2d(swerveDriveSubsystem, limeLightSubsystem, shooterSubsystem, rpm, 0),
-                new ParallelRaceGroup(new Shoot(shooterSubsystem, rpm, .75, 5),
-                        new JustAim(swerveDriveSubsystem, limeLightSubsystem)));
+                new ParallelRaceGroup(new Shoot(shooterSubsystem, rpm, .75, 5, swerveDriveSubsystem)));
     }
 
     public static class DoubleContainer {

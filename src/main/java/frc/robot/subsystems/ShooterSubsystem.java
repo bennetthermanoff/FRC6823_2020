@@ -85,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
-        out = out > 0 ? out : 0;
+        // out = out > 0 ? out : 0;
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
@@ -94,6 +94,13 @@ public class ShooterSubsystem extends SubsystemBase {
             conveyor.set(Robot.PREFS.getDouble("ConveyorShootSpeed", 0) * -1);
             manualControl = true;
         }
+    }
+
+    double margin = 100;
+
+    public boolean shooterReady(double targetRPM) {
+        return Math.abs(targetRPM - encoder.getRate() * 60 / 1024) < 100;
+
     }
 
     public void shooterPID(double rpm, int ticks, double conveyorPower) {
@@ -105,11 +112,12 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
-        out = out > 0 ? out : 0;
+        out = out > -0.05 ? out : -0.05;
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
         count++;
+
         if (count > ticks) {
             conveyor.set(conveyorPower * -1);
             manualControl = true;

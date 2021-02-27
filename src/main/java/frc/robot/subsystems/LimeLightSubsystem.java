@@ -39,6 +39,12 @@ public class LimeLightSubsystem extends SubsystemBase {
         return this.servo.getAngle();
     }
 
+    private double forwardAngle = 50;
+
+    public double getServoAngleFromGroundRad() {
+        return ((this.servo.getAngle() - forwardAngle) / 360.0) * (2 * Math.PI);
+    }
+
     public int getPipeline() {
         return (int) table.getEntry("getpipe").getDouble(0);
     }
@@ -53,8 +59,16 @@ public class LimeLightSubsystem extends SubsystemBase {
         return table.getEntry("tx").getDouble(0);
     }
 
+    public double getTxRad() {
+        return (table.getEntry("tx").getDouble(0) / 360.0) * (2.0 * Math.PI);
+    }
+
     public double getTy() {
         return table.getEntry("ty").getDouble(0);
+    }
+
+    public double getTyRad() {
+        return (table.getEntry("ty").getDouble(0) / 360.0) * (2.0 * Math.PI);
     }
 
     // this is the 3d Distance, should always be negative

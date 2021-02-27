@@ -36,6 +36,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
 
     public static double getAngleToLemon() {
         return angleToLemon;
+
     }
 
     public AutoCommandGroup(RobotContainer robotContainer) {
@@ -48,43 +49,49 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         swerveDriveSubsystem = robotContainer.getSwervedriveSubsystem();
 
         navXHandler = robotContainer.getNavXHandler();
-        navXHandler.zeroYaw();
+        // navXHandler.zeroYaw();
         shooterSubsystem = robotContainer.getShooterSubsystem();
 
         double initialAngle = navXHandler.getAngle();
 
-        RotateToZero.setInitialDegrees(initialAngle);
+        RotateToZero.setInitialAngle(navXHandler.getAngleRad());
 
-        scanCommand = new ScanFieldForLemons(limeLightSubsystem);
+        GoRight.zero(navXHandler.getAngleRad());
 
-        addCommands(scanCommand);
+        limeLightSubsystem.setServoAngle(15);
+        limeLightSubsystem.setPipeline(1);
 
         addCommands(new WaitCommand(0.5));
 
-        if (Math.abs(angleToLemon - 0.0) < margin) { // if it sees a ball directly ahead C3
-            path = 1;
-        } else if (Math.abs(angleToLemon - -11.3) < margin) {
-            path = 3;
-        } else {
+        // addCommands(new ScanFieldForLemons(limeLightSubsystem));
 
-            addCommands(new RotateDegrees(swerveDriveSubsystem, navXHandler, 27.0));
+        // addCommands(new WaitCommand(0.5));
 
-            addCommands(new ScanFieldForLemons(limeLightSubsystem));
+        // if (Math.abs(angleToLemon - 0.0) < margin) { // if it sees a ball directly
+        // ahead C3
+        // path = 1;
+        // } else if (Math.abs(angleToLemon - -11.3) < margin) {
+        // path = 3;
+        // } else {
 
-            addCommands(new WaitCommand(0.5));
+        // addCommands(new RotateDegrees(swerveDriveSubsystem, navXHandler, 27.0));
 
-            angleToLemon = AutoCommandGroup.getAngleToLemon();
-            if (Math.abs(angleToLemon - 26.5) < margin) {
-                path = 2;
-            } else {
-                addCommands(new RotateDegrees(swerveDriveSubsystem, navXHandler, 0));
-                path = 4;
-            }
+        // addCommands(new ScanFieldForLemons(limeLightSubsystem));
 
-        }
+        // addCommands(new WaitCommand(0.5));
 
-        SmartDashboard.putNumber("Auto Path", path);
-        SmartDashboard.putNumber("Auto Angle To Lemon", angleToLemon);
+        // angleToLemon = AutoCommandGroup.getAngleToLemon();
+        // if (Math.abs(angleToLemon - 26.5) < margin) {
+        // path = 2;
+        // } else {
+        // addCommands(new RotateDegrees(swerveDriveSubsystem, navXHandler, 0));
+        // path = 4;
+        // }
+
+        // }
+
+        // SmartDashboard.putNumber("Auto Path", path);
+        // SmartDashboard.putNumber("Auto Angle To Lemon", angleToLemon);
 
         // // path plans
         // if (path == 1) {
@@ -169,27 +176,42 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         // addCommands(new GoForward(swerveDriveSubsystem, 2));
 
         // } else {
-        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem));
+        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
         // limeLightSubsystem));
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
         // first ball
 
-        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem));
+        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
         // limeLightSubsystem));
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
         // second ball
 
-        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem));
+        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
         // limeLightSubsystem));
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
         // third ball
 
-        addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
-        addCommands(new GoForward(swerveDriveSubsystem, 2));
+        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+        // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+        // limeLightSubsystem));
+        addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+        // 4th ball
 
+        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+        // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+        // limeLightSubsystem));
+        addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+        // 5th ball
+
+        addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
+        addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
+        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
+        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1));
+
+        // addCommands(new GoRight(swerveDriveSubsystem, 2, navXHandler));
         // }
         // addCommands(new Wait(waitSeconds));
 

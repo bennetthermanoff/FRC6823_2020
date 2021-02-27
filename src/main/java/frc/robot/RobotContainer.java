@@ -10,13 +10,15 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.AutoAim3d;
 import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.ChangePipeline;
-import frc.robot.commands.DeterminePathandDoItCommand;
+// import frc.robot.commands.DeterminePathandDoItCommand;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.LimeLightPickupBall;
 import frc.robot.commands.LimeLightSeek;
 import frc.robot.commands.LongRange2d;
 import frc.robot.commands.LongRange2dAutoShoot;
+import frc.robot.commands.LooptyLoop;
 import frc.robot.commands.RobotSpaceDrive;
+import frc.robot.commands.RotateToZero;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
@@ -37,6 +39,7 @@ public class RobotContainer {
     public LimeLightSubsystem limeLightSubsystem;
     private LiftSubsystem liftSubsystem;
     private LimeLightPickupBall pickupBallCommand;
+    private LooptyLoop loop;
 
     public LimeLightSubsystem getLimeLightSubsystem() {
         return limeLightSubsystem;
@@ -72,9 +75,12 @@ public class RobotContainer {
         swerveDriveSubsystem.setDefaultCommand(fieldSpaceDriveCommand);
         // limeLightSubsystem.setServoAngle(70);
 
-        limeLightSubsystem.setServoAngle(10);
         this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0);
 
+        this.loop = new LooptyLoop(swerveDriveSubsystem, limeLightSubsystem, 1);
+        limeLightSubsystem.setServoAngle(65);
+        limeLightSubsystem.setPipeline(0);
+        RotateToZero.setInitialAngle(navX.getAngleRad());
         configureButtonBindings();
 
     }
@@ -153,9 +159,12 @@ public class RobotContainer {
 
         // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
         // limeLightSubsystem, 0, 100));
-        joystickHandler.button(8).whenPressed(pickupBallCommand);
-        joystickHandler.button(8)
-                .whenPressed(() -> SmartDashboard.putNumber("PickupBallCommand stage", pickupBallCommand.getStage()));
+        joystickHandler.button(8).whileActiveOnce(loop);
+        // joystickHandler.button(8)
+        // .whenPressed(() -> SmartDashboard.putNumber("PickupBallCommand stage",
+        // pickupBallCommand.getStage()));
+        // joystickHandler.button(8).whileActiveOnce(new
+        // RotateToZero(swerveDriveSubsystem, navX));
     }
 
     private int positionSelect() {

@@ -11,6 +11,10 @@ import com.kauailabs.navx.frc.AHRS;
 public class NavXHandler {
     private AHRS ahrs;
 
+    public AHRS getAhrs() {
+        return ahrs;
+    }
+
     public NavXHandler() {
         try {
             /***********************************************************************
@@ -44,7 +48,7 @@ public class NavXHandler {
     }
 
     public void zeroYaw() {
-        ahrs.zeroYaw();
+        ahrs.reset();
     }
 
     public double yeetPerSecond() {
