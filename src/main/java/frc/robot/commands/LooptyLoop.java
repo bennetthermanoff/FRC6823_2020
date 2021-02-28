@@ -28,7 +28,7 @@ public class LooptyLoop extends CommandBase {
     private double stopAngle;
 
     public LooptyLoop(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem, int pipeline,
-            NavXHandler navX, double startAngle, double stopAngle, int direction) {
+            NavXHandler navX, int direction) {
 
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.limelight = limeLightSubsystem;
@@ -70,6 +70,11 @@ public class LooptyLoop extends CommandBase {
     @Override
     public void initialize() {
         limelight.setPipeline(pipeline);
+        if (pipeline == 0) {
+            limelight.setServoAngle(50);
+        } else if (pipeline == 1) {
+            limelight.setServoAngle(15);
+        }
 
         centerTarget = new PIDController(0.8, 0, 0);
         centerTarget.setSetpoint(0);

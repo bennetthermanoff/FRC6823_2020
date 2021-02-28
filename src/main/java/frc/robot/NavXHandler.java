@@ -10,6 +10,15 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class NavXHandler {
     private AHRS ahrs;
+    private double initialAngle;
+
+    public double getInitialAngle() {
+        return initialAngle;
+    }
+
+    public void setInitialAngle() {
+        initialAngle = getAngleRad();
+    }
 
     public AHRS getAhrs() {
         return ahrs;

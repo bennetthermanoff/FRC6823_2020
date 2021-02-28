@@ -3,20 +3,21 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.NavXHandler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class AutoAim3d extends SequentialCommandGroup {
-    //private LimeLightSubsystem limeLightSubsystem;
-    //private SwerveDriveSubsystem swerveDriveSubsystem;
-    //private ShooterSubsystem shooterSubsystem;
+    // private LimeLightSubsystem limeLightSubsystem;
+    // private SwerveDriveSubsystem swerveDriveSubsystem;
+    // private ShooterSubsystem shooterSubsystem;
 
     public AutoAim3d(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
-            SwerveDriveSubsystem swerveDriveSubsystem, int position) {
-        //this.shooterSubsystem = shooterSubsystem;
-        //this.limeLightSubsystem = limeLightSubsystem;
-        //this.swerveDriveSubsystem = swerveDriveSubsystem;
+            SwerveDriveSubsystem swerveDriveSubsystem, int position, NavXHandler navX) {
+        // this.shooterSubsystem = shooterSubsystem;
+        // this.limeLightSubsystem = limeLightSubsystem;
+        // this.swerveDriveSubsystem = swerveDriveSubsystem;
 
         double distance = -56;
         double rpm = 8500;
