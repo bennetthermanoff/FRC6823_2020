@@ -23,7 +23,10 @@ public class SwitchPipelineCommand extends CommandBase {
             limeLightSubsystem.setServoAngle(65);
         else if (pipeline == 1)
             limeLightSubsystem.setServoAngle(15);
-        isFinished = true;
+        if (pipeline == 1 && Math.abs(limeLightSubsystem.getServoAngle() - 15) < 1)
+            isFinished = true;
+        else if (pipeline == 0 && Math.abs(limeLightSubsystem.getServoAngle() - 65) < 1)
+            isFinished = true;
     }
 
     @Override

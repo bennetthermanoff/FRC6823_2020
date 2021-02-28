@@ -13,7 +13,7 @@ public class RotateDegrees extends CommandBase {
     private double margin = 0.5; // margin of degrees
     private PIDController angleController;
 
-    private static double initialDegrees;
+    //private static double initialDegrees;
 
     public RotateDegrees(SwerveDriveSubsystem swerveDriveSubsystem, NavXHandler navXHandler, double newDirection) {
 
@@ -25,7 +25,7 @@ public class RotateDegrees extends CommandBase {
     }
 
     public static void setInitialDegrees(double initialDegrees) {
-        RotateDegrees.initialDegrees = initialDegrees;
+        //RotateDegrees.initialDegrees = initialDegrees;
     }
 
     @Override

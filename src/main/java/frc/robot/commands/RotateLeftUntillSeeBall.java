@@ -4,21 +4,21 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.NavXHandler;
+//import frc.robot.NavXHandler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class RotateLeftUntillSeeBall extends CommandBase {
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
-    private NavXHandler navXHandler;
+    // private NavXHandler navXHandler;
     private boolean isFinished = false;
     private double newDirection;
     private double margin = 0.05; // margin of degrees
     private PIDController angleController;
     private int pipeline;
 
-    private static double initialDegrees;
+    // private static double initialDegrees;
 
     public RotateLeftUntillSeeBall(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem,
             int pipeline) {
