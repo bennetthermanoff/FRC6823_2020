@@ -209,7 +209,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
         addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
-        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
+        addCommands(new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
         int waittime = 0;
 
         ////
@@ -242,7 +242,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
         addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
-        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
+        addCommands(new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
         ////
         ////
         ////
@@ -251,8 +251,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         ////
         ////
         ////
-        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, Math.PI));
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
+        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, Math.PI));
         addCommands(new WaitCommand(waittime));
         addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
@@ -273,7 +273,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
         addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
-        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
+        addCommands(new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler)); ////
         ////
         ////
         ////
@@ -281,9 +281,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         ////
         ////
         ////
-        ////
-        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, Math.PI));
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
+        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, Math.PI));
         addCommands(new WaitCommand(waittime));
         addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
@@ -304,7 +303,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
         addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
-        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
+        addCommands(new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler)); ////
         ////
         ////
         ////
@@ -312,9 +311,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         ////
         ////
         ////
-        ////
-        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, Math.PI));
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
+        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, Math.PI));
         addCommands(new WaitCommand(waittime));
         addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
@@ -335,8 +333,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
         addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
-        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
-
+        addCommands(new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navXHandler));
         // addCommands(new GoRight(swerveDriveSubsystem, 2, navXHandler));
         // }
         // addCommands(new Wait(waitSeconds));

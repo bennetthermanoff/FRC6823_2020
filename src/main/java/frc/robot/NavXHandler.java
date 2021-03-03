@@ -49,7 +49,7 @@ public class NavXHandler {
     }
 
     public double getAngleRad() {
-        return ahrs.getAngle() * 2 * Math.PI / 360d;
+        return (((ahrs.getAngle() * 2 * Math.PI / 360d) % Math.PI * 2) + Math.PI * 2) % Math.PI * 2;
     }
 
     public double getAngle() {

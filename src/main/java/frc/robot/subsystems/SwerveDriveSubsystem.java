@@ -53,43 +53,44 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         double backLeftAngle;
         double frontRightAngle;
         double frontLeftAngle;
-        if (x1 == 0 && y1 == 0 && x2 == 0) {
+        // if (x1 == 0 && y1 == 0 && x2 == 0) {
 
-            backRightSpeed = 0;//
-            backLeftSpeed = 0;
-            frontRightSpeed = 0;
-            frontLeftSpeed = 0;//
+        // backRightSpeed = 0;//
+        // backLeftSpeed = 0;
+        // frontRightSpeed = 0;
+        // frontLeftSpeed = 0;//
 
-            backRightAngle = 0;
-            backLeftAngle = 0;
-            frontRightAngle = 0;
-            frontLeftAngle = 0;
+        // // backRightAngle = 0;
+        // // backLeftAngle = 0;
+        // // frontRightAngle = 0;
+        // // frontLeftAngle = 0;
 
-        } else {
-            // x1, y1 are from the position of the joystick, x2 is from the rotation
+        // } else {
+        // x1, y1 are from the position of the joystick, x2 is from the rotation
 
-            // y1 *= -1;
-            // x1 *= -1;
+        // y1 *= -1;
+        // x1 *= -1;
 
-            double a = x1 - x2 * (L / r);
-            double b = x1 + x2 * (L / r);
-            double c = y1 - x2 * (W / r);
-            double d = y1 + x2 * (W / r);
+        double a = x1 - x2 * (L / r);
+        double b = x1 + x2 * (L / r);
+        double c = y1 - x2 * (W / r);
+        double d = y1 + x2 * (W / r);
 
-            backRightSpeed = Math.sqrt((b * b) + (c * c));//
-            backLeftSpeed = Math.sqrt((a * a) + (c * c));
-            frontRightSpeed = Math.sqrt((b * b) + (d * d));
-            frontLeftSpeed = Math.sqrt((a * a) + (d * d));//
+        backRightSpeed = Math.sqrt((b * b) + (c * c));//
+        backLeftSpeed = Math.sqrt((a * a) + (c * c));
+        frontRightSpeed = Math.sqrt((b * b) + (d * d));
+        frontLeftSpeed = Math.sqrt((a * a) + (d * d));//
 
-            backRightAngle = Math.atan2(b, c) / Math.PI;
-            backLeftAngle = Math.atan2(a, c) / Math.PI;
-            frontRightAngle = Math.atan2(b, d) / Math.PI;
-            frontLeftAngle = Math.atan2(a, d) / Math.PI;
-        }
+        backRightAngle = Math.atan2(b, c) / Math.PI;
+        backLeftAngle = Math.atan2(a, c) / Math.PI;
+        frontRightAngle = Math.atan2(b, d) / Math.PI;
+        frontLeftAngle = Math.atan2(a, d) / Math.PI;
+        // }
         backRight.drive(backRightSpeed, backRightAngle);
         backLeft.drive(backLeftSpeed, backLeftAngle);
         frontRight.drive(frontRightSpeed, frontRightAngle);
         frontLeft.drive(frontLeftSpeed, frontLeftAngle);
+
     }
 
     @Override
