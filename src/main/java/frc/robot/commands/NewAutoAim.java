@@ -35,7 +35,6 @@ public class NewAutoAim extends SequentialCommandGroup {
         }
 
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));
-        super.addCommands(new WaitCommand(0.5));
-        super.addCommands(new Shoot(shooterSubsystem, rpm, .2, 8, swerveDriveSubsystem));
+        super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 8, swerveDriveSubsystem));
     }
 }
