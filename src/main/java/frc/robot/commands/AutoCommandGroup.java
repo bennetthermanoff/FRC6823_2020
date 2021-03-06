@@ -58,10 +58,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         RotateToAngle.setInitialAngle(navXHandler.getAngleRad());
         GoRight.zero(navXHandler.getAngleRad());
 
-        limeLightSubsystem.setServoAngle(15);
-        limeLightSubsystem.setPipeline(1);
-
-        addCommands(new WaitCommand(0.5));
+        addCommands(new WaitCommand(4));
 
         // addCommands(new ScanFieldForLemons(limeLightSubsystem));
 
@@ -176,6 +173,9 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         // addCommands(new GoForward(swerveDriveSubsystem, 2));
 
         // } else {
+            
+            
+        addCommands( new SwitchPipelineCommand(limeLightSubsystem, 1));
         addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
         // limeLightSubsystem));
