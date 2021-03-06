@@ -1,10 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.NavXHandler;
@@ -20,7 +20,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
     private ShooterSubsystem shooterSubsystem;
 
     private ScanFieldForLemons scanCommand;
-    private LimeLightPickupBall eatBallCommand;
+    ////private LimeLightPickupBall eatBallCommand;
 
     private NavXHandler navXHandler;
 
@@ -40,10 +40,10 @@ public class AutoCommandGroup extends SequentialCommandGroup {
     }
 
     public AutoCommandGroup(RobotContainer robotContainer) {
-        boolean leftRight = Preferences.getInstance().getBoolean("leftRight", false);
-        boolean back = Preferences.getInstance().getBoolean("backShoot", false);
-        boolean sideShoot = Preferences.getInstance().getBoolean("sideShoot", false);
-        int waitSeconds = (int) Preferences.getInstance().getDouble("waitTime", 1);
+        //boolean leftRight = Preferences.getInstance().getBoolean("leftRight", false);
+        //boolean back = Preferences.getInstance().getBoolean("backShoot", false);
+        //boolean sideShoot = Preferences.getInstance().getBoolean("sideShoot", false);
+        //int waitSeconds = (int) Preferences.getInstance().getDouble("waitTime", 1);
 
         limeLightSubsystem = robotContainer.getLimeLightSubsystem();
         swerveDriveSubsystem = robotContainer.getSwervedriveSubsystem();
@@ -56,12 +56,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
 
         RotateToZero.setInitialAngle(navXHandler.getAngleRad());
 
-        GoRight.zero(navXHandler.getAngleRad());
 
-        limeLightSubsystem.setServoAngle(15);
-        limeLightSubsystem.setPipeline(1);
-
-        addCommands(new WaitCommand(0.5));
+        addCommands(new WaitCommand(4));
 
         // addCommands(new ScanFieldForLemons(limeLightSubsystem));
 
@@ -176,6 +172,9 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         // addCommands(new GoForward(swerveDriveSubsystem, 2));
 
         // } else {
+            
+            
+        addCommands( new SwitchPipelineCommand(limeLightSubsystem, 1));
         addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
         // limeLightSubsystem));
@@ -200,17 +199,109 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
         // 4th ball
 
-        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
         // limeLightSubsystem));
-        addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
-        // 5th ball
+
 
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
         addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
         addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1));
+        addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
 
+
+            // } else {
+                addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                // limeLightSubsystem));
+                addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                // first ball
+        
+                addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                // limeLightSubsystem));
+                addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                // second ball
+        
+                addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                // limeLightSubsystem));
+                addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                // third ball
+                addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
+        addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
+        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
+        addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1));
+        addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
+                  // } else {
+                    addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                    // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                    // limeLightSubsystem));
+                    addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                    // first ball
+            
+                    addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                    // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                    // limeLightSubsystem));
+                    addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                    // second ball
+            
+                    addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                    // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                    // limeLightSubsystem));
+                    addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                    // third ball
+                    addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
+            addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
+            addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
+            addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1));
+            addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
+                      // } else {
+                        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                        // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                        // limeLightSubsystem));
+                        addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                        // first ball
+                
+                        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                        // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                        // limeLightSubsystem));
+                        addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                        // second ball
+                
+                        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                        // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                        // limeLightSubsystem));
+                        addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                        // third ball
+                        addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
+                addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
+                addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
+                addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1));
+                addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
+                          // } else {
+                            addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                            // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                            // limeLightSubsystem));
+                            addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                            // first ball
+                    
+                            addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                            // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                            // limeLightSubsystem));
+                            addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                            // second ball
+                    
+                            addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+                            // addCommands(new GoForwardUntilSeeLemon(swerveDriveSubsystem,
+                            // limeLightSubsystem));
+                            addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
+                            // third ball
+                            addCommands(new SwitchPipelineCommand(limeLightSubsystem, 0));
+                    addCommands(new RotateToZero(swerveDriveSubsystem, navXHandler));
+                    addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 0));// ball means target
+                    addCommands(new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1));
+                    addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
         // addCommands(new GoRight(swerveDriveSubsystem, 2, navXHandler));
         // }
         // addCommands(new Wait(waitSeconds));

@@ -2,9 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import frc.robot.Robot;
+// import edu.wpi.first.wpilibj2.command.CommandScheduler;
+// import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+//import frc.robot.Robot;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -13,7 +13,7 @@ public class LongRange2d extends CommandBase {
 
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
-    private ShooterSubsystem shooterSubsystem;
+    //private ShooterSubsystem shooterSubsystem;
     private PIDController aimController;
 
     private LongRange2dAutoShoot.DoubleContainer rpm;
@@ -23,7 +23,7 @@ public class LongRange2d extends CommandBase {
             ShooterSubsystem shooterSubsystem, LongRange2dAutoShoot.DoubleContainer rpm, int pipeline) {
         this.limeLightSubsystem = limeLightSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.shooterSubsystem = shooterSubsystem;
+        //this.shooterSubsystem = shooterSubsystem;
 
         this.rpm = rpm;
         this.pipeline = pipeline;
@@ -63,7 +63,7 @@ public class LongRange2d extends CommandBase {
         System.out.println("ending longrange2d command");
 
         swerveDriveSubsystem.drive(0, 0, 0);
-        int rpm = (int) Robot.PREFS.getDouble("RPMControl", 0);
+        //int rpm = (int) Robot.PREFS.getDouble("RPMControl", 0);
         double t = limeLightSubsystem.getServoAngle();
         // int rpm = (int) (.0233 * Math.pow(t, 4) - 189.39 * Math.pow(t, 3) + 16304 * t
         // * t - 622601 * t

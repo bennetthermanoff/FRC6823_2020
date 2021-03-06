@@ -28,7 +28,7 @@ public class LooptyLoop extends CommandBase {
     private double stopAngle;
 
     public LooptyLoop(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem, int pipeline,
-            NavXHandler navX, double startAngle, double stopAngle, int direction) {
+            NavXHandler navX, int direction) {
 
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.limelight = limeLightSubsystem;

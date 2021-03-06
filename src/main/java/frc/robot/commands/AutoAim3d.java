@@ -8,15 +8,15 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class AutoAim3d extends SequentialCommandGroup {
-    private LimeLightSubsystem limeLightSubsystem;
-    private SwerveDriveSubsystem swerveDriveSubsystem;
-    private ShooterSubsystem shooterSubsystem;
+    //private LimeLightSubsystem limeLightSubsystem;
+    //private SwerveDriveSubsystem swerveDriveSubsystem;
+    //private ShooterSubsystem shooterSubsystem;
 
     public AutoAim3d(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
             SwerveDriveSubsystem swerveDriveSubsystem, int position) {
-        this.shooterSubsystem = shooterSubsystem;
-        this.limeLightSubsystem = limeLightSubsystem;
-        this.swerveDriveSubsystem = swerveDriveSubsystem;
+        //this.shooterSubsystem = shooterSubsystem;
+        //this.limeLightSubsystem = limeLightSubsystem;
+        //this.swerveDriveSubsystem = swerveDriveSubsystem;
 
         double distance = -56;
         double rpm = 8500;
