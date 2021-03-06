@@ -30,12 +30,12 @@ public class NewAutoAim extends SequentialCommandGroup {
         } else if (position == -1) {
             // distance = -37
             // distance = 6000
-            distance = 43;
+            distance = 50;
             rpm = 8750;
         }
 
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));
         super.addCommands(new WaitCommand(0.5));
-        super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 8, swerveDriveSubsystem));
+        super.addCommands(new Shoot(shooterSubsystem, rpm, .2, 8, swerveDriveSubsystem));
     }
 }

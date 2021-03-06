@@ -89,7 +89,6 @@ public class RobotContainer {
         limeLightSubsystem.setPipeline(0);
         RotateToZero.setInitialAngle(navX.getAngleRad());
         navX.setInitialAngle();
-
         lineUpClose = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navX);
         lineUpMedium = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 0, navX);
         lineUpFar = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 1, navX);

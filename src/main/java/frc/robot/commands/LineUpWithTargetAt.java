@@ -43,6 +43,9 @@ public class LineUpWithTargetAt extends CommandBase {
     @Override
     public void execute() {
         double angleNow = navX.getAngleRad();
+        if (angleNow > Math.PI) {
+            angleNow = angleNow % (2 * Math.PI) - 2 * Math.PI;
+        }
         double strafeDirection = strafePID.calculate(angleNow);
         double rotateDirection = centerTarget.calculate(limelight.getTxRad());
         double distanceNow = EstimateDistance.getDistance(90, limelight.getServoAngleFromGroundRad(),
@@ -75,9 +78,13 @@ public class LineUpWithTargetAt extends CommandBase {
         // isFinished = true;
         // }
 
+        if (Math.abs(angleNow) < 0.05 && Math.abs(distanceNow - distanceToMaintain) < 1
+                && Math.abs(limelight.getTxRad()) < 0.07)
+            isFinished = true;
+
         // // swerveDriveSubsystem.drive(0, 0, rotateDirection * -1);
         swerveDriveSubsystem.drive(zDirection, strafeDirection * -1, rotateDirection * -1);
-
+        // swerveDriveSubsystem.drive(0, 0 * -1, 0 * -1);
         // swerveDriveSubsystem.drive(0, strafeDirection * -1, 0 * -1);
 
     }
@@ -98,9 +105,9 @@ public class LineUpWithTargetAt extends CommandBase {
         maintainDistance = new PIDController(0.015, 0, 0);
         maintainDistance.setSetpoint(distanceToMaintain);
 
-        strafePID = new PIDController(0.1, 0, 0);
+        strafePID = new PIDController(0.2, 0, 0);
         strafePID.setSetpoint(targetAngle);
-        strafePID.enableContinuousInput(0, Math.PI * 2);
+        // strafePID.enableContinuousInput(0, Math.PI * 2);
 
     }
 
@@ -111,5 +118,6 @@ public class LineUpWithTargetAt extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        isFinished = false;
     }
 }
