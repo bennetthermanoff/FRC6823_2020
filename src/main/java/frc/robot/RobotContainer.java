@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Servo;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -7,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import frc.robot.commands.AutoAim3d;
+// import frc.robot.commands.AutoAim3d;
 import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.ChangePipeline;
 // import frc.robot.commands.DeterminePathandDoItCommand;
@@ -17,7 +18,9 @@ import frc.robot.commands.LimeLightPickupBall;
 //import frc.robot.commands.LongRange2d;
 import frc.robot.commands.LongRange2dAutoShoot;
 import frc.robot.commands.LooptyLoop;
+import frc.robot.commands.NewAutoAim;
 import frc.robot.commands.RobotSpaceDrive;
+import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToZero;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -33,13 +36,15 @@ public class RobotContainer {
     public FieldSpaceDrive fieldSpaceDriveCommand;
     private RobotSpaceDrive robotSpaceDriveCommand;
     private AutoCommandGroup auton; // gotta construct auto by giving it the swerve bas
-    private AutoAim3d autoAim3dClose, autoAim3dSuperClose;
-    private AutoAim3d autoAim3dFar;
+    // private AutoAim3d autoAim3dClose, autoAim3dSuperClose;
+    // private AutoAim3d autoAim3dFar;
     private JoystickHandler joystickHandler;
     public LimeLightSubsystem limeLightSubsystem;
     private LiftSubsystem liftSubsystem;
     private LimeLightPickupBall pickupBallCommand;
     private LooptyLoop loop;
+
+    private NewAutoAim lineUpClose, lineUpMedium, lineUpFar;
 
     public LimeLightSubsystem getLimeLightSubsystem() {
         return limeLightSubsystem;
@@ -60,14 +65,16 @@ public class RobotContainer {
     public RobotContainer() {
         swerveDriveSubsystem = new SwerveDriveSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-
         joystickHandler = new JoystickHandler(); // joystick input
-        limeLightSubsystem = new LimeLightSubsystem(0);
+        limeLightSubsystem = new LimeLightSubsystem(3);
         liftSubsystem = new LiftSubsystem(14, 15); // enter CAN Id's for the lift motors.
         navX = new NavXHandler(); // navx input
-        autoAim3dClose = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 0);
-        autoAim3dFar = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 1);
-        autoAim3dSuperClose = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1);
+        // autoAim3dClose = new AutoAim3d(limeLightSubsystem, shooterSubsystem,
+        // swerveDriveSubsystem, 0, navX);
+        // autoAim3dFar = new AutoAim3d(limeLightSubsystem, shooterSubsystem,
+        // swerveDriveSubsystem, 1, navX);
+        // autoAim3dSuperClose = new AutoAim3d(limeLightSubsystem, shooterSubsystem,
+        // swerveDriveSubsystem, -1, navX);
 
         // field space also uses navx to get its angle
         fieldSpaceDriveCommand = new FieldSpaceDrive(swerveDriveSubsystem, joystickHandler, navX);
@@ -77,13 +84,17 @@ public class RobotContainer {
 
         this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0);
 
-        this.loop = new LooptyLoop(swerveDriveSubsystem, limeLightSubsystem,1, navX, 1);
-
+        this.loop = new LooptyLoop(swerveDriveSubsystem, limeLightSubsystem, 1, navX, 1);
         limeLightSubsystem.setServoAngle(65);
         limeLightSubsystem.setPipeline(0);
         RotateToZero.setInitialAngle(navX.getAngleRad());
-        configureButtonBindings();
+        navX.setInitialAngle();
 
+        lineUpClose = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navX);
+        lineUpMedium = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 0, navX);
+        lineUpFar = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 1, navX);
+
+        configureButtonBindings();
     }
 
     public AutoCommandGroup getAutoCommandGroup() {
@@ -101,7 +112,8 @@ public class RobotContainer {
     // }
 
     private void configureButtonBindings() {
-
+        RotateToAngle.setInitialAngle(navX.getAngleRad());
+        RotateToZero.setInitialAngle(navX.getAngleRad());
         // press button 12 to set the swerve just forward, this is for calibration
         // purposes
         // joystickHandler.button(13).whileHeld(() -> swerveDriveSubsystem.drive(0.1, 0,
@@ -119,14 +131,17 @@ public class RobotContainer {
         joystickHandler.button(15).whileActiveContinuous(shooterSubsystem::shooterPID, shooterSubsystem)
                 .whenInactive(shooterSubsystem::stopShooterSpin);
 
+        // joystickHandler.button(5)
+        // .whileActiveOnce(new ConditionalCommand(autoAim3dSuperClose,
+        // new ConditionalCommand(autoAim3dClose, autoAim3dFar, () ->
+        // joystickHandler.getRawAxis6() < .85),
+        // () -> joystickHandler.getRawAxis6() < -.75));
         joystickHandler.button(5)
-                .whileActiveOnce(new ConditionalCommand(autoAim3dSuperClose,
-                        new ConditionalCommand(autoAim3dClose, autoAim3dFar, () -> joystickHandler.getRawAxis6() < .85),
+                .whileActiveOnce(new ConditionalCommand(lineUpClose,
+                        new ConditionalCommand(lineUpMedium, lineUpFar, () -> joystickHandler.getRawAxis6() < .85),
                         () -> joystickHandler.getRawAxis6() < -.75));
-
         joystickHandler.button(11).whenPressed(shooterSubsystem::startConveyorSpin)
                 .whenReleased(shooterSubsystem::stopConveyorSpin);
-
         joystickHandler.button(12).whenPressed(shooterSubsystem::startReverseConveyor)
                 .whenReleased(shooterSubsystem::stopConveyorSpin);
 
@@ -157,10 +172,9 @@ public class RobotContainer {
 
         joystickHandler.button(4)
                 .whileActiveOnce(new LongRange2dAutoShoot(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem));
-
         // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
         // limeLightSubsystem, 0, 100));
-        joystickHandler.button(8).whileActiveOnce(loop);
+        joystickHandler.button(8).whileActiveOnce(new RotateToAngle(swerveDriveSubsystem, navX, Math.PI));
         // joystickHandler.button(8)
         // .whenPressed(() -> SmartDashboard.putNumber("PickupBallCommand stage",
         // pickupBallCommand.getStage()));

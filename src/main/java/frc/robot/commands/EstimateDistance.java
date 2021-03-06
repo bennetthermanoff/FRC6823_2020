@@ -6,7 +6,7 @@ public class EstimateDistance {
     public static double getDistance(double targetHeight, double cameraAngleFromForward, double cameraAngleToTarget) {
         return ((targetHeight - cameraHeight) / Math.tan(cameraAngleFromForward + cameraAngleToTarget))
                 * Math.cos(cameraAngleFromForward);
-
+        // return Math.abs((targetHeight - cameraHeight) /
+        // Math.tan(cameraAngleFromForward + cameraAngleToTarget));
     }
-
 }

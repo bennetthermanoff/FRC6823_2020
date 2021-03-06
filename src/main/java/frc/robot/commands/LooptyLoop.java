@@ -70,6 +70,11 @@ public class LooptyLoop extends CommandBase {
     @Override
     public void initialize() {
         limelight.setPipeline(pipeline);
+        if (pipeline == 0) {
+            limelight.setServoAngle(50);
+        } else if (pipeline == 1) {
+            limelight.setServoAngle(15);
+        }
 
         centerTarget = new PIDController(0.8, 0, 0);
         centerTarget.setSetpoint(0);

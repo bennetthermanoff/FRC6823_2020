@@ -10,6 +10,15 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class NavXHandler {
     private AHRS ahrs;
+    private double initialAngle;
+
+    public double getInitialAngle() {
+        return initialAngle;
+    }
+
+    public void setInitialAngle() {
+        initialAngle = getAngleRad();
+    }
 
     public AHRS getAhrs() {
         return ahrs;
@@ -40,7 +49,7 @@ public class NavXHandler {
     }
 
     public double getAngleRad() {
-        return ahrs.getAngle() * 2 * Math.PI / 360d;
+        return (((ahrs.getAngle() * 2 * Math.PI / 360d) % Math.PI * 2) + Math.PI * 2) % Math.PI * 2;
     }
 
     public double getAngle() {
