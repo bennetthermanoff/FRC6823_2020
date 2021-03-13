@@ -45,6 +45,7 @@ public class FieldSpaceDrive extends CommandBase {
         double tyval = getTransY(xval, yval, robotAngle);
 
         swerveDrive.drive(txval, tyval, spinval);// zoooooom
+        // swerveDrive.weirdDrive(txval, tyval, robotAngle);
     }
 
     private double getTransX(double x, double y, double angle) {
@@ -57,5 +58,6 @@ public class FieldSpaceDrive extends CommandBase {
 
     public void zero() {
         this.fieldAngle = navXHandler.getAngleRad();
+        swerveDrive.setFieldAngle(fieldAngle);
     }
 }

@@ -62,7 +62,7 @@ public class LimeLightPickupBall extends CommandBase {
             // far from ball, need to move towards it using limelight
             swerveDriveSubsystem.drive(distanceCommand, 0, aimCommand * -1);
 
-            if (Math.abs(distController.getPositionError()) < 2 && hasSeenBall) {
+            if (Math.abs(distController.getPositionError()) < 5 && hasSeenBall) {
                 stage = 1;
                 whenStartedGorging = System.currentTimeMillis();
                 shooterSubsystem.startIntakeSpin();
@@ -83,7 +83,7 @@ public class LimeLightPickupBall extends CommandBase {
             }
 
             // stop after 2 seconds
-            if (System.currentTimeMillis() - whenStartedGorging > 2000) {
+            if (System.currentTimeMillis() - whenStartedGorging > 4500) {
                 isItFinished = true;
                 shooterSubsystem.stopIntakeSpin();
 
@@ -95,7 +95,7 @@ public class LimeLightPickupBall extends CommandBase {
                 isItFinished = true;
             }
             // stop after 3 seconds
-            if (System.currentTimeMillis() - whenStartedGorging > 3000) {
+            if (System.currentTimeMillis() - whenStartedGorging > 4000) {
                 isItFinished = true;
                 shooterSubsystem.stopIntakeSpin();
 
@@ -108,7 +108,7 @@ public class LimeLightPickupBall extends CommandBase {
     public void initialize() {
         limeLightSubsystem.setPipeline(1);
         aimController = new PIDController(.016, 0, 0);
-        distController = new PIDController(.016, 0, 0);
+        distController = new PIDController(.05, 0, 0);
 
         distController.setSetpoint(y);
         aimController.setSetpoint(0);

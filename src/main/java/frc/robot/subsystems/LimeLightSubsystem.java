@@ -87,9 +87,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     public double getX() {
         double newX = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[0];
         double newZ = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[2];
-        if (Math.abs(lastknownZ - newZ) > 10)
-            lastKnownX = newX;
-        return lastKnownX;
+        return newX;
     }
 
     public boolean hasTarget() {

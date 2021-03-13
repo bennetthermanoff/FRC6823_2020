@@ -33,14 +33,14 @@ public class RotateToZero extends CommandBase {
         double currentAngle = ((navXHandler.getAngleRad() % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
         double rotateCommand = angleController.calculate(currentAngle);
 
-        if (rotateCommand > 0.2) {
-            rotateCommand = 0.2;
-        } else if (rotateCommand < -0.2) {
-            rotateCommand = -0.2;
+        if (rotateCommand > 0.4) {
+            rotateCommand = 0.4;
+        } else if (rotateCommand < -0.4) {
+            rotateCommand = -0.4;
         }
         SmartDashboard.putNumber("ROTATE", rotateCommand);
         swerveDriveSubsystem.drive(0, 0, rotateCommand);
-        if (Math.abs(currentAngle - initialDegrees) < margin) {
+        if (Math.abs(rotateCommand) < 0.05) {
             isFinished = true;
         }
 
