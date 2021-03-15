@@ -32,8 +32,8 @@ public class GoForward extends CommandBase {
     @Override
     public void execute() {
 
-        swerveDriveSubsystem.weirdDrive(-0.7, 0, navX.getAngleRad());
-        if (timer.hasPeriodPassed(3.3))
+        swerveDriveSubsystem.weirdDrive(-1, 0, navX.getAngleRad());
+        if (timer.hasPeriodPassed(1.5))
             isFinished = true;
     }
 

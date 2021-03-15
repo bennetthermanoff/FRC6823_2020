@@ -40,10 +40,10 @@ public class RotateLeftUntillSeeBall extends CommandBase {
             double currentAngle = limeLightSubsystem.getTxRad();
             rotateCommand = angleController.calculate(currentAngle) * -1;
 
-            if (rotateCommand > 0.3) {
-                rotateCommand = 0.3;
-            } else if (rotateCommand < -0.3) {
-                rotateCommand = -0.3;
+            if (rotateCommand > 0.4) {
+                rotateCommand = 0.4;
+            } else if (rotateCommand < -0.4) {
+                rotateCommand = -0.4;
             }
             SmartDashboard.putNumber("ROTATE", rotateCommand);
             swerveDriveSubsystem.drive(0, 0, rotateCommand);
