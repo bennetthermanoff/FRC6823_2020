@@ -56,9 +56,10 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         GoRight.zero(navXHandler.getAngleRad());
 
         addCommands(new SwitchPipelineCommand(limeLightSubsystem, 1));
-        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
-        addCommands(new RotateRightUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
+        addCommands(new RotateToAngle(swerveDriveSubsystem, navXHandler, +Math.PI / 4));
+        addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));
         addCommands(new RotateLeftUntillSeeBall(swerveDriveSubsystem, limeLightSubsystem, 1));
         addCommands(new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0));

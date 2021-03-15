@@ -22,6 +22,7 @@ public class RotateToAngle extends CommandBase {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.navXHandler = navXHandler;
         this.angle = angle;
+        this.angle = (((this.angle % (2 * Math.PI) + (2 * Math.PI))) % (2 * Math.PI));
         addRequirements(swerveDriveSubsystem);
 
     }
@@ -35,14 +36,15 @@ public class RotateToAngle extends CommandBase {
         double currentAngle = ((navXHandler.getAngleRad() % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
         double rotateCommand = angleController.calculate(currentAngle);
 
-        if (rotateCommand > 0.2) {
-            rotateCommand = 0.2;
-        } else if (rotateCommand < -0.2) {
-            rotateCommand = -0.2;
+        if (rotateCommand > 0.4) {
+            rotateCommand = 0.4;
+        } else if (rotateCommand < -0.4) {
+            rotateCommand = -0.4;
         }
         SmartDashboard.putNumber("ROTATE", rotateCommand);
         swerveDriveSubsystem.drive(0, 0, rotateCommand);
-        if (Math.abs(currentAngle - ((initialDegrees + angle) % Math.PI * 2 + Math.PI) % Math.PI) < margin) {
+
+        if (Math.abs((currentAngle - (initialDegrees + angle)) % (2 * Math.PI)) < margin) {
             isFinished = true;
         }
 
@@ -57,7 +59,8 @@ public class RotateToAngle extends CommandBase {
     public void initialize() {
         angleController = new PIDController(.3, 0, 0);
         angleController.enableContinuousInput(0, Math.PI * 2);
-        angleController.setSetpoint(((initialDegrees + angle) % Math.PI * 2 + Math.PI) % Math.PI);
+
+        angleController.setSetpoint(((initialDegrees + angle) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
     }
 
     @Override
