@@ -78,8 +78,7 @@ public class LineUpWithTargetAt extends CommandBase {
         // isFinished = true;
         // }
 
-        if (Math.abs(angleNow) < 0.2
-                && Math.abs(limelight.getTxRad()) < 0.2)
+        if (Math.abs(angleNow) < 0.2 && Math.abs(limelight.getTxRad()) < 0.2)
             isFinished = true;
 
         // // swerveDriveSubsystem.drive(0, 0, rotateDirection * -1);
@@ -96,7 +95,7 @@ public class LineUpWithTargetAt extends CommandBase {
         targetAngle = navX.getInitialAngle();
         limelight.setPipeline(pipeline);
         if (pipeline == 0) {
-            limelight.setServoAngle(90);
+            limelight.setServoAngle(70);
         } else if (pipeline == 1) {
             limelight.setServoAngle(15);
         }
