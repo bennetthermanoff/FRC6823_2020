@@ -46,7 +46,7 @@ public class MoveTo3d extends CommandBase {
     @Override
     public void initialize() {
         limeLightSubsystem.setPipeline(0);
-        limeLightSubsystem.setServoAngle(60);
+        limeLightSubsystem.setServoAngle(70);
 
         strafeController = new PIDController(.01, 0, 0);
         distController = new PIDController(.015, 0, 0);
