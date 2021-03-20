@@ -20,17 +20,17 @@ public class NewAutoAim extends SequentialCommandGroup {
             // distance = -56;
             // rpm = 5925;
             distance = 102;
-            rpm = 6900;
+            rpm = 6700;
         } else if (position == 1) {
             // distance = -105;
             // rpm = 6575;
             distance = 186;
-            rpm = 6700;
+            rpm = 9000;
 
         } else if (position == -1) {
             // distance = -37
             // distance = 6000
-            distance = 43; // inches?
+            distance = 43; // inches
             rpm = 8750;
         }
 
