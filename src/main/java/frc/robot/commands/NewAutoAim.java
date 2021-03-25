@@ -14,8 +14,8 @@ public class NewAutoAim extends SequentialCommandGroup {
     public NewAutoAim(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
             SwerveDriveSubsystem swerveDriveSubsystem, int position, NavXHandler navX) {
 
-        double distance = 56;
-        double rpm = 8500;
+        double distance = 0;
+        double rpm = 0;
 
         // SmartDashboard.putNumber("Position From the target", position);
         if (position == 0) {
