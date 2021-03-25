@@ -7,6 +7,7 @@ import frc.robot.NavXHandler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NewAutoAim extends SequentialCommandGroup {
 
@@ -16,11 +17,12 @@ public class NewAutoAim extends SequentialCommandGroup {
         double distance = 56;
         double rpm = 8500;
 
+        // SmartDashboard.putNumber("Position From the target", position);
         if (position == 0) {
             // distance = -56;
             // rpm = 5925;
             distance = 102;
-            rpm = 6700;
+            rpm = 6650;
         } else if (position == 1) {
             // distance = -105;
             // rpm = 6575;
