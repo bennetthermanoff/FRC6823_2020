@@ -33,7 +33,10 @@ public class NewAutoAim extends SequentialCommandGroup {
             // distance = -37
             // distance = 6000
             distance = 43; // inches
-            rpm = 8750;
+            rpm = 8800;
+        } else if (position == 2) {
+            distance = 456; // ?
+            rpm = 17000;
         }
 
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));
