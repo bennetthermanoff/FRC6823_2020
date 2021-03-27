@@ -90,7 +90,7 @@ public class RobotContainer {
         this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0);
 
         this.loop = new LooptyLoop(swerveDriveSubsystem, limeLightSubsystem, 1, navX, 1);
-        limeLightSubsystem.setServoAngle(15);
+        limeLightSubsystem.setServoAngle(40);
         limeLightSubsystem.setPipeline(1);
         RotateToZero.setInitialAngle(navX.getAngleRad());
         navX.setInitialAngle();
