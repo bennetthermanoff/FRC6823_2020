@@ -1,20 +1,20 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.AlternateEncoderType;
+//import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
+//import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.WheelDrive;
+//import frc.robot.WheelDrive;
 
 public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax intake, conveyor, leftShoot, rightShoot;
@@ -23,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean manualControl, intakeUp;
     private Encoder encoder;
     private PIDController speedController;
-    private Timer timer;
+    // private Timer timer;
     private int count;
 
     public ShooterSubsystem() {
@@ -96,6 +96,13 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    double margin = 100;
+
+    public boolean shooterReady(double targetRPM) {
+        return Math.abs(targetRPM - encoder.getRate() * 60 / 1024) < 100;
+
+    }
+
     public void shooterPID(double rpm, int ticks, double conveyorPower) {
         speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
         speedController.setI(Robot.PREFS.getDouble("rpmi", 0));
@@ -105,11 +112,12 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
-        out = out > 0 ? out : 0;
+        out = out > -0.05 ? out : -0.05;
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
         count++;
+
         if (count > ticks) {
             conveyor.set(conveyorPower * -1);
             manualControl = true;

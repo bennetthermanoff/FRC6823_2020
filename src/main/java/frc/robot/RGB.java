@@ -75,6 +75,10 @@ public class RGB {
         RGB.set(0.99);
     }
 
+    public void setPattern(double setting){
+        RGB.set(setting);
+    }
+
     /**
      * Set the rgb to color1 color2 waves (look at the rev blinkin and they should
      * be blue and yellow)
@@ -89,6 +93,10 @@ public class RGB {
         else
             setHeartbeatRed();
     }
+
+    /*public void setPattern(String name){
+        RGB.set(RGBColor.getColorCode(RGBColor.));
+    }*/
 
     /**
      * private OverEngineering thread = new OverEngineering(RGB ayyyLmao);

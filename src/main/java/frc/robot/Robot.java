@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public static Preferences PREFS = Preferences.getInstance();
-    public static RGB rgb;
+    public static RGB rgb1;
+    public static RGB rgb2;
     private RobotContainer robotContainer;
 
     @Override
@@ -23,7 +24,11 @@ public class Robot extends TimedRobot {
 
         PREFS = Preferences.getInstance();
 
-        rgb = new RGB(9);
+        // rgb1 = new RGB(9);
+        // rgb2 = new RGB(9);
+
+        // rgb1.setPattern(0.67);
+        // rgb2.setPattern(0.87);
 
         // PREFS.putBoolean("DEBUG_MODE", false);
         SmartDashboard.putBoolean("LemonPipeline", false);
@@ -38,6 +43,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         robotContainer.getAutoCommandGroup().schedule();
+        // robotContainer.getMoreCommands().schedule();
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 package frc.robot;
 
-//import edu.wpi.first.wpilibj.Preferences;
-//import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,19 +10,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class NavXHandler {
     private AHRS ahrs;
-    private double initialAngle;
-
-    public double getInitialAngle() {
-        return initialAngle;
-    }
-
-    public void setInitialAngle() {
-        initialAngle = getAngleRad();
-    }
-
-    public AHRS getAhrs() {
-        return ahrs;
-    }
 
     public NavXHandler() {
         try {
@@ -31,14 +18,16 @@ public class NavXHandler {
              * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
              ***********************************************************************/
             ahrs = new AHRS(SerialPort.Port.kMXP);
+            ahrs.resetDisplacement();
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
     }
 
     public void printEverythingDammit() {
-        SmartDashboard.putNumber("getAngle()", ahrs.getAngle());
 
+        SmartDashboard.putNumber("getAngle()", ahrs.getAngle());
+        SmartDashboard.putNumber("	getActualUpdateRate()", ahrs.getActualUpdateRate());
         SmartDashboard.putNumber("getDisplacementX()", ahrs.getDisplacementX());
         SmartDashboard.putNumber("getDisplacementY()", ahrs.getDisplacementY());
         SmartDashboard.putNumber("getDisplacementZ()", ahrs.getDisplacementZ());
@@ -49,15 +38,7 @@ public class NavXHandler {
     }
 
     public double getAngleRad() {
-        return (((ahrs.getAngle() * 2 * Math.PI / 360d) % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
-    }
-
-    public double getAngle() {
-        return ahrs.getAngleAdjustment();
-    }
-
-    public void zeroYaw() {
-        ahrs.reset();
+        return ahrs.getAngle() * 2 * Math.PI / 360d;
     }
 
     public double yeetPerSecond() {

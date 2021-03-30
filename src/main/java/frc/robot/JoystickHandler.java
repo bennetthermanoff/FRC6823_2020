@@ -1,7 +1,9 @@
 package frc.robot;
 
+//import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.util.MathUtil;
 
@@ -16,12 +18,12 @@ public class JoystickHandler {
     private Joystick joystick;
     private double deadZone;
 
-    public JoystickHandler(int stick) {
-        this.joystick = new Joystick(stick);
+    public JoystickHandler() {
+        this.joystick = new Joystick(3);
         this.deadZone = Robot.PREFS.getDouble("DeadZone", .05);
-    }
+	}
 
-    public double getRawAxis0() {
+	public double getRawAxis0() {
         return joystick.getRawAxis(0);
     }
 
