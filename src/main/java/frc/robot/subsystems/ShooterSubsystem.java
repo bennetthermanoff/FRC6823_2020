@@ -125,6 +125,37 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    public void shooterPower(double power, int ticks, double conveyorPower) {
+        int rpm = 6000;
+                    speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
+        speedController.setI(Robot.PREFS.getDouble("rpmi", 0));
+        speedController.setD(Robot.PREFS.getDouble("rpmd", 0));
+        // if (!Robot.PREFS.getBoolean("PracticeBot", true)) {
+        // rpm *= -1;
+        // }
+        speedController.setSetpoint(rpm);
+        double out = speedController.calculate(encoder.getRate() * 60 / 1024);
+        out = out > 0.00 ? out : 0.00;
+
+        count++;
+
+
+
+        leftShoot.set(out);
+        rightShoot.set(out);
+        SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
+
+        if ()
+
+        leftShoot.set(power);
+        rightShoot.set(power);
+
+        if (count > ticks) {
+            conveyor.set(conveyorPower * -1);
+            manualControl = true;
+        }
+    }
+
     public void startConveyorSpin() {
         conveyor.set(Robot.PREFS.getDouble("ConveyorSpeed", 0) * -1);
         manualControl = true;
