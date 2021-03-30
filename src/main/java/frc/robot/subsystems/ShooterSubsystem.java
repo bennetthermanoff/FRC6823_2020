@@ -126,8 +126,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shooterPower(double power, int ticks, double conveyorPower) {
-        int rpm = 6000;
-                    speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
+        int rpm = 8000;
+        boolean ballEverAtTop = false;
+        speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
         speedController.setI(Robot.PREFS.getDouble("rpmi", 0));
         speedController.setD(Robot.PREFS.getDouble("rpmd", 0));
         // if (!Robot.PREFS.getBoolean("PracticeBot", true)) {
@@ -139,16 +140,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
         count++;
 
+        if (doesSenseBall()) {
+            ballEverAtTop = true;
+        }
 
-
-        leftShoot.set(out);
-        rightShoot.set(out);
+        if (ballEverAtTop) {
+            leftShoot.set(power);
+            rightShoot.set(power);
+        } else {
+            leftShoot.set(out);
+            rightShoot.set(out);
+        }
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
-
-        if ()
-
-        leftShoot.set(power);
-        rightShoot.set(power);
 
         if (count > ticks) {
             conveyor.set(conveyorPower * -1);
@@ -193,6 +196,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public boolean doesSenseBall() {
         return (!bottomSensor.get() || !secondSensor.get());
+    }
+
+    public boolean ballAtTop() {
+        return (!topSensor.get());
     }
 
     @Override
