@@ -78,12 +78,14 @@ public class LineUpWithTargetAt extends CommandBase {
         // isFinished = true;
         // }
 
-        if (Math.abs(angleNow) < 0.03 && Math.abs(limelight.getTxRad()) < 0.03
+        if (Math.abs(angleNow) < 0.04 && Math.abs(limelight.getTxRad() + 0.01) < (0.01)
                 && Math.abs(distanceNow - distanceToMaintain) < 2)
             isFinished = true;
 
         // // swerveDriveSubsystem.drive(0, 0, rotateDirection * -1);
         swerveDriveSubsystem.drive(zDirection, strafeDirection * -1, rotateDirection * -1);
+        // swerveDriveSubsystem.drive(0, 0 * -1, rotateDirection * -1);
+
         // swerveDriveSubsystem.drive(0, strafeDirection * -1, rotateDirection * -1);
 
         // swerveDriveSubsystem.drive(0, 0 * -1, 0 * -1);
@@ -102,7 +104,8 @@ public class LineUpWithTargetAt extends CommandBase {
         }
 
         centerTarget = new PIDController(0.4, 0.05, 0.1);
-        centerTarget.setSetpoint(0);
+        centerTarget.setSetpoint(0 - 0.01);
+        // centerTarget.setSetpoint(0 - 0.04);
 
         maintainDistance = new PIDController(0.005, 0, 0);
         maintainDistance.setSetpoint(distanceToMaintain);
@@ -121,5 +124,6 @@ public class LineUpWithTargetAt extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         isFinished = false;
+        swerveDriveSubsystem.stopMomentum();
     }
 }

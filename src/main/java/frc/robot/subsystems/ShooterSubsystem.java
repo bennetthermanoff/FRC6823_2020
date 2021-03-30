@@ -112,7 +112,8 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
-        out = out > -0.05 ? out : -0.05;
+        out = out > 0.00 ? out : 0.00;
+
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);

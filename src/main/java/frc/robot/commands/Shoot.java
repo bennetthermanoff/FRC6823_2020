@@ -33,7 +33,7 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         // shooterSubsystem.shooterPID(rpm, 20);
-        shooterSubsystem.shooterPID(rpm.value, 20, conveyorPower);
+        shooterSubsystem.shooterPID(rpm.value, 70, conveyorPower);
         swerveDriveSubsystem.drive(0, 0, 0);
     }
 
