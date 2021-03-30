@@ -75,7 +75,7 @@ public class LimeLightPickupBall extends CommandBase {
             // if (!limeLightSubsystem.hasTarget()) {
             // } else {
             // }
-            swerveDriveSubsystem.drive(-.3, 0, 0);
+            swerveDriveSubsystem.drive(-.6, 0, 0);
 
             if (shooterSubsystem.doesSenseBall() == true) {
                 stage = 2;

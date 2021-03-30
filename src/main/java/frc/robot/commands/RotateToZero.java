@@ -38,6 +38,7 @@ public class RotateToZero extends CommandBase {
         } else if (rotateCommand < -0.4) {
             rotateCommand = -0.4;
         }
+
         SmartDashboard.putNumber("ROTATE", rotateCommand);
         swerveDriveSubsystem.drive(0, 0, rotateCommand);
         if (Math.abs(rotateCommand) < 0.05) {

@@ -15,7 +15,7 @@ public class GoForward extends CommandBase {
 
     private NavXHandler navX;
 
-    private double initialAngle = 0;
+    private static double initialAngle = 0;
 
     public GoForward(SwerveDriveSubsystem swerveDriveSubsystem, NavXHandler navx) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
@@ -32,9 +32,24 @@ public class GoForward extends CommandBase {
     @Override
     public void execute() {
 
-        swerveDriveSubsystem.weirdDrive(-0.7, 0, navX.getAngleRad());
-        if (timer.hasPeriodPassed(3.3))
+        double xval = -0.9;
+        double yval = 0;
+        double spinval = 0;
+
+        double robotAngle = navX.getAngleRad() - initialAngle;
+
+        // mapping field space to robot space
+        double txval = getTransX(xval, yval, robotAngle);
+        double tyval = getTransY(xval, yval, robotAngle);
+
+        swerveDriveSubsystem.drive(txval, tyval, spinval);// zoooooom
+
+        // swerveDriveSubsystem.weirdDrive(-1, 0, navX.getAngleRad());
+        if (timer.hasPeriodPassed(1.5)) {
+
             isFinished = true;
+        }
+
     }
 
     @Override
@@ -53,6 +68,18 @@ public class GoForward extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         isFinished = false;
-        swerveDriveSubsystem.drive(0, 0, 0);
+        swerveDriveSubsystem.drive(0, 0, Math.PI / 2);
+    }
+
+    private double getTransX(double x, double y, double angle) {
+        return x * Math.cos(angle) + -y * Math.sin(angle);
+    }
+
+    private double getTransY(double x, double y, double angle) {
+        return x * Math.sin(angle) + y * Math.cos(angle);
+    }
+
+    public static void zero(NavXHandler navx) {
+        initialAngle = navx.getAngleRad();
     }
 }

@@ -78,12 +78,14 @@ public class LineUpWithTargetAt extends CommandBase {
         // isFinished = true;
         // }
 
-        if (Math.abs(angleNow) < 0.2 && Math.abs(distanceNow - distanceToMaintain) < 1
+        if (Math.abs(angleNow) < 0.2
                 && Math.abs(limelight.getTxRad()) < 0.2)
             isFinished = true;
 
         // // swerveDriveSubsystem.drive(0, 0, rotateDirection * -1);
         swerveDriveSubsystem.drive(zDirection, strafeDirection * -1, rotateDirection * -1);
+        swerveDriveSubsystem.drive(0, strafeDirection * -1, rotateDirection * -1);
+
         // swerveDriveSubsystem.drive(0, 0 * -1, 0 * -1);
         // swerveDriveSubsystem.drive(0, strafeDirection * -1, 0 * -1);
 
