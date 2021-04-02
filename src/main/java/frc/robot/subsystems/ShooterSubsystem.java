@@ -112,7 +112,8 @@ public class ShooterSubsystem extends SubsystemBase {
         // }
         speedController.setSetpoint(rpm);
         double out = speedController.calculate(encoder.getRate() * 60 / 1024);
-        out = out > -0.05 ? out : -0.05;
+        out = out > 0.00 ? out : 0.00;
+
         leftShoot.set(out);
         rightShoot.set(out);
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
@@ -122,6 +123,20 @@ public class ShooterSubsystem extends SubsystemBase {
             conveyor.set(conveyorPower * -1);
             manualControl = true;
         }
+    }
+
+    public void shooterPower(double power, int ticks, double conveyorPower) {
+
+        leftShoot.set(power);
+        rightShoot.set(power);
+
+        SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
+        count++;
+        if (count > ticks) {
+            conveyor.set(conveyorPower * -1);
+            manualControl = true;
+        }
+
     }
 
     public void startConveyorSpin() {
@@ -161,6 +176,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public boolean doesSenseBall() {
         return (!bottomSensor.get() || !secondSensor.get());
+    }
+
+    public boolean ballAtTop() {
+        return (!topSensor.get());
     }
 
     @Override

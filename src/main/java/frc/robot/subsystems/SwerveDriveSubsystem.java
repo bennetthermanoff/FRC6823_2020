@@ -174,6 +174,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     }
 
+    public void stopMomentum() {
+        backRight.drive(0, Math.PI / 2.0);
+        backLeft.drive(0, Math.PI);
+        frontRight.drive(0, 3 * Math.PI / 2.0);
+        frontLeft.drive(0, Math.PI * 2.0);
+    }
+
     @Override
     public void periodic() {
         if (Robot.PREFS.getBoolean("PracticeBot", false)) {

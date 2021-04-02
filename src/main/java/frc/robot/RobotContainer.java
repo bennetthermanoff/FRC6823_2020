@@ -47,7 +47,7 @@ public class RobotContainer {
 
     private SwitchBetweenWeirdAndNormal switchCommand;
 
-    private NewAutoAim lineUpClose, lineUpMedium, lineUpFar;
+    private NewAutoAim lineUpClose, lineUpMedium, lineUpFar, lineUpXtra;
 
     public LimeLightSubsystem getLimeLightSubsystem() {
         return limeLightSubsystem;
@@ -90,13 +90,14 @@ public class RobotContainer {
         this.pickupBallCommand = new LimeLightPickupBall(swerveDriveSubsystem, shooterSubsystem, limeLightSubsystem, 0);
 
         this.loop = new LooptyLoop(swerveDriveSubsystem, limeLightSubsystem, 1, navX, 1);
-        limeLightSubsystem.setServoAngle(15);
+        limeLightSubsystem.setServoAngle(35);
         limeLightSubsystem.setPipeline(1);
         RotateToZero.setInitialAngle(navX.getAngleRad());
         navX.setInitialAngle();
         lineUpClose = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, -1, navX);
         lineUpMedium = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 0, navX);
         lineUpFar = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 1, navX);
+        lineUpXtra = new NewAutoAim(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 2, navX);
 
         configureButtonBindings();
     }
@@ -144,6 +145,8 @@ public class RobotContainer {
                 .whileActiveOnce(new ConditionalCommand(lineUpClose,
                         new ConditionalCommand(lineUpMedium, lineUpFar, () -> joystickHandler.getRawAxis6() < .85),
                         () -> joystickHandler.getRawAxis6() < -.75));
+        joystickHandler.button(16).whileActiveOnce(lineUpXtra);
+
         joystickHandler.button(11).whenPressed(shooterSubsystem::startConveyorSpin)
                 .whenReleased(shooterSubsystem::stopConveyorSpin);
         joystickHandler.button(12).whenPressed(shooterSubsystem::startReverseConveyor)

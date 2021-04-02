@@ -17,7 +17,7 @@ public class LimeLightSubsystem extends SubsystemBase {
 
     private double lastknownZ = -75;
     private double lastKnownX = 0;
-    public static final int towardsGround = 15, forward = 50, towardsTarget = 65;
+    public static final int towardsGround = 15, forward = 40, towardsTarget = 65;
 
     public LimeLightSubsystem(int servo) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -42,7 +42,7 @@ public class LimeLightSubsystem extends SubsystemBase {
         return this.servo.getAngle();
     }
 
-    private double forwardAngle = 50;
+    private double forwardAngle = 40;
 
     public double getServoAngleFromGroundRad() {
         return ((this.servo.getAngle() - forwardAngle) / 360.0) * (2 * Math.PI);
@@ -78,16 +78,16 @@ public class LimeLightSubsystem extends SubsystemBase {
     // this is the 3d Distance, should always be negative
     public double getZ() {
         double newZ = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[2];
-        if (newZ < -15 && newZ > -200)
+        if (newZ < -15 && newZ > -300) {
             lastknownZ = newZ;
+            lastKnownX = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[0];
+        }
         return lastknownZ;
     }
 
     // this is the 3d strafe
     public double getX() {
-        double newX = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[0];
-        double newZ = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[2];
-        return newX;
+        return lastKnownX;
     }
 
     public boolean hasTarget() {
