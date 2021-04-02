@@ -13,7 +13,7 @@ public class NewAutoAim extends SequentialCommandGroup {
 
     public NewAutoAim(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
             SwerveDriveSubsystem swerveDriveSubsystem, int position, NavXHandler navX) {
-
+        // commitCheck
         double distance = 0;
         double rpm = 0;
         double power = 0;
