@@ -24,7 +24,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             // rpm = 5925;
             distance = 116;
             // rpm = 6850;
-            power = 0.49;
+            power = 0.48;
         } else if (position == 1) {
             // distance = -105;
             // rpm = 6575;
@@ -32,14 +32,14 @@ public class NewAutoAim extends SequentialCommandGroup {
             // rpm = 9400;
             rpm = 9000;
 
-            power = 0.73;
+            power = 0.61;
 
         } else if (position == -1) {
             // distance = -37
             // distance = 6000
-            distance = 43; // inches
+            distance = 50; // inches
             rpm = 9000;
-            power = 0.8;
+            power = 0.9;
         } else if (position == 2) {
             distance = 400; // ?
             // rpm = 20000;
@@ -51,8 +51,10 @@ public class NewAutoAim extends SequentialCommandGroup {
         // distance * -1));
         if (position == 2)
             super.addCommands(new NewShoot(shooterSubsystem, power, 0.6, 20, swerveDriveSubsystem));
-        else
-            super.addCommands(new NewShoot(shooterSubsystem, power, 0.4, 20, swerveDriveSubsystem));
+        else if (position == 0 || position == 1)
+            super.addCommands(new NewShoot(shooterSubsystem, power, 0.5, 20, swerveDriveSubsystem));
+        else if (position == -1)
+            super.addCommands(new NewShoot(shooterSubsystem, power, 0.3, 20, swerveDriveSubsystem));
 
         // if (power == 0)
         // super.addCommands(new NewShoot(shooterSubsystem, power, 0.4, 20,
