@@ -24,13 +24,13 @@ public class NewAutoAim extends SequentialCommandGroup {
             // rpm = 5925;
             distance = 116;
             // rpm = 6850;
-            power = 0.49;
+            // power = 0.49;
         } else if (position == 1) {
             // distance = -105;
             // rpm = 6575;
             distance = 300;
             // rpm = 9400;
-            rpm = 9000;
+            // rpm = 9000;
 
             power = 0.73;
 
@@ -39,18 +39,21 @@ public class NewAutoAim extends SequentialCommandGroup {
             // distance = 6000
             distance = 43; // inches
             rpm = 9000;
-            power = 0.8;
+            // power = 0.8;
         } else if (position == 2) {
             distance = 400; // ?
-            rpm = 20000;
-            power = 0.5;
+            // rpm = 20000;
+            power = 1;
         }
 
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));
         // super.addCommands(new MoveTo3d(swerveDriveSubsystem, limeLightSubsystem, 0,
         // distance * -1));
 
-        super.addCommands(new NewShoot(shooterSubsystem, power, 0.4, 20, swerveDriveSubsystem));
+        if (power == 0)
+            super.addCommands(new NewShoot(shooterSubsystem, power, 0.4, 20, swerveDriveSubsystem));
+        else
+            super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20, swerveDriveSubsystem));
 
         // if (position == 1 || position == 2) {
         // super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20,
