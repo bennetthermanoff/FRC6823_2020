@@ -24,7 +24,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             // distance = -56;
             // rpm = 5925;
             distance = 124;
-            // rpm = 6850;
+            rpm = 6850;
             // power = (Robot.PREFS.getDouble("Zone Two Power", 0.49));
             power = 0.47;
             // power = 1;
@@ -33,7 +33,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             // rpm = 6575;
             distance = 240;
             // rpm = 9400;
-            rpm = 9000;
+            rpm = 7500;
             // power = (Robot.PREFS.getDouble("Zone Three Power", 0.58));
             power = 0.59;
         } else if (position == -1) {
@@ -45,7 +45,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             power = 0.75;
         } else if (position == 2) {
             distance = 350; // ?
-            // rpm = 20000;
+            rpm = 10250;
             // power = (Robot.PREFS.getDouble("Zone Foi Power", 0.6));
             power = 0.64001;
         }
@@ -53,14 +53,18 @@ public class NewAutoAim extends SequentialCommandGroup {
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));
         // super.addCommands(new MoveTo3d(swerveDriveSubsystem, limeLightSubsystem, 0,
         // distance * -1));
-        if (position == 2)
-            super.addCommands(new NewShoot(shooterSubsystem, power, 1, 20, swerveDriveSubsystem));
-        else if (position == 1)
-            super.addCommands(new NewShoot(shooterSubsystem, power, 1, 80, swerveDriveSubsystem));
-        else if (position == -1)
-            super.addCommands(new NewShoot(shooterSubsystem, power, 0.3, 20, swerveDriveSubsystem));
-        else if (position == 0)
-            super.addCommands(new NewShoot(shooterSubsystem, power, 0.6, 20, swerveDriveSubsystem));
+        // if (position == 2)
+        // super.addCommands(new NewShoot(shooterSubsystem, power, 1, 20,
+        // swerveDriveSubsystem));
+        // else if (position == 1)
+        // super.addCommands(new NewShoot(shooterSubsystem, power, 1, 80,
+        // swerveDriveSubsystem));
+        // else if (position == -1)
+        // super.addCommands(new NewShoot(shooterSubsystem, power, 0.3, 20,
+        // swerveDriveSubsystem));
+        // else if (position == 0)
+        // super.addCommands(new NewShoot(shooterSubsystem, power, 0.6, 20,
+        // swerveDriveSubsystem));
 
         // if (power == 0)
         // super.addCommands(new NewShoot(shooterSubsystem, power, 0.4, 20,
@@ -69,12 +73,10 @@ public class NewAutoAim extends SequentialCommandGroup {
         // super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20,
         // swerveDriveSubsystem));
 
-        // if (position == 1 || position == 2) {
-        // super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20,
-        // swerveDriveSubsystem));
-        // } else {
-        // super.addCommands(new Shoot(shooterSubsystem, rpm, .3, 20,
-        // swerveDriveSubsystem));
-        // }
+        if (position == 1 || position == 2) {
+            super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20, swerveDriveSubsystem));
+        } else {
+            super.addCommands(new Shoot(shooterSubsystem, rpm, .3, 20, swerveDriveSubsystem));
+        }
     }
 }
