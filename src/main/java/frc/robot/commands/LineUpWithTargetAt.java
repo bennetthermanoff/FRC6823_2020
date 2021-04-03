@@ -78,7 +78,7 @@ public class LineUpWithTargetAt extends CommandBase {
         // isFinished = true;
         // }
 
-        if (Math.abs(angleNow) < 0.04 && Math.abs(limelight.getTxRad() + 0.01) < (0.01)
+        if (Math.abs(angleNow) < 0.08 && Math.abs(limelight.getTxRad() + 0.01) < (0.04)
                 && Math.abs(distanceNow - distanceToMaintain) < 2)
             isFinished = true;
 

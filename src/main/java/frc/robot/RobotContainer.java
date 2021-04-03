@@ -117,6 +117,8 @@ public class RobotContainer {
     // }
 
     private void configureButtonBindings() {
+        navX.zeroYaw();
+        swerveDriveSubsystem.setFieldAngle(navX.getAngleRad());
         RotateToAngle.setInitialAngle(navX.getAngleRad());
         RotateToZero.setInitialAngle(navX.getAngleRad());
         // press button 12 to set the swerve just forward, this is for calibration
