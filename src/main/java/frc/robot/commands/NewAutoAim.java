@@ -33,7 +33,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             // rpm = 6575;
             distance = 240;
             // rpm = 9400;
-            rpm = 7500;
+            rpm = 7900;
             // power = (Robot.PREFS.getDouble("Zone Three Power", 0.58));
             power = 0.59;
         } else if (position == -1) {
@@ -45,7 +45,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             power = 0.75;
         } else if (position == 2) {
             distance = 350; // ?
-            rpm = 10250;
+            rpm = 10200;
             // power = (Robot.PREFS.getDouble("Zone Foi Power", 0.6));
             power = 0.64001;
         }

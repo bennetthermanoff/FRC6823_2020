@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 //import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
-//import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean manualControl, intakeUp;
     private Encoder encoder;
     private PIDController speedController;
-    // private Timer timer;
+    private Timer timer;
     private int count;
 
     public ShooterSubsystem() {
@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
         encoder = new Encoder(8, 9, false, Encoder.EncodingType.k1X);
         encoder.setDistancePerPulse(1);
         speedController = new PIDController(Robot.PREFS.getDouble("rpmk", .0001), 0, 0);
-
+        timer = new Timer();
     }
 
     public void startShooterSpin() {
@@ -187,6 +187,11 @@ public class ShooterSubsystem extends SubsystemBase {
         // get returns true when nothing is there
         if (doesSenseBall() && !manualControl && topSensor.get()) {
             conveyor.set(Robot.PREFS.getDouble("ConveyorSpeed", 0) * -1);
+            timer.start();
+            while (!timer.hasElapsed(0.5)) {
+            }
+            timer.stop();
+            timer.reset();
         } else if (!manualControl) {
             conveyor.set(0);
         }
