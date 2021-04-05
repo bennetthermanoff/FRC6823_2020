@@ -33,7 +33,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             // rpm = 6575;
             distance = 240;
             // rpm = 9400;
-            rpm = 7900;
+            rpm = 8100;
             // power = (Robot.PREFS.getDouble("Zone Three Power", 0.58));
             power = 0.59;
         } else if (position == -1) {
@@ -45,7 +45,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             power = 0.75;
         } else if (position == 2) {
             distance = 350; // ?
-            rpm = 10200;
+            rpm = 50000;
             // power = (Robot.PREFS.getDouble("Zone Foi Power", 0.6));
             power = 0.64001;
         }
@@ -73,10 +73,13 @@ public class NewAutoAim extends SequentialCommandGroup {
         // super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20,
         // swerveDriveSubsystem));
 
-        if (position == 1 || position == 2) {
-            super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20, swerveDriveSubsystem));
-        } else {
-            super.addCommands(new Shoot(shooterSubsystem, rpm, .3, 20, swerveDriveSubsystem));
-        }
+        // if (position == 1 || position == 2) {
+        // super.addCommands(new Shoot(shooterSubsystem, rpm, .4, 20,
+        // swerveDriveSubsystem));
+        // } else {
+        // super.addCommands(new Shoot(shooterSubsystem, rpm, .3, 20,
+        // swerveDriveSubsystem));
+        // }
+        super.addCommands(new NewShoot(shooterSubsystem, 1, .3, 20, swerveDriveSubsystem));
     }
 }
