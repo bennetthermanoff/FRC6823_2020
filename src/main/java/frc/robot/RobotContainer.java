@@ -14,6 +14,7 @@ import frc.robot.commands.ChangePipeline;
 // import frc.robot.commands.DeterminePathandDoItCommand;
 import frc.robot.commands.FieldSpaceDrive;
 import frc.robot.commands.LimeLightPickupBall;
+import frc.robot.commands.LineUpWithTargetAt;
 //import frc.robot.commands.LimeLightSeek;
 //import frc.robot.commands.LongRange2d;
 import frc.robot.commands.LongRange2dAutoShoot;
@@ -183,7 +184,7 @@ public class RobotContainer {
                 .whileActiveOnce(new LongRange2dAutoShoot(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem));
         // joystickHandler.button(3).whenPressed(new MoveTo3d(swerveDriveSubsystem,
         // limeLightSubsystem, 0, 100));
-        joystickHandler.button(8).whileActiveOnce(switchCommand);
+        // joystickHandler.button(8).whileActiveOnce(LineUpWithTargetAt.setTargetAngle(navX.getAngle()));
         // joystickHandler.button(8).whileActiveOnce(new
         // RotateToAngle(swerveDriveSubsystem, navX, Math.PI));
         // joystickHandler.button(8)

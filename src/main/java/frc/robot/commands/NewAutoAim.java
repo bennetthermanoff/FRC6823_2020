@@ -81,5 +81,7 @@ public class NewAutoAim extends SequentialCommandGroup {
         // swerveDriveSubsystem));
         // }
         super.addCommands(new NewShoot(shooterSubsystem, 1, .3, 20, swerveDriveSubsystem));
+        // super.addCommands(new NewShoot(shooterSubsystem, 0.75, .3, 20,
+        // swerveDriveSubsystem));
     }
 }

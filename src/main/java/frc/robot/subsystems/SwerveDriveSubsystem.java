@@ -50,7 +50,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         SendableRegistry.addLW(this, "Swerve Drive Subsystem");
 
-        angleController = new PIDController(.6, 0, 0);
+        angleController = new PIDController(.7, 0, 0);
         angleController.enableContinuousInput(0, Math.PI * 2);
         angleController.setSetpoint(0 - Math.PI / 2);
 

@@ -78,7 +78,7 @@ public class LineUpWithTargetAt extends CommandBase {
         // isFinished = true;
         // }
 
-        if (Math.abs(angleNow) < 0.08 && Math.abs(limelight.getTxRad() + 0.01) < (0.04)
+        if (Math.abs(angleNow) < 0.04 && Math.abs(limelight.getTxRad() + 0.01) < (0.04)
                 && Math.abs(distanceNow - distanceToMaintain) < 2)
             isFinished = true;
 
@@ -110,7 +110,7 @@ public class LineUpWithTargetAt extends CommandBase {
         maintainDistance = new PIDController(0.005, 0, 0);
         maintainDistance.setSetpoint(distanceToMaintain);
 
-        strafePID = new PIDController(0.8, 0, 0.1);
+        strafePID = new PIDController(0.8, 0.1, 0.1);
         strafePID.setSetpoint(targetAngle);
         // strafePID.enableContinuousInput(0, Math.PI * 2);
 
@@ -120,6 +120,15 @@ public class LineUpWithTargetAt extends CommandBase {
     public boolean isFinished() {
         return isFinished;
     }
+
+    /**
+     * // * @param targetAngle the targetAngle to set
+     */
+    // public static void setTargetAngle(double targetAngle) {
+    // this.targetAngle = targetAngle;
+    // strafePID.setSetpoint(targetAngle);
+
+    // }
 
     @Override
     public void end(boolean interrupted) {

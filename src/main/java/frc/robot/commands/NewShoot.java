@@ -49,7 +49,7 @@ public class NewShoot extends CommandBase {
         // // } else {
         // // shooterSubsystem.shooterPower(0.6, 20, 0.4);
 
-        shooterSubsystem.shooterPower(power, 0, conveyorPower);
+        shooterSubsystem.shooterPower(power, time, conveyorPower);
 
         SmartDashboard.putBoolean("A ball has reached the top", aBallHasReachedTheTop);
         swerveDriveSubsystem.drive(0, 0, 0);
