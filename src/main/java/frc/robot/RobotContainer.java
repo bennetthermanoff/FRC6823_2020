@@ -171,7 +171,7 @@ public class RobotContainer {
         // joystickHandler.button(16).toggleWhenPressed(
         // new StartEndCommand(shooterSubsystem::coolShooter,
         // shooterSubsystem::stopShooterSpin));
-        joystickHandler.button(16).whenPressed(shooterSubsystem::raiseIntake);
+        joystickHandler.button(8).whenPressed(shooterSubsystem::raiseIntake);
 
         joystickHandler.button(2).whileActiveContinuous(() -> shooterSubsystem.shooterPID(10000, 30), shooterSubsystem)
                 .whenInactive(shooterSubsystem::stopShooterSpin);

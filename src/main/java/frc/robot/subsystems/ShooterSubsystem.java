@@ -59,9 +59,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public void raiseIntake() {
         intakeUp = !intakeUp;
         if (intakeUp) {
-            intakeServo.setAngle(Robot.PREFS.getDouble("intakeRaiseAngle", 0));
+            intakeServo.setAngle(68);
         } else {
-            intakeServo.setAngle(Robot.PREFS.getDouble("intakeLowerAngle", 0));
+            intakeServo.setAngle(0);
         }
     }
 
@@ -130,12 +130,14 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShoot.set(power);
         rightShoot.set(power);
 
-        SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
+        // SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
         count++;
-        if (count > ticks) {
-            conveyor.set(conveyorPower * -1);
-            manualControl = true;
-        }
+        // if (count > ticks) {
+        // conveyor.set(conveyorPower * -1);
+        // manualControl = true;
+        // }
+        conveyor.set(conveyorPower * -1);
+        manualControl = true;
 
     }
 
