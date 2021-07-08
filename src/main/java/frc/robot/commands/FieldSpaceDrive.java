@@ -45,8 +45,8 @@ public class FieldSpaceDrive extends CommandBase {
         double txval = getTransX(xval, yval, robotAngle);
         double tyval = getTransY(xval, yval, robotAngle);
 
-        // swerveDrive.drive(txval, tyval, spinval);// zoooooom
-        swerveDrive.weirdDrive(txval, tyval, spinval, robotAngle);
+        swerveDrive.drive(txval, tyval, spinval);// zoooooom
+        // swerveDrive.weirdDrive(txval, tyval, spinval, robotAngle);
     }
 
     private double getTransX(double x, double y, double angle) {

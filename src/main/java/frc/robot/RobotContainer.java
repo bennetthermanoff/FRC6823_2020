@@ -20,6 +20,7 @@ import frc.robot.commands.LineUpWithTargetAt;
 import frc.robot.commands.LongRange2dAutoShoot;
 import frc.robot.commands.LooptyLoop;
 import frc.robot.commands.NewAutoAim;
+import frc.robot.commands.NewShoot;
 import frc.robot.commands.RobotSpaceDrive;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToZero;
@@ -136,9 +137,13 @@ public class RobotContainer {
         // holding 10 will enable field space drive, instead of robot space
         joystickHandler.button(7).whenHeld(robotSpaceDriveCommand);
 
-        joystickHandler.button(15).whileActiveContinuous(shooterSubsystem::shooterPID, shooterSubsystem)
-                .whenInactive(shooterSubsystem::stopShooterSpin);
+        // joystickHandler.button(15).whileActiveContinuous(shooterSubsystem::shooterPID,
+        // shooterSubsystem)
+        // .whenInactive(shooterSubsystem::stopShooterSpin);
 
+        joystickHandler.button(15)
+                .whileActiveContinuous(new NewShoot(shooterSubsystem, 1, 0.8, 10, swerveDriveSubsystem));
+        // .whenInactive(shooterSubsystem::stopShooterSpin);
         // joystickHandler.button(5)
         // .whileActiveOnce(new ConditionalCommand(autoAim3dSuperClose,
         // new ConditionalCommand(autoAim3dClose, autoAim3dFar, () ->

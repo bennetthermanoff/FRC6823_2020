@@ -143,8 +143,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         // y1 *= -1;
         // x1 *= -1;
 
-        // x2 = rotateCommand + x2;
-        x2 = rotateCommand;
+        x2 = rotateCommand + x2;
+        // x2 = rotateCommand;
 
         double a = x1 - x2 * (L / r);
         double b = x1 + x2 * (L / r);
