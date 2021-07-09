@@ -26,7 +26,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             distance = 124;
             rpm = 6850;
             // power = (Robot.PREFS.getDouble("Zone Two Power", 0.49));
-            power = 0.47;
+            power = 0.50; // within 5% power
             // power = 1;
         } else if (position == 1) {
             // distance = -105;
@@ -47,7 +47,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             distance = 350; // ?
             rpm = 50000;
             // power = (Robot.PREFS.getDouble("Zone Foi Power", 0.6));
-            power = 0.64001;
+            power = 1;
         }
 
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));

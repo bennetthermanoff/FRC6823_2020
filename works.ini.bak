@@ -1,7 +1,7 @@
 [NetworkTables Storage 3.0]
 string "/Preferences/.type"="RobotPreferences"
-double "/Preferences/BLOffset"=3.6
-double "/Preferences/BROffset"=3.7
+double "/Preferences/BLOffset"=3.5
+double "/Preferences/BROffset"=3.64
 double "/Preferences/ConveyorSpeed"=1
 boolean "/Preferences/DEBUG_MODE"=false
 double "/Preferences/DeadZone"=0
@@ -9,8 +9,8 @@ double "/Preferences/Encoder [0] getVoltage"=3.68286
 double "/Preferences/Encoder [1] getVoltage"=3.70361
 double "/Preferences/Encoder [2] getVoltage"=1.20728
 double "/Preferences/Encoder [3] getVoltage"=1.20728
-double "/Preferences/FLOffset"=4.2
-double "/Preferences/FROffset"=-2.45
+double "/Preferences/FLOffset"=4.1
+double "/Preferences/FROffset"=2.5
 double "/Preferences/IntakeSpeed"=-0.5
 double "/Preferences/KpStrafe"=0.1
 boolean "/Preferences/LemonPipeline"=true
