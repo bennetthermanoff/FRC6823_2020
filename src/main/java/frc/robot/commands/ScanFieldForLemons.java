@@ -7,8 +7,8 @@ import frc.robot.subsystems.*;
 public class ScanFieldForLemons extends CommandBase {
 
     private LimeLightSubsystem limeLightSubsystem;
-    //private Timer timer;
-    //private boolean timerOn = false;
+    // private Timer timer;
+    // private boolean timerOn = false;
     private boolean isFinished = false;
     private double angleToLemon;
 
@@ -23,7 +23,7 @@ public class ScanFieldForLemons extends CommandBase {
         if (limeLightSubsystem.hasTarget()) {
             angleToLemon = limeLightSubsystem.getTx();
             isFinished = true;
-            AutoCommandGroup.setAngleToLemon(angleToLemon);
+            // AutoCommandGroup.setAngleToLemon(angleToLemon);
         }
 
     }

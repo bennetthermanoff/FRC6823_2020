@@ -10,9 +10,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class NewAutoAim extends SequentialCommandGroup {
+public class NewAutoAimAutonomous extends SequentialCommandGroup {
 
-    public NewAutoAim(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
+    public NewAutoAimAutonomous(LimeLightSubsystem limeLightSubsystem, ShooterSubsystem shooterSubsystem,
             SwerveDriveSubsystem swerveDriveSubsystem, int position, NavXHandler navX) {
         // commitCheck
         double distance = 0;
@@ -24,7 +24,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             // distance = -56;
             // rpm = 5925;
             distance = 124;
-            rpm = 5650;
+            rpm = 5200;
             // power = (Robot.PREFS.getDouble("Zone Two Power", 0.49));
             power = 0.50; // within 5% power
             // power = 1;
