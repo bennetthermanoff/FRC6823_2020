@@ -190,7 +190,7 @@ public class ShooterSubsystem extends SubsystemBase {
         if (doesSenseBall() && !manualControl && topSensor.get()) {
             conveyor.set(Robot.PREFS.getDouble("ConveyorSpeed", 0) * -1);
             timer.start();
-            while (!timer.hasElapsed(0.1)) {
+            while (!timer.hasElapsed(0.01)) {
             }
             timer.stop();
             timer.reset();
