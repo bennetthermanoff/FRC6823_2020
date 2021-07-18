@@ -83,7 +83,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
                 robotContainer.swerveDriveSubsystem, -1, robotContainer.getNavXHandler()));
 
         // addCommands(new GoForward(robotContainer.swerveDriveSubsystem,
-        // robotContainer.getNavXHandler()));
+        // robotContainer.getNavXHandler(), 0.5));
     }
 
 }

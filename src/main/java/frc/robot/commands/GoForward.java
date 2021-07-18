@@ -12,19 +12,20 @@ public class GoForward extends CommandBase {
     private boolean isFinished = false;
     private double direction;
     private Timer timer;
+    private double time;
 
     private NavXHandler navX;
 
     private static double initialAngle = 0;
 
-    public GoForward(SwerveDriveSubsystem swerveDriveSubsystem, NavXHandler navx) {
+    public GoForward(SwerveDriveSubsystem swerveDriveSubsystem, NavXHandler navx, double time) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         // direction is always forward in radians (right is 0, left is PI, forward is
         // Pi/2. back is 3PI/2)
         this.direction = Math.PI / 2.0;
         addRequirements(swerveDriveSubsystem);
         timer = new Timer();
-
+        this.time = time;
         this.navX = navx;
 
     }
@@ -45,7 +46,7 @@ public class GoForward extends CommandBase {
         swerveDriveSubsystem.drive(txval, tyval, spinval);// zoooooom
 
         // swerveDriveSubsystem.weirdDrive(-1, 0, navX.getAngleRad());
-        if (timer.hasPeriodPassed(1.5)) {
+        if (timer.hasPeriodPassed(time)) {
 
             isFinished = true;
         }
