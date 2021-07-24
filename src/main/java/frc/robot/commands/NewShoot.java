@@ -48,6 +48,7 @@ public class NewShoot extends CommandBase {
         // // if (aBallHasReachedTheTop) {
         // // } else {
         // // shooterSubsystem.shooterPower(0.6, 20, 0.4);
+        shooterSubsystem.raiseIntake();
 
         shooterSubsystem.shooterPower(power, time, conveyorPower);
 

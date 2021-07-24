@@ -45,7 +45,7 @@ public class NewAutoAim extends SequentialCommandGroup {
             power = 0.75;
         } else if (position == 2) {
             distance = 350; // ?
-            rpm = (Robot.PREFS.getDouble("Zone 4 rpm", 50000)); // Does not actually go 50000 rpm, so maximum value
+            rpm = (Robot.PREFS.getDouble("Zone 4 rpm", 50000)); // Does not actually go 50000 rpm, so maximum valuesad
             // power = (Robot.PREFS.getDouble("Zone Foi Power", 0.6));
             power = 1;
         }
