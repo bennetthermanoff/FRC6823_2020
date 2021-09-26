@@ -31,12 +31,20 @@ public class JoystickHandler {
         return joystick.getRawAxis(1);
     }
 
-    public double getRawAxis5() {
-        return joystick.getRawAxis(5);
-    }
-
     public double getRawAxis2() {
         return joystick.getRawAxis(2);
+    }
+
+    public double getRawAxis3() {
+        return joystick.getRawAxis(3);
+    }
+
+    public double getRawAxis4() {
+        return joystick.getRawAxis(4);
+    }
+
+    public double getRawAxis5() {
+        return joystick.getRawAxis(5);
     }
 
     public double getRawAxis6() {

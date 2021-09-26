@@ -51,6 +51,7 @@ public class NewAutoAimAutonomous extends SequentialCommandGroup {
         }
 
         super.addCommands(new LineUpWithTargetAt(swerveDriveSubsystem, limeLightSubsystem, 0, navX, distance));
+
         // super.addCommands(new MoveTo3d(swerveDriveSubsystem, limeLightSubsystem, 0,
         // distance * -1));
         // if (position == 2)

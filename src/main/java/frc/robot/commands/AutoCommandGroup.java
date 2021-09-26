@@ -79,6 +79,9 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(new SwitchPipelineCommand(robotContainer.limeLightSubsystem, 0));
         addCommands(new RotateRightUntillSeeBall(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem,
                 0));
+        addCommands(new LineUpWithTargetAt(robotContainer.swerveDriveSubsystem, robotContainer.limeLightSubsystem, 0,
+                robotContainer.getNavXHandler(), 50));
+        addCommands(new Shoot(robotContainer.shooterSubsystem, 9000, 0.3, 20, robotContainer.swerveDriveSubsystem));
         addCommands(new NewAutoAimAutonomous(robotContainer.limeLightSubsystem, robotContainer.shooterSubsystem,
                 robotContainer.swerveDriveSubsystem, -1, robotContainer.getNavXHandler()));
 
