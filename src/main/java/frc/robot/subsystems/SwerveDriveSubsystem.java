@@ -50,9 +50,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         SendableRegistry.addLW(this, "Swerve Drive Subsystem");
 
-        angleController = new PIDController(.3, 0, 0);
+        angleController = new PIDController(.6, 0, 0);
         angleController.enableContinuousInput(0, Math.PI * 2);
-        angleController.setSetpoint(0);
+        angleController.setSetpoint(0 - Math.PI / 2);
 
     }
 
@@ -107,15 +107,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     }
 
-    public void weirdDrive(double x1, double y1, double robotAngle) {
+    public void weirdDrive(double x1, double y1, double x2, double robotAngle) {
         double rotateCommand = angleController.calculate(robotAngle);
-        if (rotateCommand > 0.2) {
-            rotateCommand = 0.2;
-        } else if (rotateCommand < -0.2) {
-            rotateCommand = -0.2;
+        if (rotateCommand > 0.5) {
+            rotateCommand = 0.5;
+        } else if (rotateCommand < -0.5) {
+            rotateCommand = -0.5;
         }
 
-        double x2;
         double r = Math.sqrt((L * L) + (W * W));
         double backRightSpeed;//
         double backLeftSpeed;
@@ -144,13 +143,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         // y1 *= -1;
         // x1 *= -1;
 
-        x2 = rotateCommand;
-
-        if (Math.abs(x1) > Math.abs(y1)) {
-            y1 = 0;
-        } else {
-            x1 = 0;
-        }
+        x2 = rotateCommand + x2;
 
         double a = x1 - x2 * (L / r);
         double b = x1 + x2 * (L / r);

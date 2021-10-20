@@ -37,6 +37,7 @@ public class FieldSpaceDrive extends CommandBase {
         double xval = joystickHandler.getAxis1() * speedRate;
         double yval = joystickHandler.getAxis0() * speedRate;
         double spinval = joystickHandler.getAxis5() * turnRate;
+        double ok = -69;
 
         double robotAngle = navXHandler.getAngleRad() - fieldAngle;
 
@@ -45,7 +46,7 @@ public class FieldSpaceDrive extends CommandBase {
         double tyval = getTransY(xval, yval, robotAngle);
 
         swerveDrive.drive(txval, tyval, spinval);// zoooooom
-        // swerveDrive.weirdDrive(txval, tyval, 0);
+        // swerveDrive.weirdDrive(txval, tyval, spinval, robotAngle);
     }
 
     private double getTransX(double x, double y, double angle) {

@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.MathUtil;
@@ -75,6 +76,8 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
 
         if (Robot.PREFS.getBoolean("DEBUG_MODE", false)) {
             Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
+                    currentEncoderValue);
+            SmartDashboard.putNumber("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
                     currentEncoderValue);
             Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] setpoint", setpoint);
             Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] pidOut", pidOut);
