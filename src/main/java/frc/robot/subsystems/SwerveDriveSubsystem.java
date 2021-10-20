@@ -90,7 +90,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         double c = y1 - x2 * (W / r);
         double d = y1 + x2 * (W / r);
 
-        backRightSpeed = Math.sqrt((b * b) + (c * c));//
+        backRightSpeed = Math.sqrt((b * b) + (c * c));//sqrt((xcos(theta)-ysin(theta)))
         backLeftSpeed = Math.sqrt((a * a) + (c * c));
         frontRightSpeed = Math.sqrt((b * b) + (d * d));
         frontLeftSpeed = Math.sqrt((a * a) + (d * d));//
