@@ -10,12 +10,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.MathUtil;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 public class SwerveWheelModuleSubsystem extends SubsystemBase {
     private final double MAX_VOLTS = 4.95; // Voltage for the Andymark Absolute Encoders used in the SDS kit.
     private final double P = .5;
 
-    private CANSparkMax angleMotor;
-    private CANSparkMax speedMotor;
+    private TalonFX angleMotor;
+    private TalonFX speedMotor;
     private PIDController pidController;
     private AnalogInput angleEncoder;
 
@@ -24,8 +27,8 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
     public SwerveWheelModuleSubsystem(int angleMotorChannel, int speedMotorChannel, int angleEncoderChannel,
             double encoderOffset) {
         // We're using CANSparkMax controllers, but not their encoders.
-        this.angleMotor = new CANSparkMax(angleMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
-        this.speedMotor = new CANSparkMax(speedMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
+        this.angleMotor = new TalonFX(angleMotorChannel);
+        this.speedMotor = new TalonFX(speedMotorChannel);
         this.angleEncoder = new AnalogInput(angleEncoderChannel);
         this.encoderOffset = encoderOffset;
 
@@ -67,12 +70,12 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
             setpoint = (setpoint + MAX_VOLTS / 2) % MAX_VOLTS;
         }
 
-        speedMotor.set(speed); // sets motor speed.
+        speedMotor.set(TalonFXControlMode.PercentOutput, speed); // sets motor speed.
         pidController.setSetpoint(setpoint);
 
         double pidOut = pidController.calculate(currentEncoderValue, setpoint);
 
-        angleMotor.set(-pidOut);
+        angleMotor.set(TalonFXControlMode.PercentOutput, -pidOut);
 
         if (Robot.PREFS.getBoolean("DEBUG_MODE", false)) {
             Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
@@ -102,7 +105,7 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
 
     public void stop() {
         pidController.setP(0);
-        speedMotor.set(0);
+        speedMotor.set(TalonFXControlMode.PercentOutput, 0);
     }
 
     public void restart() {
