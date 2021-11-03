@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,8 +22,8 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
     public SwerveWheelModuleSubsystem(int angleMotorChannel, int speedMotorChannel, int angleEncoderChannel,
             double encoderOffset) {
         // We're using CANSparkMax controllers, but not their encoders.
-        this.angleMotor = new TalonFX(angleMotorChannel);
-        this.speedMotor = new TalonFX(speedMotorChannel);
+        this.angleMotor = (angleMotorChannel);
+        this.speedMotor = (speedMotorChannel);
         this.angleEncoder = new AnalogInput(angleEncoderChannel);
         this.encoderOffset = encoderOffset;
 
