@@ -1,7 +1,9 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.util.MathUtil;
@@ -9,16 +11,16 @@ import frc.robot.util.MathUtil;
 public class WheelDrive {
     private final double MAX_VOLTS = 4.95; // Voltage for the Andymark Absolute Encoders used in the SDS kit.
 
-    private CANSparkMax angleMotor;
-    private CANSparkMax speedMotor;
+    private TalonFX angleMotor;
+    private TalonFX speedMotor;
     private PIDController pidController;
     private AnalogInput angleEncoder;
 
     private double encoderOffset;
 
     public WheelDrive(int angleMotor, int speedMotor, AnalogInput angleEncoder, double encoderOffset) {
-        this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
-        this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless); // We're using CANSparkMax controllers, but
+        this.angleMotor = new TalonFX(angleMotor);
+        this.speedMotor = new TalonFX(speedMotor); // We're using CANSparkMax controllers, but
                                                                              // not their encoders.
         this.angleEncoder = angleEncoder;
         this.encoderOffset = encoderOffset;
@@ -57,12 +59,12 @@ public class WheelDrive {
             setpoint = (setpoint + MAX_VOLTS / 2) % MAX_VOLTS;
         }
 
-        speedMotor.set(speed); // sets motor speed.
+        speedMotor.set(ControlMode.PercentOutput, speed); // sets motor speed.
         pidController.setSetpoint(setpoint);
 
         double pidOut = pidController.calculate(currentEncoderValue, setpoint);
 
-        angleMotor.set(-pidOut);
+        angleMotor.set(ControlMode.PercentOutput, -pidOut);
 
         if (Robot.PREFS.getBoolean("DEBUG_MODE", false)) {
             Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
@@ -91,7 +93,7 @@ public class WheelDrive {
 
     public void stop() {
         pidController.setP(0);
-        speedMotor.set(0);
+        speedMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public void restart() {

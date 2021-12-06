@@ -19,7 +19,7 @@ import frc.robot.commands.LongRange2dAutoShoot;
 import frc.robot.commands.RobotSpaceDrive;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.LiftSubsystem;
+//import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;;
 
@@ -35,7 +35,7 @@ public class RobotContainer {
     private AutoAim3d autoAim3dFar;
     private JoystickHandler joystickHandler;
     public LimeLightSubsystem limeLightSubsystem;
-    private LiftSubsystem liftSubsystem;
+    //private LiftSubsystem liftSubsystem;
     private LimeLightPickupBall pickupBallCommand;
 
     public LimeLightSubsystem getLimeLightSubsystem() {
@@ -60,7 +60,7 @@ public class RobotContainer {
 
         joystickHandler = new JoystickHandler(); // joystick input
         limeLightSubsystem = new LimeLightSubsystem(0);
-        liftSubsystem = new LiftSubsystem(14, 15); // enter CAN Id's for the lift motors.
+        //liftSubsystem = new LiftSubsystem(14, 15); // enter CAN Id's for the lift motors.
         navX = new NavXHandler(); // navx input
         autoAim3dClose = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 0);
         autoAim3dFar = new AutoAim3d(limeLightSubsystem, shooterSubsystem, swerveDriveSubsystem, 1);
@@ -103,8 +103,8 @@ public class RobotContainer {
         // this will set the current orientation to be "forward" for field drive
         joystickHandler.button(3).whenPressed(fieldSpaceDriveCommand::zero);
 
-        joystickHandler.button(14).whenPressed(liftSubsystem::startUp).whenReleased(liftSubsystem::stop);
-        joystickHandler.button(13).whenPressed(liftSubsystem::startReverse).whenReleased(liftSubsystem::stop);
+        //joystickHandler.button(14).whenPressed(liftSubsystem::startUp).whenReleased(liftSubsystem::stop);
+        //joystickHandler.button(13).whenPressed(liftSubsystem::startReverse).whenReleased(liftSubsystem::stop);
 
         // holding 10 will enable field space drive, instead of robot space
         joystickHandler.button(7).whenHeld(robotSpaceDriveCommand);
