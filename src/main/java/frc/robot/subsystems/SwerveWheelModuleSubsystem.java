@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogInput;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,16 +18,18 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
     private TalonFX angleMotor;
     private TalonFX speedMotor;
     private PIDController pidController;
-    private AnalogInput angleEncoder;
+    private CANCoder angleEncoder;
 
     private double encoderOffset;
+    private int angleEncoderChannel;
 
     public SwerveWheelModuleSubsystem(int angleMotorChannel, int speedMotorChannel, int angleEncoderChannel,
             double encoderOffset) {
         // We're using CANSparkMax controllers, but not their encoders.
         this.angleMotor = new TalonFX(angleMotorChannel);
         this.speedMotor = new TalonFX(speedMotorChannel);
-        this.angleEncoder = new AnalogInput(angleEncoderChannel);
+        this.angleEncoder = new CANCoder(angleEncoderChannel);
+        this.angleEncoderChannel = angleEncoderChannel;
         this.encoderOffset = encoderOffset;
 
         pidController = new PIDController(P, 0, 0); // This is the PID constant, we're not using any
@@ -51,7 +55,7 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
     // angle is a value between -1 to 1
     public void drive(double speed, double angle) {
 
-        double currentEncoderValue = (angleEncoder.getVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from
+        double currentEncoderValue = (angleEncoder.getBusVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from
         // encoder
 
         // Optimization offset can be calculated here.
@@ -73,12 +77,9 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
 
         angleMotor.set(ControlMode.PercentOutput, -pidOut);
 
-        if (Robot.PREFS.getBoolean("DEBUG_MODE", false)) {
-            Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
-                    currentEncoderValue);
-            Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] setpoint", setpoint);
-            Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] pidOut", pidOut);
-        }
+        SmartDashboard.putNumber("Encoder [" + angleEncoderChannel + "] currentEncoderValue", currentEncoderValue);
+        SmartDashboard.putNumber("Encoder [" + angleEncoderChannel + "] setpoint", setpoint);
+        SmartDashboard.putNumber("Encoder [" + angleEncoderChannel + "] pidOut", pidOut);
 
         // This is for testing to find the max value of an encoder. The encoders we use
         // (and most encoders) give values from 0 - 4.95.
@@ -94,7 +95,7 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
     // this method outputs voltages of the encoder to the smartDashBoard, useful for
     // calibrating the encoder offsets
     public double getVoltages() {
-        return angleEncoder.getVoltage();
+        return angleEncoder.getBusVoltage();
     }
 
     public void stop() {

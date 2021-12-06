@@ -3,6 +3,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -14,11 +15,11 @@ public class WheelDrive {
     private TalonFX angleMotor;
     private TalonFX speedMotor;
     private PIDController pidController;
-    private AnalogInput angleEncoder;
+    private CANCoder angleEncoder;
 
     private double encoderOffset;
 
-    public WheelDrive(int angleMotor, int speedMotor, AnalogInput angleEncoder, double encoderOffset) {
+    public WheelDrive(int angleMotor, int speedMotor, CANCoder angleEncoder, double encoderOffset) {
         this.angleMotor = new TalonFX(angleMotor);
         this.speedMotor = new TalonFX(speedMotor); // We're using CANSparkMax controllers, but
                                                                              // not their encoders.
@@ -44,7 +45,7 @@ public class WheelDrive {
     // angle is a value between -1 to 1
     public void drive(double speed, double angle) {
 
-        double currentEncoderValue = (angleEncoder.getVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from
+        double currentEncoderValue = (angleEncoder.getBusVoltage() + encoderOffset) % MAX_VOLTS; // Combines reading from
                                                                                               // encoder
 
         // Optimization offset can be calculated here.
@@ -66,12 +67,12 @@ public class WheelDrive {
 
         angleMotor.set(ControlMode.PercentOutput, -pidOut);
 
-        if (Robot.PREFS.getBoolean("DEBUG_MODE", false)) {
-            Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
-                    currentEncoderValue);
-            Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] setpoint", setpoint);
-            Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] pidOut", pidOut);
-        }
+        // if (Robot.PREFS.getBoolean("DEBUG_MODE", false)) {
+        //     Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] currentEncoderValue",
+        //             currentEncoderValue);
+        //     Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] setpoint", setpoint);
+        //     Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] pidOut", pidOut);
+        // }
 
         // This is for testing to find the max value of an encoder. The encoders we use
         // (and most encoders) give values from 0 - 4.95.
@@ -87,8 +88,8 @@ public class WheelDrive {
     // this method outputs voltages of the encoder to the smartDashBoard, useful for
     // calibrating the encoder offsets
     public double getVoltages() {
-        Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
-        return angleEncoder.getVoltage();
+        //Robot.PREFS.putDouble("Encoder [" + angleEncoder.getChannel() + "] getVoltage", angleEncoder.getVoltage());
+        return angleEncoder.getBusVoltage();
     }
 
     public void stop() {
