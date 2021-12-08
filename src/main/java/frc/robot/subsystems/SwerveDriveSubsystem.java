@@ -26,11 +26,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     private SwerveWheelModuleSubsystem frontLeft;
 
     public SwerveDriveSubsystem() {
-        backRight = new SwerveWheelModuleSubsystem(7, 6, 3, -4.70);// These are the motors and encoder ports for swerve
-                                                                   // drive,
-        backLeft = new SwerveWheelModuleSubsystem(5, 4, 2, .884);
-        frontRight = new SwerveWheelModuleSubsystem(3, 2, 1, .697);
-        frontLeft = new SwerveWheelModuleSubsystem(1, 8, 0, .800);// angle,speed,encoder,offset (offset gets changed by
+        backRight = new SwerveWheelModuleSubsystem(7, 6, 3, 180);// These are the motors and encoder ports for swerve drive,
+        backLeft = new SwerveWheelModuleSubsystem(5, 4, 2, 90);
+        frontRight = new SwerveWheelModuleSubsystem(3, 2, 1, 45);
+        frontLeft = new SwerveWheelModuleSubsystem(1, 8, 0, 270);// angle,speed,encoder,offset (offset gets changed by
       // smartdashboard in calibration.)
 
         SendableRegistry.addChild(this, backRight);
@@ -72,16 +71,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (Robot.PREFS.getBoolean("PracticeBot", false)) {
-            backRight.setZero(Robot.PREFS.getDouble("BROffsetPractice", 0) + 1.25);
-            backLeft.setZero(Robot.PREFS.getDouble("BLOffsetPractice", 0) + 1.25);
-            frontRight.setZero(Robot.PREFS.getDouble("FROffsetPractice", 0) + 1.25);
-            frontLeft.setZero(Robot.PREFS.getDouble("FLOffsetPractice", 0) + 1.25);
-        } else {
-            backRight.setZero(Robot.PREFS.getDouble("BROffset", 0) + 1.25);
-            backLeft.setZero(Robot.PREFS.getDouble("BLOffset", 0) + 1.25);
-            frontRight.setZero(Robot.PREFS.getDouble("FROffset", 0) + 1.25);
-            frontLeft.setZero(Robot.PREFS.getDouble("FLOffset", 0) + 1.25);
-        }
+        // if (Robot.PREFS.getBoolean("PracticeBot", false)) {
+        //     backRight.setZero(Robot.PREFS.getDouble("BROffsetPractice", 0) + 1.25);
+        //     backLeft.setZero(Robot.PREFS.getDouble("BLOffsetPractice", 0) + 1.25);
+        //     frontRight.setZero(Robot.PREFS.getDouble("FROffsetPractice", 0) + 1.25);
+        //     frontLeft.setZero(Robot.PREFS.getDouble("FLOffsetPractice", 0) + 1.25);
+        // } else {
+        backRight.setZero(270);
+        backLeft.setZero(90);
+        frontRight.setZero(135);
+        frontLeft.setZero(270);
+        // }
     }
 }

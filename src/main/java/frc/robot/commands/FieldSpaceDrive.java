@@ -26,8 +26,8 @@ public class FieldSpaceDrive extends CommandBase {
     public void execute() {
         navXHandler.printEverythingDammit();
 
-        double speedRate = Robot.PREFS.getDouble("SpeedRate", 1);
-        double turnRate = Robot.PREFS.getDouble("TurnRate", 1);
+        double speedRate = 0.05;
+        double turnRate = 0.01;
 
         if (joystickHandler.isYeet()) {
             speedRate = 1;
