@@ -77,10 +77,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         //     frontRight.setZero(Robot.PREFS.getDouble("FROffsetPractice", 0) + 1.25);
         //     frontLeft.setZero(Robot.PREFS.getDouble("FLOffsetPractice", 0) + 1.25);
         // } else {
-        backRight.setZero(180);
-        backLeft.setZero(90);
-        frontRight.setZero(135);
-        frontLeft.setZero(270);
+        backRight.setZero(-180);
+        backLeft.setZero(0);
+        frontRight.setZero(45);
+        frontLeft.setZero(152);
         // }
     }
 }
