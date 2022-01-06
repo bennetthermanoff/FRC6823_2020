@@ -73,7 +73,7 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
         //     setpoint = (setpoint + 180) % 360;
         // }
 
-        speedMotor.set(ControlMode.PercentOutput, 50); // sets motor speed. Set back to speed
+        speedMotor.set(ControlMode.PercentOutput, speed); // sets motor speed. Set back to speed
         pidController.setSetpoint(setpoint);
 
         double pidOut = pidController.calculate(currentEncoderValue, setpoint);
