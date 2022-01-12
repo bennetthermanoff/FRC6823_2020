@@ -67,7 +67,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         backLeft.drive(backLeftSpeed, backLeftAngle);
         frontRight.drive(frontRightSpeed, frontRightAngle);
         frontLeft.drive(frontLeftSpeed, frontLeftAngle);
-        //SmartDashboard.putNumber("Backleft Target Angle", backRightAngle);
+        SmartDashboard.putNumber("Backright Speed", backRightSpeed);
+        SmartDashboard.putNumber("Backleft Speed", backLeftSpeed);
+        SmartDashboard.putNumber("Frontright Speed", frontRightSpeed);
+        SmartDashboard.putNumber("Frontleft Speed", frontLeftSpeed);
     }
 
     @Override
@@ -80,10 +83,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         // } else {
 
         //Do NOT make negative!!!!
-        backRight.setZero(185);
-        backLeft.setZero(0);
-        frontRight.setZero(45);
-        frontLeft.setZero(152);
+        //adding is counter clockwise, subtratcting is clockwise
+        backRight.setZero(50);
+        backLeft.setZero(180);
+        frontRight.setZero(282);
+        frontLeft.setZero(337);
         
         // }
     }
