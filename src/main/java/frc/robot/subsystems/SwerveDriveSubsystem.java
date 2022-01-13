@@ -84,10 +84,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         //Do NOT make negative!!!!
         //adding is counter clockwise, subtratcting is clockwise
-        backRight.setZero(90);
+        backRight.setZero(80);
         backLeft.setZero(175);
-        frontRight.setZero(282);
-        frontLeft.setZero(343);
+        frontRight.setZero(280);
+        frontLeft.setZero(340);
         
         // }
     }
