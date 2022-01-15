@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public static Preferences PREFS = Preferences.getInstance();
-    // public static RGB rgb1;
-    // public static RGB rgb2;
+    public static RGB rgb1;
+    public static RGB rgb2;
     private RobotContainer robotContainer;
 
     @Override
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
         // rgb1 = new RGB(9);
         // rgb2 = new RGB(9);
-        
+
         // rgb1.setPattern(0.67);
         // rgb2.setPattern(0.87);
 

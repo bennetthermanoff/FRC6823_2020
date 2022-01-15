@@ -1,7 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.SPI;
+//import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,6 +10,19 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class NavXHandler {
     private AHRS ahrs;
+    private double initialAngle;
+
+    public double getInitialAngle() {
+        return initialAngle;
+    }
+
+    public void setInitialAngle() {
+        initialAngle = getAngleRad();
+    }
+
+    public AHRS getAhrs() {
+        return ahrs;
+    }
 
     public NavXHandler() {
         try {
@@ -36,7 +49,7 @@ public class NavXHandler {
     }
 
     public double getAngleRad() {
-        return ahrs.getAngle() * 2 * Math.PI / 360d;
+        return (((ahrs.getAngle() * 2 * Math.PI / 360d) % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
     }
 
     public double getAngle() {
@@ -44,7 +57,7 @@ public class NavXHandler {
     }
 
     public void zeroYaw() {
-        ahrs.zeroYaw();
+        ahrs.reset();
     }
 
     public double yeetPerSecond() {

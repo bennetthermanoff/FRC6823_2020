@@ -7,44 +7,62 @@ import frc.robot.NavXHandler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class MoveTo3d extends CommandBase {
+public class MoveToTarget3d extends CommandBase {
 
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private LimeLightSubsystem limeLightSubsystem;
     private PIDController strafeController, distController, aimController;
+    private NavXHandler navX;
     private double x, z;
 
-    public MoveTo3d(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem, double x,
-            double z) {
+    private double currentAngle = -10000;
+
+    private PIDController angleController;
+
+    public MoveToTarget3d(SwerveDriveSubsystem swerveDriveSubsystem, LimeLightSubsystem limeLightSubsystem,
+            NavXHandler navx, double x, double z) {
         this.limeLightSubsystem = limeLightSubsystem;
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.x = x;
         this.z = z;
+        this.navX = navx;
 
         addRequirements(limeLightSubsystem, swerveDriveSubsystem);
     }
 
     @Override
     public void execute() {
+        currentAngle = ((navX.getAngleRad() % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
+        double rotateCommand = angleController.calculate(currentAngle);
+
         limeLightSubsystem.setPipeline(0);
-        double strafeCommand = strafeController.calculate(limeLightSubsystem.getX());
+        double strafeCommand = strafeController.calculate(limeLightSubsystem.getTx());
         double distanceCommand = distController.calculate(limeLightSubsystem.getZ());
         double aimCommand = aimController.calculate(limeLightSubsystem.getTx());
         SmartDashboard.putNumber("distance from thing", limeLightSubsystem.getZ());
-        SmartDashboard.putNumber("strafe from thing", limeLightSubsystem.getX());
-
         if (distanceCommand > 0.5) {
-            distanceCommand = 0.4;
+            distanceCommand = 0.5;
         } else if (distanceCommand < -0.5) {
-            distanceCommand = -0.4;
+            distanceCommand = -0.5;
+        }
+
+        if (rotateCommand > 0.1) {
+            rotateCommand = 0.1;
+        } else if (rotateCommand < -0.1) {
+            rotateCommand = -0.1;
         }
 
         if (limeLightSubsystem.hasTarget())
-            swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand, aimCommand * -1);
+            swerveDriveSubsystem.drive(distanceCommand * -1, strafeCommand + rotateCommand * -1, aimCommand);
     }
 
     @Override
     public void initialize() {
+
+        angleController = new PIDController(.3, 0, 0);
+        angleController.enableContinuousInput(0, Math.PI * 2);
+        angleController.setSetpoint(navX.getInitialAngle());
+
         limeLightSubsystem.setPipeline(0);
         limeLightSubsystem.setServoAngle(70);
 
@@ -63,8 +81,8 @@ public class MoveTo3d extends CommandBase {
         // if (Math.abs(strafeController.getPositionError()) < 5 &&
         // Math.abs(distController.getPositionError()) < 3
         // && Math.abs(aimController.getPositionError()) < 2) {
-        if (Math.abs(limeLightSubsystem.getX() - x) < 1 && Math.abs(limeLightSubsystem.getZ() - z) < 1
-                && Math.abs(aimController.getPositionError()) < 0.5) {
+        if (Math.abs(strafeController.getPositionError()) < 1 && Math.abs(distController.getPositionError()) < 1
+                && Math.abs(currentAngle - navX.getInitialAngle()) < 0.1) {
             return true;
         } else {
             return false;

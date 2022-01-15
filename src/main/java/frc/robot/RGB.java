@@ -3,7 +3,7 @@
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
-/*----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------*/
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
@@ -19,7 +19,7 @@ public class RGB {
      * a constructer for the rgb which takes in a spark motor as a paramater
      * 
      * @param lights a spark motor
-     *
+     */
     public RGB(int lights) {
         RGB = new Spark(lights);
         test = -0.99;
@@ -75,10 +75,14 @@ public class RGB {
         RGB.set(0.99);
     }
 
+    public void setPattern(double setting){
+        RGB.set(setting);
+    }
+
     /**
      * Set the rgb to color1 color2 waves (look at the rev blinkin and they should
      * be blue and yellow)
-     *
+     */
     public void normalMode() {
         RGB.set(0.41);
     }
@@ -90,10 +94,6 @@ public class RGB {
             setHeartbeatRed();
     }
 
-    public void setPattern(double setting){
-        RGB.set(setting);
-    }
-
     /*public void setPattern(String name){
         RGB.set(RGBColor.getColorCode(RGBColor.));
     }*/
@@ -103,7 +103,6 @@ public class RGB {
      * 
      * public void graciousProfesionalism() { if (!thread.isAlive()) thread.start();
      * }
-     *
+     */
 
 }
-*/

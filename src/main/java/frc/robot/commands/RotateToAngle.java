@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.NavXHandler;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class RotateToZero extends CommandBase {
+public class RotateToAngle extends CommandBase {
     private SwerveDriveSubsystem swerveDriveSubsystem;
     private NavXHandler navXHandler;
     private boolean isFinished = false;
@@ -14,18 +14,21 @@ public class RotateToZero extends CommandBase {
     private PIDController angleController;
     public static final double kToleranceDegrees = 2.0f;
 
+    private double angle;
     private static double initialDegrees;
 
-    public RotateToZero(SwerveDriveSubsystem swerveDriveSubsystem, NavXHandler navXHandler) {
+    public RotateToAngle(SwerveDriveSubsystem swerveDriveSubsystem, NavXHandler navXHandler, double angle) {
 
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.navXHandler = navXHandler;
+        this.angle = angle;
+        this.angle = (((this.angle % (2 * Math.PI) + (2 * Math.PI))) % (2 * Math.PI));
         addRequirements(swerveDriveSubsystem);
 
     }
 
     public static void setInitialAngle(double angle) {
-        RotateToZero.initialDegrees = ((angle % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
+        RotateToAngle.initialDegrees = ((angle % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
     }
 
     @Override
@@ -38,10 +41,10 @@ public class RotateToZero extends CommandBase {
         } else if (rotateCommand < -0.4) {
             rotateCommand = -0.4;
         }
-
         SmartDashboard.putNumber("ROTATE", rotateCommand);
         swerveDriveSubsystem.drive(0, 0, rotateCommand);
-        if (Math.abs(rotateCommand) < 0.05) {
+
+        if (Math.abs((currentAngle - (initialDegrees + angle)) % (2 * Math.PI)) < margin) {
             isFinished = true;
         }
 
@@ -56,7 +59,8 @@ public class RotateToZero extends CommandBase {
     public void initialize() {
         angleController = new PIDController(.3, 0, 0);
         angleController.enableContinuousInput(0, Math.PI * 2);
-        angleController.setSetpoint(initialDegrees);
+
+        angleController.setSetpoint(((initialDegrees + angle) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI));
     }
 
     @Override
