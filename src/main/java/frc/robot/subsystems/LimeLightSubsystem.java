@@ -1,21 +1,23 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+//import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
+//import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLightSubsystem extends SubsystemBase {
 
     private Servo servo;
-    private int pipeline;
+    // private int pipeline;
     private NetworkTable table;
 
-    public static final int towardsGround = 15, forward = 50, towardsTarget = 65;
+    private double lastknownZ = -75;
+    private double lastKnownX = 0;
+    public static final int towardsGround = 15, forward = 40, towardsTarget = 65;
 
     public LimeLightSubsystem(int servo) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -36,7 +38,14 @@ public class LimeLightSubsystem extends SubsystemBase {
     }
 
     public double getServoAngle() {
+        SmartDashboard.putNumber("THE servo angel", this.servo.getAngle());
         return this.servo.getAngle();
+    }
+
+    private double forwardAngle = 40;
+
+    public double getServoAngleFromGroundRad() {
+        return ((this.servo.getAngle() - forwardAngle) / 360.0) * (2 * Math.PI);
     }
 
     public int getPipeline() {
@@ -50,21 +59,35 @@ public class LimeLightSubsystem extends SubsystemBase {
     // "T"x is for theta, aka this is from 2d pipelines, non "T" methods get 3d
     // pipline functions.
     public double getTx() {
+
         return table.getEntry("tx").getDouble(0);
+    }
+
+    public double getTxRad() {
+        return (table.getEntry("tx").getDouble(0) / 360.0) * (2.0 * Math.PI);
     }
 
     public double getTy() {
         return table.getEntry("ty").getDouble(0);
     }
 
+    public double getTyRad() {
+        return (table.getEntry("ty").getDouble(0) / 360.0) * (2.0 * Math.PI);
+    }
+
     // this is the 3d Distance, should always be negative
     public double getZ() {
-        return table.getEntry("camtran").getDoubleArray(new double[] { 0 })[2];
+        double newZ = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[2];
+        if (newZ < -15 && newZ > -300) {
+            lastknownZ = newZ;
+            lastKnownX = table.getEntry("camtran").getDoubleArray(new double[] { 0 })[0];
+        }
+        return lastknownZ;
     }
 
     // this is the 3d strafe
     public double getX() {
-        return table.getEntry("camtran").getDoubleArray(new double[] { 0 })[0];
+        return lastKnownX;
     }
 
     public boolean hasTarget() {

@@ -3,16 +3,17 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.WheelDrive;
+//import frc.robot.WheelDrive;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX intake, conveyor, leftShoot, rightShoot;
@@ -21,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean manualControl, intakeUp;
     private Encoder encoder;
     private PIDController speedController;
-    private Timer timer;
+    // private Timer timer;
     private int count;
 
     public ShooterSubsystem() {
@@ -94,6 +95,13 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    double margin = 100;
+
+    public boolean shooterReady(double targetRPM) {
+        return Math.abs(targetRPM - encoder.getRate() * 60 / 1024) < 100;
+
+    }
+
     public void shooterPID(double rpm, int ticks, double conveyorPower) {
         speedController.setP((Robot.PREFS.getDouble("rpmk", .0001)));
         speedController.setI(Robot.PREFS.getDouble("rpmi", 0));
@@ -106,12 +114,28 @@ public class ShooterSubsystem extends SubsystemBase {
         out = out > 0 ? out : 0;
         // leftShoot.set(out);
         // rightShoot.set(out);
+
+        SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
+        count++;
+
+        if (count > ticks) {
+            conveyor.set(conveyorPower * -1);
+            manualControl = true;
+        }
+    }
+
+    public void shooterPower(double power, int ticks, double conveyorPower) {
+
+        leftShoot.set(power);
+        rightShoot.set(power);
+
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
         count++;
         if (count > ticks) {
             // conveyor.set(conveyorPower * -1);
             manualControl = true;
         }
+
     }
 
     public void startConveyorSpin() {
@@ -151,6 +175,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public boolean doesSenseBall() {
         return (!bottomSensor.get() || !secondSensor.get());
+    }
+
+    public boolean ballAtTop() {
+        return (!topSensor.get());
     }
 
     @Override

@@ -2,7 +2,7 @@ package frc.robot;
 
 public class CoordinateConverter {
 
-    private static char yList[] = { 'A', 'B', 'C', 'D', 'E' };
+    //private static char yList[] = { 'A', 'B', 'C', 'D', 'E' };
 
     public static int[] alphaNumbaToInches(char y, int x) {
         int yVal;
