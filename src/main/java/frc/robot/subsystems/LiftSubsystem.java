@@ -1,4 +1,4 @@
-/*package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -38,4 +38,3 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
 }
-*/

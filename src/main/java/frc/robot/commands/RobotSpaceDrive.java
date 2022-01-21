@@ -20,8 +20,8 @@ public class RobotSpaceDrive extends CommandBase {
 
     @Override
     public void execute() {
-        double speedRate = Preferences.getInstance().getDouble("SpeedRate", 0.3);
-        double turnRate = Preferences.getInstance().getDouble("TurnRate", 0.1);
+        double speedRate = Preferences.getInstance().getDouble("SpeedRate", 1);
+        double turnRate = Preferences.getInstance().getDouble("TurnRate", 1);
 
         double xval = joystickHandler.getAxis1() * speedRate;
         double yval = joystickHandler.getAxis0() * speedRate;

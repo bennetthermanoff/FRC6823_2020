@@ -26,8 +26,8 @@ public class FieldSpaceDrive extends CommandBase {
     public void execute() {
         navXHandler.printEverythingDammit();
 
-        double speedRate = 0.5;
-        double turnRate = 0.1;
+        double speedRate = Robot.PREFS.getDouble("SpeedRate", 1);
+        double turnRate = Robot.PREFS.getDouble("TurnRate", 1);
 
         if (joystickHandler.isYeet()) {
             speedRate = 1;
@@ -37,7 +37,6 @@ public class FieldSpaceDrive extends CommandBase {
         double xval = joystickHandler.getAxis1() * speedRate;
         double yval = joystickHandler.getAxis0() * speedRate;
         double spinval = joystickHandler.getAxis5() * turnRate;
-        
 
         double robotAngle = navXHandler.getAngleRad() - fieldAngle;
 

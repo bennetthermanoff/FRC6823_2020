@@ -36,11 +36,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public SwerveDriveSubsystem() {
-        backRight = new SwerveWheelModuleSubsystem(7, 6, 3, 90);// These are the motors and encoder ports for swerve drive,
-        backLeft = new SwerveWheelModuleSubsystem(5, 4, 2, 90);
-        frontRight = new SwerveWheelModuleSubsystem(3, 2, 1, 45);
-        frontLeft = new SwerveWheelModuleSubsystem(1, 8, 0, 270);// angle,speed,encoder,offset (offset gets changed by
-      // smartdashboard in calibration.)
+        backRight = new SwerveWheelModuleSubsystem(7, 6, 3, -4.70);// These are the motors and encoder ports for swerve
+                                                                   // drive,
+        backLeft = new SwerveWheelModuleSubsystem(5, 4, 2, .884);
+        frontRight = new SwerveWheelModuleSubsystem(3, 2, 1, .697);
+        frontLeft = new SwerveWheelModuleSubsystem(1, 8, 0, .800);// angle,speed,encoder,offset (offset gets changed by
+        // smartdashboard in calibration.)
 
         SendableRegistry.addChild(this, backRight);
         SendableRegistry.addChild(this, backLeft);
@@ -103,7 +104,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         backLeft.drive(backLeftSpeed, backLeftAngle);
         frontRight.drive(frontRightSpeed, frontRightAngle);
         frontLeft.drive(frontLeftSpeed, frontLeftAngle);
-
     }
 
     public void weirdDrive(double x1, double y1, double robotAngle) {
@@ -137,32 +137,61 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         // // frontRightAngle = 0;
         // // frontLeftAngle = 0;
 
-        backRight.drive(backRightSpeed, 1-backRightAngle);
-        backLeft.drive(backLeftSpeed, 1-backLeftAngle);
-        frontRight.drive(frontRightSpeed, 1-frontRightAngle);
-        frontLeft.drive(frontLeftSpeed, 1-frontLeftAngle);
-        SmartDashboard.putNumber("Backright Speed", backRightSpeed);
-        SmartDashboard.putNumber("Backleft Speed", backLeftSpeed);
-        SmartDashboard.putNumber("Frontright Speed", frontRightSpeed);
-        SmartDashboard.putNumber("Frontleft Speed", frontLeftSpeed);
+        // } else {
+        // x1, y1 are from the position of the joystick, x2 is from the rotation
+
+        // y1 *= -1;
+        // x1 *= -1;
+
+        x2 = rotateCommand;
+
+        if (Math.abs(x1) > Math.abs(y1)) {
+            y1 = 0;
+        } else {
+            x1 = 0;
+        }
+
+        double a = x1 - x2 * (L / r);
+        double b = x1 + x2 * (L / r);
+        double c = y1 - x2 * (W / r);
+        double d = y1 + x2 * (W / r);
+
+        backRightSpeed = Math.sqrt((b * b) + (c * c));//
+        backLeftSpeed = Math.sqrt((a * a) + (c * c));
+        frontRightSpeed = Math.sqrt((b * b) + (d * d));
+        frontLeftSpeed = Math.sqrt((a * a) + (d * d));//
+
+        backRightAngle = Math.atan2(b, c) / Math.PI;
+        backLeftAngle = Math.atan2(a, c) / Math.PI;
+        frontRightAngle = Math.atan2(b, d) / Math.PI;
+        frontLeftAngle = Math.atan2(a, d) / Math.PI;
+        // }
+        backRight.drive(backRightSpeed, backRightAngle);
+        backLeft.drive(backLeftSpeed, backLeftAngle);
+        frontRight.drive(frontRightSpeed, frontRightAngle);
+        frontLeft.drive(frontLeftSpeed, frontLeftAngle);
+
+    }
+
+    public void stopMomentum() {
+        backRight.drive(0, Math.PI / 2.0);
+        backLeft.drive(0, Math.PI);
+        frontRight.drive(0, 3 * Math.PI / 2.0);
+        frontLeft.drive(0, Math.PI * 2.0);
     }
 
     @Override
     public void periodic() {
-        // if (Robot.PREFS.getBoolean("PracticeBot", false)) {
-        //     backRight.setZero(Robot.PREFS.getDouble("BROffsetPractice", 0) + 1.25);
-        //     backLeft.setZero(Robot.PREFS.getDouble("BLOffsetPractice", 0) + 1.25);
-        //     frontRight.setZero(Robot.PREFS.getDouble("FROffsetPractice", 0) + 1.25);
-        //     frontLeft.setZero(Robot.PREFS.getDouble("FLOffsetPractice", 0) + 1.25);
-        // } else {
-
-        //Do NOT make negative!!!!
-        //adding is counter clockwise, subtratcting is clockwise
-        backRight.setZero(80);
-        backLeft.setZero(175);
-        frontRight.setZero(280);
-        frontLeft.setZero(340);
-        
-        // }
+        if (Robot.PREFS.getBoolean("PracticeBot", false)) {
+            backRight.setZero(Robot.PREFS.getDouble("BROffsetPractice", 0) + 1.25);
+            backLeft.setZero(Robot.PREFS.getDouble("BLOffsetPractice", 0) + 1.25);
+            frontRight.setZero(Robot.PREFS.getDouble("FROffsetPractice", 0) + 1.25);
+            frontLeft.setZero(Robot.PREFS.getDouble("FLOffsetPractice", 0) + 1.25);
+        } else {
+            backRight.setZero(Robot.PREFS.getDouble("BROffset", 0) + 1.25);
+            backLeft.setZero(Robot.PREFS.getDouble("BLOffset", 0) + 1.25);
+            frontRight.setZero(Robot.PREFS.getDouble("FROffset", 0) + 1.25);
+            frontLeft.setZero(Robot.PREFS.getDouble("FLOffset", 0) + 1.25);
+        }
     }
 }
