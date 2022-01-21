@@ -104,7 +104,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         backLeft.drive(backLeftSpeed, backLeftAngle);
         frontRight.drive(frontRightSpeed, frontRightAngle);
         frontLeft.drive(frontLeftSpeed, frontLeftAngle);
-
     }
 
     public void weirdDrive(double x1, double y1, double robotAngle) {

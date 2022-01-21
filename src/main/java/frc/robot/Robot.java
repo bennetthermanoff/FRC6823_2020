@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
         // rgb1 = new RGB(9);
         // rgb2 = new RGB(9);
 
+
+
         // rgb1.setPattern(0.67);
         // rgb2.setPattern(0.87);
 

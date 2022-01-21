@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 //import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 //import edu.wpi.first.wpilibj.Preferences;
@@ -116,6 +117,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         leftShoot.set(out);
         rightShoot.set(out);
+
         SmartDashboard.putNumber("RPM", encoder.getRate() * 60 / 1024);
         count++;
 
